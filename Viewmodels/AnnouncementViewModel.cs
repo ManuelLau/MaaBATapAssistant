@@ -24,7 +24,7 @@ public partial class AnnouncementViewModel : ObservableObject
     [ObservableProperty]
     public string title1 = $"V{MyConstant.AppVersion} 更新内容";
     [ObservableProperty]
-    public string str1 = "初始测试版本，基础功能已经可以正常使用了(也许可能大概会有一些奇奇怪怪的bug)" +
+    public string str1 = "初始测试版本，基础功能已经可以正常使用了(也许应该可能大概会有一些奇奇怪怪的bug)" +
         "\n由于还没做新版本检查/自动更新的功能，还请时不时手动前往github查看有没有更新。" +
         "\n使用前请务必先查看文档！";
     [ObservableProperty]
