@@ -1,0 +1,145 @@
+{
+    "Stop": {
+		"action": "StopTask",
+		"doc": "停止当前任务链，可用作流程的终点"
+    },
+	"ClickHomeButton": {
+        "recognition": "TemplateMatch",
+        "template": "HomePageButton.png",
+		"roi": [ 1200, 0, 80, 45 ],
+        "action": "Click",
+		"post_delay": 2000
+    },
+	"IfInHomePage":{
+		"recognition": "TemplateMatch",
+        "template": "HomePageLabel.png",
+		"inverse": true,
+		"next": "ClickHomeButton",
+		"interrupt": [
+			"ClosePopup",
+			"IdelTapScreen"
+		],
+		"timeout": 1000,
+		"doc": "timeout了则说明现在处在主界面"
+	},
+	"ClosePopup": {
+        "recognition": "TemplateMatch",
+        "template": [
+			"CloseButtonBlack.png",
+			"CloseButtonWhite.png"
+		],
+        "action": "Click",
+		"doc": "关闭带有X的弹窗，不论颜色"
+    },
+	"IdelTapScreen": {
+		"recognition": "TemplateMatch",
+        "template": "Pyroxene.png",
+		"inverse": true,
+		"action": "Click",
+		"target": [640, 360, 0, 0],
+		"post_delay": 1000,
+		"doc": "检测不到UI栏的青辉石图标，说明可能是进入挂机状态，点击一下屏幕中央"
+	},
+	"WaitLoading": {
+		"recognition": "OCR",
+        "text": "正在加载",
+		"roi": [930, 600, 315, 95],
+		"post_delay": 1000
+	},
+	"CloseReward": {
+		"recognition": "OCR",
+        "text": "获得奖励",
+		"action": "Click",
+		"target": [640, 560, 0, 0],
+		"doc": "关闭获得奖励界面"
+    },
+
+	"StartGame": {
+        "action": "StartApp",
+		"package": "com.RoamingStar.BlueArchive/com.yostar.supersdk.activity.YoStarSplashActivity",
+		"post_delay": 2000,
+		"next": "RefreshGame@IdelClick",
+		"doc": "启动游戏入口，先识别非从头启动的内容，检测不到再开始检测从头启动"
+    },
+	"RefreshGame@IdelClick": {
+        "action": "Click",
+		"target": [640, 100, 0, 0],
+		"post_delay": 1000,
+		"next": "RefreshGame@FirstCheck"
+    },
+	"RefreshGame@FirstCheck": {
+		"next": [
+			"RefreshGame@BackToHomePage",
+			"RefreshGame@GoToStudentsPage"
+		],
+		"timeout": 2000,
+		"on_error": "StartUp@FirstCheck",
+		"doc": "准备执行任务，刷新游戏，检测掉线、重复登录状态。前置条件是已经执行过启动游戏任务，当前在游戏内。如果识别到主页按钮说明不在主界面，直接返回即可；如果在主界面则点进学生界面再返回主页"
+    },
+	"RefreshGame@BackToHomePage": {
+		"recognition": "TemplateMatch",
+        "template": "HomePageButton.png",
+		"roi": [ 1200, 0, 80, 45 ],
+        "action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"RefreshGame@CheckDisconnected",
+			"RefreshGame@CheckDuplicatedLogin"
+		],
+		"timeout": 2000,
+		"on_error": "Stop",
+		"doc": "返回到主界面后循环检测2秒"
+    },
+	"RefreshGame@GoToStudentsPage": {
+		"recognition": "OCR",
+        "text": "成员",
+		"roi": [290, 614, 79, 88],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"RefreshGame@BackToHomePage",
+			"RefreshGame@CheckDisconnected"
+		],
+		"interrupt":[
+			"ClosePopup"
+		]
+	},
+	"RefreshGame@CheckDisconnected": {
+		"recognition": "OCR",
+        "text": ["认证信息已超时", "日期已变更"],
+		"roi": [363, 132, 554, 444],
+		"next": "RefreshGame@Reconnect",
+		"doc": "检测掉线，后面触发启动游戏流程。"
+    },
+	"RefreshGame@CheckDuplicatedLogin": {
+		"recognition": "OCR",
+        "text": "发现重复登录",
+		"roi": [363, 132, 554, 444],
+		"next": "RefreshGame@Reconnect",
+		"doc": "*检测重复登录，后面触发登录流程。根据用户配置重载next字段来决定是否自动重连，选择重连的话后续触发启动游戏流程"
+    },
+	"RefreshGame@Reconnect": {
+		"recognition": "OCR",
+        "text": "确认",
+		"roi": [363, 132, 554, 444],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": "RefreshGame@Reconnect",
+		"timeout": 2000,
+		"on_error": "StartUp@FirstCheck",
+		"doc": "有些弹窗需要点击2次确定才生效，循环检测"
+	},
+	
+	
+	"BackToHomePage": {
+		"recognition": "TemplateMatch",
+        "template": "HomePageButton.png",
+		"next": "Stop",
+		"interrupt": [
+			"IfInHomePage",
+			"ClosePopup",
+			"IdelTapScreen"
+		],
+		"doc": "【废弃】点击后会持续检测是否回到了主界面"
+    }
+}

@@ -1,0 +1,118 @@
+{
+	"EnterCafe1": {
+		"next": [
+			"CafeEnter@CheckText"
+		],
+		"interrupt": [
+			"ClickCafeButton",
+			"WaitLoading",
+			"ClosePopup",
+			"ClickHomeButton",
+			"IdelTapScreen",
+			"CloseReward"
+		],
+		"doc": "进入咖啡厅。前置是处在主界面且已刷新过一次，排除掉线、重复登录的情况"
+    },
+	"ClickCafeButton": {
+		"recognition": "TemplateMatch",
+        "template": "CafeButton.png",
+		"roi": [ 0, 600, 150, 120 ],
+        "action": "Click",
+		"post_delay": 1000
+    },
+	"CafeEnter@CheckText": {
+		"recognition": "OCR",
+        "text": "沙勒附属咖啡厅",
+		"roi": [ 30, 0, 300, 50 ],
+		"post_delay": 2000,
+		"next": [
+			"CafeEnter@CheckEarningsButton"
+		],
+		"interrupt": [
+			"WaitLoading",
+			"CafeEnter@CheckFirstTimePopup"
+		],
+		"doc": "第一个任务检查点：识别左上角文字。确保进入到了咖啡厅，但是可能会有弹窗出现。进入后等待2秒"
+	},
+	"CafeEnter@CheckFirstTimePopup": {
+		"recognition": "OCR",
+        "text": "到访成员列表",
+		"roi": [ 520, 200, 220, 100 ],
+		"next": "CafeEnter@CloseFirstTimePopup",
+		"doc": "检查该时间段首次进入咖啡厅的弹窗"
+	},
+	"CafeEnter@CloseFirstTimePopup": {
+		"recognition": "TemplateMatch",
+        "template": "CloseButtonBlack.png",
+		"action": "Click"
+	},
+	"CafeEnter@CheckEarningsButton":{
+		"recognition": "ColorMatch",
+		"roi": [ 1202, 666, 7, 7 ],
+		"lower": [ 44, 69, 98 ],
+		"upper": [ 46, 71, 100 ],
+		"count": 47,
+		"next": "Stop",
+		"doc": "第二个任务检查点：识别咖啡厅收益按钮处的色值判断是否关闭了所有弹窗"
+	},
+	
+	"CafeEnter@SwitchCafe": {
+		"recognition": "OCR",
+        "text": "前往咖啡厅",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000
+	},
+	
+	"ReturnToCafe1": {
+		"next": [
+			"CafeEnter@GoToCafe1"
+		],
+		"interrupt": [
+			"CafeEnter@SwitchCafe",
+			"ClickCafeButton",
+			"WaitLoading",
+			"ClosePopup",
+			"ClickHomeButton",
+			"IdelTapScreen",
+			"CloseReward"
+		],
+		"doc": "切换到1号咖啡厅，前置条件是处于2号咖啡厅，且没有任何弹窗，不处于挂机状态"
+    },
+	"CafeEnter@GoToCafe1": {
+		"recognition": "OCR",
+        "text": "1号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"CafeEnter@CheckText"
+		],
+		"interrupt": [
+			"ClickCafeButton",
+			"WaitLoading",
+			"ClosePopup",
+			"ClickHomeButton",
+			"IdelTapScreen",
+			"CloseReward"
+		]
+	},
+	"CafeClickUnfoldButton": {
+		"recognition": "TemplateMatch",
+        "template": "CafeUnfoldButton.png",
+		"roi": [ 20, 585, 80, 80 ],
+        "action": "Click",
+		"post_delay": 1000,
+		"doc": "点击底部左侧UI栏的展开按钮"
+    },
+	
+	
+	
+	"BondLevelUpScreenShot": {
+		"recognition": "OCR",
+        "text": "好感等级提升",
+		"action": "Command",
+		"next": "CloseBondLevelUp",
+		"doc": "【未实现，待完成】截图保存好感升级界面，"
+    }
+}
