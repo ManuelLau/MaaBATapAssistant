@@ -1,0 +1,174 @@
+{
+	"StartGameOld": {
+        "action": "StartApp",
+		"package": "com.RoamingStar.BlueArchive/com.yostar.supersdk.activity.YoStarSplashActivity",
+		"post_delay": 2000,
+		"next": "StartUp@IdelClick",
+		"doc": "启动游戏，并进入主界面。最终结果是进入到主界面，且关闭一切弹窗。通过识别主界面右上角3个按钮UI+邮箱按钮的色值来判断是否在主界面。只匹配了正常启动流程。异常流程不一定能快速准确地识别"
+    },
+	"StartUp@IdelClick": {
+        "action": "Click",
+		"target": [640, 100, 0, 0],
+		"next": [
+			"StartUp@FirstCheck"
+		]
+    },
+	
+	"StartUp@FirstCheck": {
+		"next": [
+			"StartUp@CheckLabel"
+		],
+		"interrupt": [
+			"ClickHomeButton",
+			"ClosePopup",
+			"CloseReward",
+			"StartUp@WaitLoading"
+		],
+		"timeout": 2000,
+		"on_error": "StartUp@Start",
+		"doc": "什么都识别不到，就当做是从头启动游戏"
+	},
+	"StartUp@Start": {
+		"next": [
+			"StartUp@CheckLabel"
+		],
+		"interrupt": [
+			"StartUp@UpdatePopUp",
+			"StartUp@TitleScreen",
+			"StartUp@DailyCheckIn",
+			"ClosePopup",
+			"CloseReward",
+			"StartUp@WaitLoading",
+			"ClickHomeButton"
+		],
+		"rate_limit": 2000,
+		"pre_delay": 5000,
+		"pre_wait_freezes": {
+			"time": 2000,
+			"target": [ 34, 680, 28, 28],
+			"threshold": 0.5,
+			"rate_limit": 100,
+			"timeout": 120000
+		},
+		"doc": "从头启动游戏"
+	},
+	"StartUp@CheckLabel":{
+		"recognition": "TemplateMatch",
+        "template": "HomePageLabel.png",
+		"next": "StartUp@CheckMailButton",
+		"interrupt": [
+			"ClickHomeButton",
+			"ClosePopup",
+			"CloseReward",
+			"StartUp@WaitLoading"
+		]
+	},
+	"StartUp@CheckMailButton":{
+		"recognition": "ColorMatch",
+		"roi": [ 1137, 43, 12, 4 ],
+		"lower": [ 69, 98, 151 ],
+		"upper": [ 71, 100, 153 ],
+		"count": 46,
+		"next": "StartUp@FinalCheck",
+		"timeout": 3000
+	},
+	"StartUp@CheckLabelInverse":{
+		"inverse": true,
+		"recognition": "TemplateMatch",
+        "template": "HomePageLabel.png",
+		"next": "StartUp@CheckLabel",
+		"interrupt": [
+			"ClickHomeButton",
+			"ClosePopup",
+			"StartUp@TitleScreen",
+			"StartUp@DailyCheckIn",
+			"CloseReward",
+			"StartUp@WaitLoading"
+		]
+	},
+	"StartUp@CheckMailButtonInverse":{
+		"inverse": true,
+		"recognition": "ColorMatch",
+		"roi": [ 1137, 43, 12, 4 ],
+		"lower": [ 69, 98, 151 ],
+		"upper": [ 71, 100, 153 ],
+		"count": 46,
+		"next": "StartUp@CheckLabel",
+		"interrupt": [
+			"ClickHomeButton",
+			"ClosePopup",
+			"StartUp@TitleScreen",
+			"StartUp@DailyCheckIn",
+			"CloseReward",
+			"StartUp@WaitLoading"
+		]
+	},
+	"StartUp@FinalCheck":{
+		"next": [
+			"StartUp@CheckLabelInverse",
+			"StartUp@CheckMailButtonInverse"
+		],
+		"timeout": 2000,
+		"on_error": "Stop",
+		"doc": "识别右上角3个按钮UI+邮箱按钮的色值。持续3秒以上才算，以免突然有其他弹窗出现"
+	},
+
+	"StartUp@WaitLoading": {
+		"recognition": "OCR",
+        "text": [
+			"正在加载",
+			"Initialize",
+			"Catalog",
+			"初始化"
+		],
+		"roi": [0, 500, 1280, 220],
+		"post_delay": 1000
+	},
+	"StartUp@TitleScreen": {
+        "recognition": "TemplateMatch",
+        "template": "TitleScreen.png",
+        "action": "Click",
+		"target": [640, 360, 0, 0],
+		"post_delay": 8000,
+		"post_wait_freezes": {
+			"time": 2000,
+			"target": [ 34, 680, 28, 28],
+			"threshold": 0.5,
+			"rate_limit": 100,
+			"timeout": 120000
+		},
+		"doc": "识别到标题画面。进入登录流程"
+	},
+	"StartUp@DailyCheckIn": {
+		"recognition": "OCR",
+		"text": "签到",
+		"action": "Click",
+		"target": [640, 360, 0, 0],
+		"doc": "识别签到界面"
+	},
+	"StartUp@UpdatePopUp": {
+		"recognition": "OCR",
+		"text": "更新提醒",
+		"roi": [285, 48, 718, 614],
+		"next": "StartUp@UpdatePopUpConfirm",
+		"doc": "识别下载弹窗"
+	},
+	"StartUp@UpdatePopUpConfirm": {
+		"recognition": "OCR",
+		"text": "确认",
+		"action": "Click",
+		"target": [285, 48, 718, 614],
+		"next": "StartUp@FirstCheck"
+	},
+	
+	
+	"CloseGame": {
+		"action": "StopApp",
+		"package": "com.RoamingStar.BlueArchive"
+    },
+	"RestartGame": {
+		"action": "StopApp",
+		"package": "com.RoamingStar.BlueArchive",
+		"next": "StartGame"
+	}
+}

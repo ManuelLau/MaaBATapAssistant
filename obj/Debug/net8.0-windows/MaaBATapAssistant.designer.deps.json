@@ -1,0 +1,206 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "CalcBinding/2.5.2": {
+        "dependencies": {
+          "DynamicExpresso.Core": "2.3.1"
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/CalcBinding.dll": {
+            "assemblyVersion": "2.5.2.0",
+            "fileVersion": "2.5.2.0"
+          }
+        }
+      },
+      "CommunityToolkit.Mvvm/8.4.0": {
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "assemblyVersion": "8.4.0.0",
+            "fileVersion": "8.4.0.1"
+          }
+        }
+      },
+      "DynamicExpresso.Core/2.3.1": {
+        "runtime": {
+          "lib/netstandard2.0/DynamicExpresso.Core.dll": {
+            "assemblyVersion": "2.3.1.0",
+            "fileVersion": "2.3.1.0"
+          }
+        }
+      },
+      "HandyControl/3.5.1": {
+        "runtime": {
+          "lib/net8.0/HandyControl.dll": {
+            "assemblyVersion": "3.5.1.0",
+            "fileVersion": "3.5.1.0"
+          }
+        }
+      },
+      "Maa.AgentBinary/1.0.0": {},
+      "Maa.Framework.Binding/2.3.1": {
+        "runtime": {
+          "lib/net8.0/MaaFramework.Binding.dll": {
+            "assemblyVersion": "2.3.1.0",
+            "fileVersion": "2.3.1.0"
+          }
+        }
+      },
+      "Maa.Framework.Binding.Native/2.3.1": {
+        "dependencies": {
+          "Maa.Framework.Binding": "2.3.1"
+        },
+        "runtime": {
+          "lib/net8.0/MaaFramework.Binding.Native.dll": {
+            "assemblyVersion": "2.3.1.0",
+            "fileVersion": "2.3.1.0"
+          }
+        }
+      },
+      "Maa.Framework.Native/2.3.1": {
+        "dependencies": {
+          "Maa.AgentBinary": "1.0.0",
+          "Maa.Framework.Binding.Native": "2.3.1"
+        }
+      },
+      "Maa.Framework.Runtime.win-x64/2.4.2": {
+        "runtimeTargets": {
+          "runtimes/win-x64/native/DirectML.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.15.4.0"
+          },
+          "runtimes/win-x64/native/MaaAdbControlUnit.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/MaaDbgControlUnit.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/MaaFramework.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/MaaToolkit.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/MaaUtils.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/MaaWin32ControlUnit.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/fastdeploy_ppocr_maa.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/onnxruntime_maa.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.19.2.0"
+          },
+          "runtimes/win-x64/native/opencv_world4_maa.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "4.8.0.0"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.3": {
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.3.27908"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CalcBinding/2.5.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hbMnS12GUmWTFVROhKJMAQNv5Cqx+AjVGOGGjUOidEaRQ5oGr87PCZih5kfEA/8qlRMzpBsMPQ0fiOahPWwmXQ==",
+      "path": "calcbinding/2.5.2",
+      "hashPath": "calcbinding.2.5.2.nupkg.sha512"
+    },
+    "CommunityToolkit.Mvvm/8.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tqVU8yc/ADO9oiTRyTnwhFN68hCwvkliMierptWOudIAvWY1mWCh5VFh+guwHJmpMwfg0J0rY+yyd5Oy7ty9Uw==",
+      "path": "communitytoolkit.mvvm/8.4.0",
+      "hashPath": "communitytoolkit.mvvm.8.4.0.nupkg.sha512"
+    },
+    "DynamicExpresso.Core/2.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gAoOdAA7KypwC2aEWbm72ZcNj9ERn0GBrFyFrLm9tRZGd+z1rgnKlh+BtWJi9X32ldzOwItY/Ty5ao6CqbG5ig==",
+      "path": "dynamicexpresso.core/2.3.1",
+      "hashPath": "dynamicexpresso.core.2.3.1.nupkg.sha512"
+    },
+    "HandyControl/3.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-i2i0xrLev7F1MFnhf0DP1CNCdGw8hVJ0HJrI0kxRv02ZJgaAzLzDTgAXDPY8GAoD3aYnBLSgM74lBHZ844KQnQ==",
+      "path": "handycontrol/3.5.1",
+      "hashPath": "handycontrol.3.5.1.nupkg.sha512"
+    },
+    "Maa.AgentBinary/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA==",
+      "path": "maa.agentbinary/1.0.0",
+      "hashPath": "maa.agentbinary.1.0.0.nupkg.sha512"
+    },
+    "Maa.Framework.Binding/2.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Gm0SClFr9AzkcuHwJeJWTLEow2kWBy2pl0g0QtI672NAdmU5ul4kfM+6YPkbuDymeZTKkW1qayZ10YLpYeHCIQ==",
+      "path": "maa.framework.binding/2.3.1",
+      "hashPath": "maa.framework.binding.2.3.1.nupkg.sha512"
+    },
+    "Maa.Framework.Binding.Native/2.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YyOO497DhOwU3+vCdmTDgau3wPSH/zeS22OPhTb5EaB0bFkoLbXasQX/+un/8vqgWLZZNLLUGcxkg4S3//tPBQ==",
+      "path": "maa.framework.binding.native/2.3.1",
+      "hashPath": "maa.framework.binding.native.2.3.1.nupkg.sha512"
+    },
+    "Maa.Framework.Native/2.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kSz+oKYWYsZZFkcK7WKca5byq58Do7+pcKGgAEjkaGtw5vZ/HS/1jiIHbwEXWhfeHotPRzCsgKI3FhW4lpl2VA==",
+      "path": "maa.framework.native/2.3.1",
+      "hashPath": "maa.framework.native.2.3.1.nupkg.sha512"
+    },
+    "Maa.Framework.Runtime.win-x64/2.4.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-22TyZB4Jl1Jim54aNiy/n2/VsWPoT59N/LguXs/22Wq7APUECwjw1G2mGAYO+XbZmNt0v1rOuDIGBu+Z0GskYA==",
+      "path": "maa.framework.runtime.win-x64/2.4.2",
+      "hashPath": "maa.framework.runtime.win-x64.2.4.2.nupkg.sha512"
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "path": "newtonsoft.json/13.0.3",
+      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
+    }
+  }
+}

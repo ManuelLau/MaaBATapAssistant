@@ -1,0 +1,150 @@
+{
+	"CafeApplyLayout": {
+		"recognition": "OCR",
+		"roi": [783, 577, 109, 41],
+		"only_rec": true,
+		"next": "CafeLayout@GoToSpecifiedCafe",
+		"interrupt": [
+			"ClickCafeButton",
+			"WaitLoading",
+			"ClosePopup",
+			"IdelTapScreen",
+			"CloseReward"
+		],
+		"timeout": 2000,
+		"doc": "默认是在咖啡厅内，且无弹窗不处于闲置界面，正常看得到UI。"
+    },
+
+
+	"CafeLayout@GoToSpecifiedCafe": {
+		"recognition": "OCR",
+        "text": "前往咖啡厅",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": "CafeLayout@CheckText",
+		"interrupt": "CafeLayout@ClickGoToCafeButton"
+    },
+	"CafeLayout@ClickGoToCafeButton": {
+		"recognition": "OCR",
+        "text": "前往咖啡厅",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000
+    },
+	"CafeLayout@CheckText": {
+		"recognition": "OCR",
+        "text": "号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"next": [
+			"CafeLayout@InCafe1ThenApply",
+			"CafeLayout@GoToCafe1ThenApply"
+		],
+		"doc": "*根据需要重载这里的next字段来选择对1号还是2号咖啡厅应用家具预设"
+    },
+	"CafeLayout@InCafe1ThenApply":{
+		"recognition": "ColorMatch",
+		"roi": [ 62, 160, 8, 8 ],
+		"lower": [ 43, 68, 98 ],
+		"upper": [ 45, 70, 100 ],
+		"count": 60,
+		"next": "CafeLayout@CloseGoToCafeButtonThenApply",
+		"timeout": 2000,
+		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
+	},
+	"CafeLayout@GoToCafe1ThenApply": {
+		"recognition": "OCR",
+        "text": "1号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": "CafeLayout@ApplyLayoutStart",
+		"interrupt": "WaitLoading",
+		"timeout": 2000
+    },
+	"CafeLayout@InCafe2ThenApply":{
+		"recognition": "ColorMatch",
+		"roi": [ 204, 160, 8, 8 ],
+		"lower": [ 43, 68, 98 ],
+		"upper": [ 45, 70, 100 ],
+		"count": 60,
+		"next": "CafeLayout@CloseGoToCafeButtonThenApply",
+		"timeout": 2000,
+		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
+	},
+	"CafeLayout@GoToCafe2ThenApply": {
+		"recognition": "OCR",
+        "text": "2号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": "CafeLayout@ApplyLayoutStart",
+		"interrupt": "WaitLoading",
+		"timeout": 2000
+    },
+	"CafeLayout@CloseGoToCafeButtonThenApply": {
+		"recognition": "OCR",
+        "text": "前往咖啡厅",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": "CafeLayout@ApplyLayoutStart",
+		"timeout": 2000
+    },
+
+
+	"CafeLayout@ApplyLayoutStart": {
+        "next": "CafeLayout@ApplyLayout1",
+		"interrupt": [
+			"CafeClickUnfoldButton",
+			"CafeLayout@ClickLayoutButton",
+			"IdelTapScreen"
+		],
+		"timeout": 2000,
+		"doc": "*根据需要重载这里的next字段来选择应用第几个家具预设"
+    },
+	"CafeLayout@ClickLayoutButton": {
+        "recognition": "OCR",
+        "text": "预设",
+		"roi": [ 315, 650, 85, 35 ],
+        "action": "Click",
+        "target_offset": [ 0, -20, 0, 0 ],
+		"post_delay": 1000
+    },
+	"CafeLayout@ApplyLayout1": {
+        "recognition": "OCR",
+        "text": "应用预设",
+		"roi": [ 888, 290, 166, 60 ],
+        "action": "Click",
+		"post_delay": 1000,
+		"next": "CafeLayout@Check"
+    },
+	"CafeLayout@ApplyLayout2": {
+        "recognition": "OCR",
+        "text": "应用预设",
+		"roi": [ 888, 428, 166, 60 ],
+        "action": "Click",
+		"post_delay": 1000,
+		"next": "CafeLayout@Check"
+    },
+	"CafeLayout@Check": {
+        "recognition": "OCR",
+        "text": "隔壁咖啡厅的家具",
+		"roi": [ 387, 385, 510, 60 ],
+        "action": "Click",
+		"next": "CafeLayout@IsCheck"
+    },
+	"CafeLayout@IsCheck": {
+        "recognition": "TemplateMatch",
+        "template": "ApplyLayoutCheck.png",
+		"roi": [ 380, 380, 68, 68 ],
+		"next": "CafeLayout@Confirm"
+    },
+	"CafeLayout@Confirm": {
+        "recognition": "OCR",
+        "text": "确认",
+		"roi": [ 650, 462, 234, 76 ],
+        "action": "Click",
+		"post_delay": 2000
+    }
+}

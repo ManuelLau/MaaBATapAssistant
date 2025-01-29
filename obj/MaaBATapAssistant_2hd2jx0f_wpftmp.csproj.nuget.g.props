@@ -1,0 +1,879 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\Manuel_0\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.12.2</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="C:\Users\Manuel_0\.nuget\packages\" />
+    <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\maatouch\universal\maatouch" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\maatouch\universal\maatouch')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\maatouch\universal\maatouch</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\maatouch\universal\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\maatouch\universal\maatouch</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\bin\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\bin\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\bin\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\bin\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\bin\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\bin\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\bin\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\bin\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-21\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-21\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-21\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-21\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-21\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-22\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-22\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-22\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-22\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-22\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-23\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-23\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-23\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-23\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-23\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-24\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-24\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-24\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-24\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-24\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-25\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-25\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-25\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-25\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-25\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-26\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-26\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-26\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-26\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-26\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-27\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-27\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-27\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-27\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-27\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-28\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-28\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-28\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-28\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-28\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-29\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-30\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-30\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-30\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-30\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-30\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-31\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\arm64-v8a\lib\android-31\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\arm64-v8a\lib\android-31\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\arm64-v8a\lib\android-31\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\arm64-v8a\lib\android-31\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\bin\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\bin\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\bin\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\bin\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\bin\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\bin\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\bin\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\bin\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-10\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-10\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-10\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-10\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-10\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-14\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-14\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-14\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-14\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-14\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-15\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-15\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-15\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-15\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-15\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-16\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-16\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-16\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-16\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-16\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-17\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-17\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-17\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-17\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-17\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-18\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-18\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-18\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-18\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-18\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-19\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-19\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-19\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-19\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-19\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-21\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-21\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-21\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-21\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-21\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-22\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-22\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-22\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-22\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-22\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-23\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-23\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-23\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-23\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-23\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-24\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-24\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-24\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-24\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-24\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-25\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-25\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-25\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-25\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-25\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-26\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-26\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-26\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-26\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-26\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-27\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-27\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-27\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-27\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-27\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-28\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-28\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-28\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-28\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-28\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-29\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-30\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-30\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-30\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-30\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-30\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-31\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-31\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-31\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-31\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-31\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-9\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\armeabi-v7a\lib\android-9\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\armeabi-v7a\lib\android-9\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\armeabi-v7a\lib\android-9\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\armeabi-v7a\lib\android-9\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\bin\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\bin\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\bin\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\bin\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\bin\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\bin\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\bin\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\bin\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-14\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-14\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-14\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-14\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-14\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-15\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-15\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-15\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-15\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-15\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-16\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-16\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-16\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-16\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-16\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-17\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-17\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-17\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-17\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-17\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-18\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-18\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-18\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-18\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-18\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-19\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-19\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-19\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-19\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-19\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-21\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-21\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-21\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-21\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-21\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-22\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-22\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-22\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-22\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-22\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-23\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-23\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-23\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-23\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-23\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-24\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-24\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-24\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-24\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-24\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-25\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-25\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-25\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-25\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-25\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-26\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-26\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-26\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-26\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-26\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-27\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-27\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-27\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-27\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-27\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-28\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-28\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-28\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-28\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-28\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-29\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-29\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-29\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-29\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-29\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-29\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-29\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-29\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-29\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-29\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-29\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-29\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-31\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86\lib\android-31\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86\lib\android-31\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86\lib\android-31\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86\lib\android-31\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\bin\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\bin\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\bin\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\bin\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\bin\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\bin\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\bin\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\bin\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\bin\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-21\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-21\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-21\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-21\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-21\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-22\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-22\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-22\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-22\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-22\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-23\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-23\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-23\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-23\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-23\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-24\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-24\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-24\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-24\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-24\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-25\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-25\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-25\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-25\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-25\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-26\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-26\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-26\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-26\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-26\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-27\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-27\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-27\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-27\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-27\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-28\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-28\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-28\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-28\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-28\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-29\minicap" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-29\minicap')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-29\minicap</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-29\minicap</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-29\minicap-nopie" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-29\minicap-nopie')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-29\minicap-nopie</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-29\minicap-nopie</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-29\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-29\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-29\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-29\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-29\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-31\minicap.so" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minicap\x86_64\lib\android-31\minicap.so')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minicap\x86_64\lib\android-31\minicap.so</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minicap\x86_64\lib\android-31\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minicap\x86_64\lib\android-31\minicap.so</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\arm64-v8a\minitouch" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\arm64-v8a\minitouch')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minitouch\arm64-v8a\minitouch</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minitouch\arm64-v8a\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minitouch\arm64-v8a\minitouch</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\armeabi-v7a\minitouch" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\armeabi-v7a\minitouch')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minitouch\armeabi-v7a\minitouch</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minitouch\armeabi-v7a\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minitouch\armeabi-v7a\minitouch</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\armeabi\minitouch" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\armeabi\minitouch')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minitouch\armeabi\minitouch</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minitouch\armeabi\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minitouch\armeabi\minitouch</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\x86\minitouch" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\x86\minitouch')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minitouch\x86\minitouch</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minitouch\x86\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minitouch\x86\minitouch</Link>
+    </None>
+    <None Include="$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\x86_64\minitouch" Condition="Exists('$(NuGetPackageRoot)maa.agentbinary\1.0.0\contentFiles\any\any\MaaAgentBinary\minitouch\x86_64\minitouch')">
+      <NuGetPackageId>Maa.AgentBinary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.0</NuGetPackageVersion>
+      <NuGetItemType>None</NuGetItemType>
+      <Pack>false</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MaaAgentBinary\minitouch\x86_64\minitouch</TargetPath>
+      <DestinationSubDirectory>MaaAgentBinary\minitouch\x86_64\</DestinationSubDirectory>
+      <Private>True</Private>
+      <Link>MaaAgentBinary\minitouch\x86_64\minitouch</Link>
+    </None>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgHandyControl Condition=" '$(PkgHandyControl)' == '' ">C:\Users\Manuel_0\.nuget\packages\handycontrol\3.5.1</PkgHandyControl>
+  </PropertyGroup>
+</Project>

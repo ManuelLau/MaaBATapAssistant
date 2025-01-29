@@ -1,0 +1,211 @@
+{
+	"CafeTap": {
+		"action": "Swipe",
+        "begin": [ 640, 600, 0, 0 ],
+        "end": [ 640, 360, 0, 0 ],
+		"post_delay": 1000,
+		"next": [
+			"Cafe1Tap@Tap"
+		],
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "Cafe1Tap@RefreshStep1",
+		"doc": "开始摸头，前置条件是处于咖啡厅且关闭了所有弹窗。终点是没有识别到可摸头标识&没有识别到好感升级界面"
+    },
+	"Cafe1Tap@Tap": {
+        "recognition": "TemplateMatch",
+        "template": "CanTapGreen.png",
+        "green_mask": true,
+        "threshold": 0.55,
+        "target_offset": [ 37, -3, 6, 6 ],
+        "action": "Click",
+		"next": [
+			"Cafe1Tap@Tap"
+		],
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "Cafe1Tap@RefreshStep1",
+		"pre_delay": 0,
+		"doc": "重复，直到识别不到可摸头标识。异常处理掉线弹窗"
+    },
+	"Cafe1Tap@RefreshStep1": {
+        "recognition": "OCR",
+        "text": "编辑模式",
+		"roi": [ 10, 590, 115, 110 ],
+        "action": "Click",
+		"next": "Cafe1Tap@RefreshStep2",
+		"doc": "刷新一下学生位置再次识别摸头，看有没有漏的"
+    },
+	"Cafe1Tap@RefreshStep2": {
+        "recognition": "OCR",
+        "text": "结束编辑模式",
+		"roi": [ 1090, 60, 180, 60 ],
+        "action": "Click",
+		"next": "Cafe1Tap@TapAgain",
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "EnterCafe2"
+    },
+	"Cafe1Tap@TapAgain": {
+        "recognition": "TemplateMatch",
+        "template": "CanTapGreen.png",
+        "green_mask": true,
+        "threshold": 0.55,
+        "target_offset": [ 37, -3, 6, 6 ],
+        "action": "Click",
+		"next": "Cafe1Tap@TapAgain",
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "EnterCafe2",
+		"pre_delay": 0,
+		"doc": "第二轮摸头，防止有漏掉的"
+    },
+	
+	"EnterCafe2": {
+		"next": [
+			"Cafe2Enter@GoToCafe2"
+		],
+		"interrupt": [
+			"CafeEnter@SwitchCafe",
+			"ClickCafeButton",
+			"WaitLoading",
+			"ClosePopup",
+			"ClickHomeButton",
+			"IdelTapScreen",
+			"CloseReward"
+		],
+		"doc": "切换到2号咖啡厅，前置条件是处于1号咖啡厅，且没有任何弹窗，不处于挂机状态"
+    },
+	"Cafe2Enter@GoToCafe2": {
+		"recognition": "OCR",
+        "text": "2号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"Cafe2Enter@CheckText"
+		],
+		"interrupt": [
+			"ClickCafeButton",
+			"WaitLoading",
+			"ClosePopup",
+			"ClickHomeButton",
+			"IdelTapScreen",
+			"CloseReward"
+		]
+	},
+	"Cafe2Enter@CheckText": {
+		"recognition": "OCR",
+        "text": "沙勒附属咖啡厅",
+		"roi": [ 30, 0, 300, 50 ],
+		"post_delay": 2000,
+		"next": [
+			"Cafe2Enter@CheckEarningsButton"
+		],
+		"interrupt": [
+			"WaitLoading",
+			"CafeEnter@CheckFirstTimePopup"
+		],
+		"doc": "第一个终点。确保进入到了咖啡厅，但是可能会有弹窗出现。进入后等待2秒看是否有弹窗"
+	},
+	"Cafe2Enter@CheckEarningsButton":{
+		"recognition": "ColorMatch",
+		"roi": [ 1202, 666, 7, 7 ],
+		"lower": [ 44, 69, 98 ],
+		"upper": [ 46, 71, 100 ],
+		"count": 47,
+		"next": "Cafe2Tap",
+		"doc": "第二个终点，通过检查咖啡厅收益按钮处的色值判断是否在咖啡厅界面且关闭了所有弹窗"
+	},
+	
+	"Cafe2Tap": {
+		"next": "Cafe2Tap@Tap",
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "Cafe2Tap@RefreshStep1"
+	},
+	"Cafe2Tap@Tap": {
+        "recognition": "TemplateMatch",
+        "template": "CanTapGreen.png",
+        "green_mask": true,
+        "threshold": 0.55,
+        "target_offset": [ 37, -3, 6, 6 ],
+        "action": "Click",
+		"next": "Cafe2Tap@Tap",
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "Cafe2Tap@RefreshStep1",
+		"pre_delay": 0
+    },
+	"Cafe2Tap@RefreshStep1": {
+        "recognition": "OCR",
+        "text": "编辑模式",
+		"roi": [ 10, 590, 115, 110 ],
+        "action": "Click",
+		"next": "Cafe2Tap@RefreshStep2",
+		"doc": "刷新一下学生位置再次识别摸头，看有没有漏的"
+    },
+	"Cafe2Tap@RefreshStep2": {
+        "recognition": "OCR",
+        "text": "结束编辑模式",
+		"roi": [ 1090, 60, 180, 60 ],
+        "action": "Click",
+		"next": "Cafe2Tap@TapAgain",
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "Stop"
+    },
+	"Cafe2Tap@TapAgain": {
+        "recognition": "TemplateMatch",
+        "template": "CanTapGreen.png",
+        "green_mask": true,
+        "threshold": 0.55,
+        "target_offset": [ 37, -3, 6, 6 ],
+        "action": "Click",
+		"next": "Cafe2Tap@TapAgain",
+		"interrupt": [
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 4000,
+		"on_error": "Stop",
+		"pre_delay": 0
+    },
+	"CloseBondLevelUp": {
+		"recognition": "OCR",
+        "text": "好感等级提升",
+		"roi": [ 428, 574, 396, 90 ],
+		"action": "Click",
+		"target": [640, 360, 0, 0],
+		"doc": "关闭好感升级界面"
+    }
+}

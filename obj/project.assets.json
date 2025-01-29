@@ -1,0 +1,1078 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0-windows7.0": {
+      "CalcBinding/2.5.2": {
+        "type": "package",
+        "dependencies": {
+          "DynamicExpresso.Core": "2.3.1"
+        },
+        "compile": {
+          "lib/netcoreapp3.0/CalcBinding.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/CalcBinding.dll": {}
+        }
+      },
+      "CommunityToolkit.Mvvm/8.4.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.Mvvm.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/CommunityToolkit.Mvvm.targets": {}
+        }
+      },
+      "DynamicExpresso.Core/2.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/DynamicExpresso.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/DynamicExpresso.Core.dll": {}
+        }
+      },
+      "HandyControl/3.5.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/HandyControl.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/HandyControl.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      },
+      "Maa.AgentBinary/1.0.0": {
+        "type": "package",
+        "contentFiles": {
+          "contentFiles/any/any/MaaAgentBinary/maatouch/universal/maatouch": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/maatouch/universal/maatouch"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/bin/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/bin/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/bin/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/bin/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-21/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-21/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-22/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-22/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-23/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-23/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-24/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-24/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-25/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-25/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-26/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-26/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-27/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-27/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-28/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-28/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-30/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-30/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-31/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/arm64-v8a/lib/android-31/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/bin/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/bin/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/bin/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/bin/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-10/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-10/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-14/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-14/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-15/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-15/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-16/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-16/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-17/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-17/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-18/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-18/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-19/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-19/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-21/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-21/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-22/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-22/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-23/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-23/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-24/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-24/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-25/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-25/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-26/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-26/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-27/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-27/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-28/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-28/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-30/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-30/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-31/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-31/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-9/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/armeabi-v7a/lib/android-9/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/bin/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/bin/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/bin/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/bin/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-14/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-14/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-15/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-15/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-16/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-16/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-17/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-17/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-18/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-18/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-19/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-19/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-21/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-21/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-22/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-22/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-23/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-23/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-24/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-24/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-25/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-25/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-26/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-26/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-27/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-27/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-28/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-28/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-29/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-29/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-29/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-29/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-29/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-29/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-31/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86/lib/android-31/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/bin/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/bin/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/bin/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/bin/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-21/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-21/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-22/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-22/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-23/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-23/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-24/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-24/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-25/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-25/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-26/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-26/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-27/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-27/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-28/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-28/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-29/minicap": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-29/minicap"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-29/minicap-nopie": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-29/minicap-nopie"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-29/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-29/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-31/minicap.so": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minicap/x86_64/lib/android-31/minicap.so"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minitouch/arm64-v8a/minitouch": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minitouch/arm64-v8a/minitouch"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minitouch/armeabi-v7a/minitouch": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minitouch/armeabi-v7a/minitouch"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minitouch/armeabi/minitouch": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minitouch/armeabi/minitouch"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minitouch/x86/minitouch": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minitouch/x86/minitouch"
+          },
+          "contentFiles/any/any/MaaAgentBinary/minitouch/x86_64/minitouch": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": true,
+            "outputPath": "MaaAgentBinary/minitouch/x86_64/minitouch"
+          }
+        }
+      },
+      "Maa.Framework.Binding/2.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/MaaFramework.Binding.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/MaaFramework.Binding.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Maa.Framework.Binding.Native/2.3.1": {
+        "type": "package",
+        "dependencies": {
+          "Maa.Framework.Binding": "2.3.1"
+        },
+        "compile": {
+          "lib/net8.0/MaaFramework.Binding.Native.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/MaaFramework.Binding.Native.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Maa.Framework.Native/2.3.1": {
+        "type": "package",
+        "dependencies": {
+          "Maa.AgentBinary": "1.0.0",
+          "Maa.Framework.Binding.Native": "2.3.1"
+        },
+        "compile": {
+          "lib/net8.0/_._": {}
+        },
+        "runtime": {
+          "lib/net8.0/_._": {}
+        }
+      },
+      "Maa.Framework.Runtime.win-x64/2.4.2": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-x64/native/DirectML.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/MaaAdbControlUnit.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/MaaDbgControlUnit.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/MaaFramework.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/MaaToolkit.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/MaaUtils.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/MaaWin32ControlUnit.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/fastdeploy_ppocr_maa.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/onnxruntime_maa.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/opencv_world4_maa.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CalcBinding/2.5.2": {
+      "sha512": "hbMnS12GUmWTFVROhKJMAQNv5Cqx+AjVGOGGjUOidEaRQ5oGr87PCZih5kfEA/8qlRMzpBsMPQ0fiOahPWwmXQ==",
+      "type": "package",
+      "path": "calcbinding/2.5.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "calcbinding.2.5.2.nupkg.sha512",
+        "calcbinding.nuspec",
+        "lib/net40/CalcBinding.dll",
+        "lib/net45/CalcBinding.dll",
+        "lib/netcoreapp3.0/CalcBinding.dll"
+      ]
+    },
+    "CommunityToolkit.Mvvm/8.4.0": {
+      "sha512": "tqVU8yc/ADO9oiTRyTnwhFN68hCwvkliMierptWOudIAvWY1mWCh5VFh+guwHJmpMwfg0J0rY+yyd5Oy7ty9Uw==",
+      "type": "package",
+      "path": "communitytoolkit.mvvm/8.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "License.md",
+        "ThirdPartyNotices.txt",
+        "analyzers/dotnet/roslyn4.0/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.0/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn4.12/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.12/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "analyzers/dotnet/roslyn4.3/cs/CommunityToolkit.Mvvm.CodeFixers.dll",
+        "analyzers/dotnet/roslyn4.3/cs/CommunityToolkit.Mvvm.SourceGenerators.dll",
+        "build/CommunityToolkit.Mvvm.FeatureSwitches.targets",
+        "build/CommunityToolkit.Mvvm.SourceGenerators.targets",
+        "build/CommunityToolkit.Mvvm.Windows.targets",
+        "build/CommunityToolkit.Mvvm.WindowsSdk.targets",
+        "build/CommunityToolkit.Mvvm.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.FeatureSwitches.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.SourceGenerators.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.Windows.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.WindowsSdk.targets",
+        "buildTransitive/CommunityToolkit.Mvvm.targets",
+        "communitytoolkit.mvvm.8.4.0.nupkg.sha512",
+        "communitytoolkit.mvvm.nuspec",
+        "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.dll",
+        "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.pdb",
+        "lib/net8.0-windows10.0.17763/CommunityToolkit.Mvvm.xml",
+        "lib/net8.0/CommunityToolkit.Mvvm.dll",
+        "lib/net8.0/CommunityToolkit.Mvvm.pdb",
+        "lib/net8.0/CommunityToolkit.Mvvm.xml",
+        "lib/netstandard2.0/CommunityToolkit.Mvvm.dll",
+        "lib/netstandard2.0/CommunityToolkit.Mvvm.pdb",
+        "lib/netstandard2.0/CommunityToolkit.Mvvm.xml",
+        "lib/netstandard2.1/CommunityToolkit.Mvvm.dll",
+        "lib/netstandard2.1/CommunityToolkit.Mvvm.pdb",
+        "lib/netstandard2.1/CommunityToolkit.Mvvm.xml"
+      ]
+    },
+    "DynamicExpresso.Core/2.3.1": {
+      "sha512": "gAoOdAA7KypwC2aEWbm72ZcNj9ERn0GBrFyFrLm9tRZGd+z1rgnKlh+BtWJi9X32ldzOwItY/Ty5ao6CqbG5ig==",
+      "type": "package",
+      "path": "dynamicexpresso.core/2.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "dynamicexpresso.core.2.3.1.nupkg.sha512",
+        "dynamicexpresso.core.nuspec",
+        "lib/net45/DynamicExpresso.Core.dll",
+        "lib/net461/DynamicExpresso.Core.dll",
+        "lib/netstandard2.0/DynamicExpresso.Core.dll"
+      ]
+    },
+    "HandyControl/3.5.1": {
+      "sha512": "i2i0xrLev7F1MFnhf0DP1CNCdGw8hVJ0HJrI0kxRv02ZJgaAzLzDTgAXDPY8GAoD3aYnBLSgM74lBHZ844KQnQ==",
+      "type": "package",
+      "path": "handycontrol/3.5.1",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "handycontrol.3.5.1.nupkg.sha512",
+        "handycontrol.nuspec",
+        "icon.png",
+        "lib/net40/HandyControl.dll",
+        "lib/net40/HandyControl.xml",
+        "lib/net45/HandyControl.dll",
+        "lib/net45/HandyControl.xml",
+        "lib/net451/HandyControl.dll",
+        "lib/net451/HandyControl.xml",
+        "lib/net452/HandyControl.dll",
+        "lib/net452/HandyControl.xml",
+        "lib/net46/HandyControl.dll",
+        "lib/net46/HandyControl.xml",
+        "lib/net461/HandyControl.dll",
+        "lib/net461/HandyControl.xml",
+        "lib/net462/HandyControl.dll",
+        "lib/net462/HandyControl.xml",
+        "lib/net47/HandyControl.dll",
+        "lib/net47/HandyControl.xml",
+        "lib/net471/HandyControl.dll",
+        "lib/net471/HandyControl.xml",
+        "lib/net472/HandyControl.dll",
+        "lib/net472/HandyControl.xml",
+        "lib/net48/HandyControl.dll",
+        "lib/net48/HandyControl.xml",
+        "lib/net481/HandyControl.dll",
+        "lib/net481/HandyControl.xml",
+        "lib/net5.0/HandyControl.deps.json",
+        "lib/net5.0/HandyControl.dll",
+        "lib/net5.0/HandyControl.xml",
+        "lib/net6.0/HandyControl.deps.json",
+        "lib/net6.0/HandyControl.dll",
+        "lib/net6.0/HandyControl.xml",
+        "lib/net7.0/HandyControl.deps.json",
+        "lib/net7.0/HandyControl.dll",
+        "lib/net7.0/HandyControl.xml",
+        "lib/net8.0/HandyControl.deps.json",
+        "lib/net8.0/HandyControl.dll",
+        "lib/net8.0/HandyControl.xml",
+        "lib/netcoreapp3.0/HandyControl.deps.json",
+        "lib/netcoreapp3.0/HandyControl.dll",
+        "lib/netcoreapp3.0/HandyControl.xml",
+        "lib/netcoreapp3.1/HandyControl.deps.json",
+        "lib/netcoreapp3.1/HandyControl.dll",
+        "lib/netcoreapp3.1/HandyControl.xml",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "Maa.AgentBinary/1.0.0": {
+      "sha512": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA==",
+      "type": "package",
+      "path": "maa.agentbinary/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "contentFiles/any/any/MaaAgentBinary/maatouch/universal/maatouch",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/bin/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/bin/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-21/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-22/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-23/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-24/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-25/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-26/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-27/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-28/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-29/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-30/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/arm64-v8a/lib/android-31/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/bin/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/bin/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-10/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-14/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-15/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-16/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-17/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-18/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-19/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-21/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-22/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-23/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-24/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-25/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-26/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-27/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-28/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-29/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-30/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-31/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/armeabi-v7a/lib/android-9/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/bin/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/bin/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-14/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-15/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-16/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-17/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-18/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-19/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-21/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-22/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-23/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-24/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-25/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-26/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-27/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-28/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-29/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-29/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-29/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86/lib/android-31/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/bin/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/bin/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-21/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-22/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-23/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-24/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-25/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-26/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-27/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-28/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-29/minicap",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-29/minicap-nopie",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-29/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minicap/x86_64/lib/android-31/minicap.so",
+        "contentFiles/any/any/MaaAgentBinary/minitouch/arm64-v8a/minitouch",
+        "contentFiles/any/any/MaaAgentBinary/minitouch/armeabi-v7a/minitouch",
+        "contentFiles/any/any/MaaAgentBinary/minitouch/armeabi/minitouch",
+        "contentFiles/any/any/MaaAgentBinary/minitouch/x86/minitouch",
+        "contentFiles/any/any/MaaAgentBinary/minitouch/x86_64/minitouch",
+        "maa-logo_128x128.png",
+        "maa.agentbinary.1.0.0.nupkg.sha512",
+        "maa.agentbinary.nuspec"
+      ]
+    },
+    "Maa.Framework.Binding/2.3.1": {
+      "sha512": "Gm0SClFr9AzkcuHwJeJWTLEow2kWBy2pl0g0QtI672NAdmU5ul4kfM+6YPkbuDymeZTKkW1qayZ10YLpYeHCIQ==",
+      "type": "package",
+      "path": "maa.framework.binding/2.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net7.0/MaaFramework.Binding.dll",
+        "lib/net7.0/MaaFramework.Binding.xml",
+        "lib/net8.0/MaaFramework.Binding.dll",
+        "lib/net8.0/MaaFramework.Binding.xml",
+        "maa-logo_128x128.png",
+        "maa.framework.binding.2.3.1.nupkg.sha512",
+        "maa.framework.binding.nuspec"
+      ]
+    },
+    "Maa.Framework.Binding.Native/2.3.1": {
+      "sha512": "YyOO497DhOwU3+vCdmTDgau3wPSH/zeS22OPhTb5EaB0bFkoLbXasQX/+un/8vqgWLZZNLLUGcxkg4S3//tPBQ==",
+      "type": "package",
+      "path": "maa.framework.binding.native/2.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net7.0/MaaFramework.Binding.Native.dll",
+        "lib/net7.0/MaaFramework.Binding.Native.xml",
+        "lib/net8.0/MaaFramework.Binding.Native.dll",
+        "lib/net8.0/MaaFramework.Binding.Native.xml",
+        "maa-logo_128x128.png",
+        "maa.framework.binding.native.2.3.1.nupkg.sha512",
+        "maa.framework.binding.native.nuspec"
+      ]
+    },
+    "Maa.Framework.Native/2.3.1": {
+      "sha512": "kSz+oKYWYsZZFkcK7WKca5byq58Do7+pcKGgAEjkaGtw5vZ/HS/1jiIHbwEXWhfeHotPRzCsgKI3FhW4lpl2VA==",
+      "type": "package",
+      "path": "maa.framework.native/2.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "2.3.1/docs/en_us/1.1-QuickStarted.md",
+        "2.3.1/docs/en_us/2.1-Integration.md",
+        "2.3.1/docs/en_us/2.2-CallbackProtocol.md",
+        "2.3.1/docs/en_us/3.1-PipelineProtocol.md",
+        "2.3.1/docs/en_us/4.1-BuildGuide.md",
+        "2.3.1/docs/en_us/4.2-StandardizedInterfaceDesign.md",
+        "2.3.1/docs/en_us/NodeJS/J1.1-QuickStarted.md",
+        "2.3.1/docs/en_us/NodeJS/J1.2-Custom Recognition and Action.md",
+        "2.3.1/docs/en_us/NodeJS/J1.3-Packaging.md",
+        "2.3.1/docs/zh_cn/1.1-快速开始.md",
+        "2.3.1/docs/zh_cn/2.1-集成文档.md",
+        "2.3.1/docs/zh_cn/2.2-回调协议.md",
+        "2.3.1/docs/zh_cn/3.1-任务流水线协议.md",
+        "2.3.1/docs/zh_cn/3.2-ProjectInterface协议.md",
+        "2.3.1/docs/zh_cn/4.1-构建指南.md",
+        "2.3.1/docs/zh_cn/4.2-标准化接口设计.md",
+        "2.3.1/docs/zh_cn/NodeJS/J1.1-快速开始.md",
+        "2.3.1/docs/zh_cn/NodeJS/J1.2-自定义识别_操作.md",
+        "2.3.1/docs/zh_cn/NodeJS/J1.3-打包.md",
+        "README.md",
+        "lib/net7.0/_._",
+        "lib/net8.0/_._",
+        "maa-logo_128x128.png",
+        "maa.framework.native.2.3.1.nupkg.sha512",
+        "maa.framework.native.nuspec"
+      ]
+    },
+    "Maa.Framework.Runtime.win-x64/2.4.2": {
+      "sha512": "22TyZB4Jl1Jim54aNiy/n2/VsWPoT59N/LguXs/22Wq7APUECwjw1G2mGAYO+XbZmNt0v1rOuDIGBu+Z0GskYA==",
+      "type": "package",
+      "path": "maa.framework.runtime.win-x64/2.4.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "maa-logo_128x128.png",
+        "maa.framework.runtime.win-x64.2.4.2.nupkg.sha512",
+        "maa.framework.runtime.win-x64.nuspec",
+        "runtimes/win-x64/native/DirectML.dll",
+        "runtimes/win-x64/native/MaaAdbControlUnit.dll",
+        "runtimes/win-x64/native/MaaDbgControlUnit.dll",
+        "runtimes/win-x64/native/MaaFramework.dll",
+        "runtimes/win-x64/native/MaaToolkit.dll",
+        "runtimes/win-x64/native/MaaUtils.dll",
+        "runtimes/win-x64/native/MaaWin32ControlUnit.dll",
+        "runtimes/win-x64/native/fastdeploy_ppocr_maa.dll",
+        "runtimes/win-x64/native/onnxruntime_maa.dll",
+        "runtimes/win-x64/native/opencv_world4_maa.dll"
+      ]
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0-windows7.0": [
+      "CalcBinding >= 2.5.2",
+      "CommunityToolkit.Mvvm >= 8.4.0",
+      "HandyControl >= 3.5.1",
+      "Maa.Framework.Native >= 2.3.1",
+      "Maa.Framework.Runtime.win-x64 >= 2.4.2",
+      "Newtonsoft.Json >= 13.0.3"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Manuel_0\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "D:\\BA\\My\\MaaBATapAssistant\\MaaBATapAssistant.csproj",
+      "projectName": "MaaBATapAssistant",
+      "projectPath": "D:\\BA\\My\\MaaBATapAssistant\\MaaBATapAssistant.csproj",
+      "packagesPath": "C:\\Users\\Manuel_0\\.nuget\\packages\\",
+      "outputPath": "D:\\BA\\My\\MaaBATapAssistant\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Manuel_0\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0-windows"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.100"
+    },
+    "frameworks": {
+      "net8.0-windows7.0": {
+        "targetAlias": "net8.0-windows",
+        "dependencies": {
+          "CalcBinding": {
+            "target": "Package",
+            "version": "[2.5.2, )"
+          },
+          "CommunityToolkit.Mvvm": {
+            "target": "Package",
+            "version": "[8.4.0, )"
+          },
+          "HandyControl": {
+            "target": "Package",
+            "version": "[3.5.1, )"
+          },
+          "Maa.Framework.Native": {
+            "target": "Package",
+            "version": "[2.3.1, )"
+          },
+          "Maa.Framework.Runtime.win-x64": {
+            "target": "Package",
+            "version": "[2.4.2, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.3, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WPF": {
+            "privateAssets": "none"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
