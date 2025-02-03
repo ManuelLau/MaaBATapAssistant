@@ -6,17 +6,17 @@ namespace MaaBATapAssistant.Utils;
 public class PreventSleepTool
 {
     private const uint ES_CONTINUOUS = 0x80000000;
-    private const int ES_SYSTEM_REQUIRED = 0x00000001;
+    private const int ES_SYSTEM_REQUIRED = 0x00000001; //防止系统睡眠
     [DllImport("kernel32.dll")]
     private static extern uint SetThreadExecutionState(uint flags);
 
-    public static void PreventSleep()
+    public static uint PreventSleep()
     {
-        SetThreadExecutionState(ES_SYSTEM_REQUIRED);
+        return SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
     }
 
-    public static void RestoreSleep()
+    public static uint RestoreSleep()
     {
-        SetThreadExecutionState(ES_CONTINUOUS);
+        return SetThreadExecutionState(ES_CONTINUOUS);
     }
 }
