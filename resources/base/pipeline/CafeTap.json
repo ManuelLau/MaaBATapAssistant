@@ -1,0 +1,99 @@
+{
+	"CafeTap": {
+		"action": "Swipe",
+        "begin": [ 640, 560, 0, 0 ],
+        "end": [ 640, 300, 0, 0 ],
+		"post_delay": 1000,
+		"next": "CafeTap@DeadLoop",
+		"interrupt": [
+			"CafeTap@Tap",
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 3000,
+		"on_error": "CafeTap@RefreshStep0",
+		"doc": "开始摸头，前置条件是处于咖啡厅且关闭了所有弹窗"
+    },
+	"CafeTap@Tap": {
+        "recognition": "TemplateMatch",
+        "template": "CanTapGreen.png",
+        "green_mask": true,
+        "threshold": 0.55,
+		"pre_delay": 0,
+        "target_offset": [ 37, -3, 6, 6 ],
+        "action": "Click",
+		"doc": "重复，直到识别不到可摸头标识。异常处理：好感升级界面"
+    },
+	"CafeTap@RefreshStep0": {
+		"next": "CafeTap@RefreshStep1",
+		"interrupt": "Cafe@ClickUnfoldButton",
+		"doc": "第0步用于从on_error跳转，以便识别interrupt"
+    },
+	"CafeTap@RefreshStep1": {
+        "recognition": "OCR",
+        "text": "编辑模式",
+		"roi": [ 10, 590, 115, 110 ],
+        "action": "Click",
+		"next": "CafeTap@RefreshStep2",
+		"interrupt": "Cafe@ClickUnfoldButton",
+		"doc": "刷新一下学生位置再次识别摸头，看有没有漏的"
+    },
+	"CafeTap@RefreshStep2": {
+        "recognition": "OCR",
+        "text": "结束编辑模式",
+		"roi": [ 1090, 60, 180, 60 ],
+        "action": "Click",
+		"next": "CafeTap@DeadLoop",
+		"interrupt": [
+			"CafeTap@Tap",
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 3000,
+		"on_error": "CafeTap@RefreshAgainStep0"
+    },
+	"CafeTap@RefreshAgainStep0": {
+		"next": "CafeTap@RefreshAgainStep1",
+		"interrupt": "Cafe@ClickUnfoldButton"
+    },
+	"CafeTap@RefreshAgainStep1": {
+        "recognition": "OCR",
+        "text": "编辑模式",
+		"roi": [ 10, 590, 115, 110 ],
+        "action": "Click",
+		"next": "CafeTap@RefreshAgainStep2",
+		"interrupt": "Cafe@ClickUnfoldButton",
+		"doc": "再次刷新学生位置，还有漏的说明没缘分"
+    },
+	"CafeTap@RefreshAgainStep2": {
+        "recognition": "OCR",
+        "text": "结束编辑模式",
+		"roi": [ 1090, 60, 180, 60 ],
+        "action": "Click",
+		"next": "CafeTap@DeadLoop",
+		"interrupt": [
+			"CafeTap@Tap",
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 3000,
+		"on_error": "Stop"
+    },
+
+	"CafeTap@DeadLoop": {
+        "recognition": "TemplateMatch",
+        "template": "CafeButton.png",
+		"doc": "死循环，用于持续执行interrupt任务"
+    },
+	"CloseBondLevelUp": {
+		"recognition": "OCR",
+        "text": "升",
+		"roi": [ 428, 574, 396, 90 ],
+		"action": "Click",
+		"target": [640, 360, 0, 0],
+		"doc": "关闭好感升级界面，只检测升字可以同时适配简体、繁体客户端"
+    }
+}

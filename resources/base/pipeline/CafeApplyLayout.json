@@ -1,0 +1,50 @@
+{
+	"CafeApplyLayout": {
+		"next": "CafeLayout@ApplyLayout",
+		"interrupt": [
+			"CafeLayout@ClickLayoutButton",
+			"Cafe@ClickUnfoldButton",
+			"IdelTapScreen"
+		],
+		"timeout": 2000
+    },
+	"CafeLayout@ClickLayoutButton": {
+        "recognition": "OCR",
+        "text": "预设",
+		"roi": [ 315, 650, 85, 35 ],
+        "action": "Click",
+        "target_offset": [ 0, -20, 0, 0 ],
+		"post_delay": 1000
+    },
+	"CafeLayout@ApplyLayout": {
+        "recognition": "OCR",
+        "text": "应用预设",
+		"roi": [ 888, 273, 178, 342 ],
+		"order_by": "Vertical",
+		"index": 0,
+        "action": "Click",
+		"post_delay": 1000,
+		"next": "CafeLayout@RecognizeCheck",
+		"doc": "*根据配置重载这里的index字段来选择应用第几个家具预设，只支持1~3项，其他的懒得做了"
+    },
+	"CafeLayout@RecognizeCheck": {
+        "recognition": "OCR",
+        "text": "隔壁咖啡厅的家具",
+		"roi": [ 387, 385, 510, 60 ],
+        "action": "Click",
+		"next": "CafeLayout@IsCheck"
+    },
+	"CafeLayout@IsCheck": {
+        "recognition": "TemplateMatch",
+        "template": "ApplyLayoutCheck.png",
+		"roi": [ 380, 380, 68, 68 ],
+		"next": "CafeLayout@Confirm"
+    },
+	"CafeLayout@Confirm": {
+        "recognition": "OCR",
+        "text": "确认",
+		"roi": [ 650, 462, 234, 76 ],
+        "action": "Click",
+		"post_delay": 2000
+    }
+}

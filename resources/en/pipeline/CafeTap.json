@@ -1,0 +1,57 @@
+{
+	
+	"CafeTap@RefreshStep1": {
+        "recognition": "OCR",
+        "text": "Edit",
+		"roi": [ 10, 590, 115, 110 ],
+        "action": "Click",
+		"next": "CafeTap@RefreshStep2",
+		"interrupt": "Cafe@ClickUnfoldButton"
+    },
+	"CafeTap@RefreshStep2": {
+        "recognition": "OCR",
+        "text": "Finish",
+		"roi": [ 1090, 60, 180, 60 ],
+        "action": "Click",
+		"next": "CafeTap@DeadLoop",
+		"interrupt": [
+			"CafeTap@Tap",
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 3000,
+		"on_error": "CafeTap@RefreshAgainStep0"
+    },
+	"CafeTap@RefreshAgainStep1": {
+        "recognition": "OCR",
+        "text": "Edit",
+		"roi": [ 10, 590, 115, 110 ],
+        "action": "Click",
+		"next": "CafeTap@RefreshAgainStep2",
+		"interrupt": "Cafe@ClickUnfoldButton"
+    },
+	"CafeTap@RefreshAgainStep2": {
+        "recognition": "OCR",
+        "text": "Finish",
+		"roi": [ 1090, 60, 180, 60 ],
+        "action": "Click",
+		"next": "CafeTap@DeadLoop",
+		"interrupt": [
+			"CafeTap@Tap",
+			"CloseBondLevelUp",
+			"CloseReward",
+			"ClosePopup"
+		],
+		"timeout": 3000,
+		"on_error": "Stop"
+    },
+
+	"CloseBondLevelUp": {
+		"recognition": "OCR",
+        "text": "rank up",
+		"roi": [ 428, 574, 396, 90 ],
+		"action": "Click",
+		"target": [640, 360, 0, 0]
+    }
+}

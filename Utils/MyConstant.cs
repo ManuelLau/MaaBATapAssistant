@@ -5,9 +5,11 @@ public static class MyConstant
     public const string AppVersion = "0.1.0";
     public const string ResourceVersion = "0.1.0";
     public const string ConfigJsonFilePath = "./config/config.json";
-    public const string MaaSourcePath = "./resource/base";
-    public const string MaaSourcePathBiliBiliOverride = "./resource/bilibili";
-    public const string MaaSourcePathCHTOverride = "./resource/cht";
+    public const string MaaSourcePath = "./resources/base";
+    public const string MaaSourcePathBiliBiliOverride = "./resources/bilibili";
+    public const string MaaSourcePathZhtwOverride = "./resources/zh-tw";
+    public const string MaaSourcePathEnOverride = "./resources/en";
+    public const string MaaSourcePathJpOverride = "./resources/jp";
     public static readonly TimeOnly RefreshTimeOnlyCN = new(4, 0, 0);
     public static readonly TimeOnly RefreshTimeOnlyNexon = new(3, 0, 0);
     /// <summary>

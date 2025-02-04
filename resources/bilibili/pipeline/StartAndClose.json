@@ -1,0 +1,8 @@
+{
+	"StartGame": {
+        "action": "StartApp",
+		"package": "com.RoamingStar.BlueArchive.bilibili/com.yostar.supersdk.activity.YoStarSplashActivity",
+		"post_delay": 2000,
+		"next": "RefreshGame@IdelClick"
+    }
+}

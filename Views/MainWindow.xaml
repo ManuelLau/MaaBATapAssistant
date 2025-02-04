@@ -11,7 +11,7 @@
     xmlns:models="clr-namespace:MaaBATapAssistant.Models"
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     mc:Ignorable="d"  Height="500" Width="720" MinHeight="500" MinWidth="700" 
-    Icon="/MaaBATapAssistant;component/resource/AppIcon_256x256.ico" Title="MaaBA摸头小助手" Background="White">
+    Icon="/MaaBATapAssistant;component/resources/AppIcon_256x256.ico" Title="MaaBA摸头小助手" Background="White">
 
     <hc:Window.Resources>
         <utils:TaskStatusToColorConverter x:Key="TaskStatusToColorConverter" />

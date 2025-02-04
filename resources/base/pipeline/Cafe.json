@@ -1,0 +1,186 @@
+{
+	"MoveToCafe1": {
+		"next": [
+			"MoveToCafe1@RecognizeNumberText",
+			"Cafe@EnterCafe"
+		],
+		"interrupt": [
+			"ClosePopup",
+			"CloseReward",
+			"Cafe@ClickMoveCafeButton",
+			"WaitLoading",
+			"ClickHomeButton",
+			"IdelTapScreen"
+		],
+		"doc": "已优化，可以在任务地方进入到1号咖啡厅"
+    },
+	"MoveToCafe1@RecognizeNumberText": {
+		"recognition": "OCR",
+        "text": "号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"next": [
+			"MoveToCafe1@InCafe1",
+			"MoveToCafe1@MoveToCafe1"
+		]
+    },
+	"MoveToCafe1@InCafe1":{
+		"recognition": "ColorMatch",
+		"roi": [ 72, 160, 6, 6 ],
+		"lower": [ 34, 59, 89 ],
+		"upper": [ 54, 79, 109 ],
+		"count": 30,
+		"next": "Cafe@CloseMoveCafeButtonThenDoJob",
+		"timeout": 2000,
+		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
+	},
+	"MoveToCafe1@MoveToCafe1": {
+		"recognition": "OCR",
+        "text": "1号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": "Cafe@RecognizeTopLeftText",
+		"interrupt": "WaitLoading",
+		"timeout": 2000
+    },
+
+
+	"MoveToCafe2": {
+		"next": [
+			"MoveToCafe2@RecognizeNumberText",
+			"MoveToCafe2@EnterCafeThenMoveToCafe2"
+		],
+		"interrupt": [
+			"ClosePopup",
+			"CloseReward",
+			"Cafe@ClickMoveCafeButton",
+			"WaitLoading",
+			"ClickHomeButton",
+			"IdelTapScreen"
+		]
+    },
+	"MoveToCafe2@RecognizeNumberText": {
+		"recognition": "OCR",
+        "text": "号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"next": [
+			"MoveToCafe2@InCafe2",
+			"MoveToCafe2@MoveToCafe2"
+		]
+    },
+	"MoveToCafe2@InCafe2":{
+		"recognition": "ColorMatch",
+		"roi": [ 214, 160, 6, 6 ],
+		"lower": [ 34, 59, 89 ],
+		"upper": [ 54, 79, 109 ],
+		"count": 30,
+		"next": "Cafe@CloseMoveCafeButtonThenDoJob",
+		"timeout": 2000,
+		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
+	},
+	"MoveToCafe2@MoveToCafe2": {
+		"recognition": "OCR",
+        "text": "2号店",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": "Cafe@RecognizeTopLeftText",
+		"interrupt": "WaitLoading",
+		"timeout": 2000
+    },
+	"MoveToCafe2@EnterCafeThenMoveToCafe2": {
+		"recognition": "TemplateMatch",
+        "template": "CafeButton.png",
+		"roi": [ 0, 600, 150, 120 ],
+        "action": "Click",
+		"post_delay": 1000,
+		"next": "MoveToCafe2@RecognizeNumberText",
+		"interrupt": [
+			"WaitLoading",
+			"Cafe@ClickCafeButton",
+			"Cafe@ClickMoveCafeButton",
+			"ClosePopup"
+		],
+		"doc": "从主界面进入咖啡厅，然后切换到2号咖啡厅"
+    },
+
+	"Cafe@ClickMoveCafeButton": {
+		"recognition": "OCR",
+        "text": "前往咖啡厅",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000
+    },
+	"Cafe@CloseMoveCafeButtonThenDoJob": {
+		"recognition": "OCR",
+        "text": "前往咖啡厅",
+		"roi": [ 5, 55, 385, 125 ],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": "Stop",
+		"timeout": 2000
+    },
+	"Cafe@ClickCafeButton": {
+		"recognition": "TemplateMatch",
+        "template": "CafeButton.png",
+		"roi": [ 0, 600, 150, 120 ],
+        "action": "Click",
+		"post_delay": 1000
+    },
+
+	"Cafe@EnterCafe": {
+		"recognition": "TemplateMatch",
+        "template": "CafeButton.png",
+		"roi": [ 0, 600, 150, 120 ],
+        "action": "Click",
+		"post_delay": 1000,
+		"next": "Cafe@RecognizeTopLeftText",
+		"interrupt": [
+			"WaitLoading",
+			"Cafe@ClickCafeButton"
+		],
+		"doc": "从主界面进入咖啡厅。默认会先进入1号咖啡厅，所以使用另外的pipeline"
+    },
+	"Cafe@RecognizeTopLeftText": {
+		"recognition": "OCR",
+        "text": "沙勒附属咖啡厅",
+		"roi": [ 30, 0, 300, 50 ],
+		"post_delay": 1000,
+		"next": "Cafe@RecognizeEarningsButton",
+		"interrupt": [
+			"WaitLoading",
+			"Cafe@RecognizeFirstTimePopup"
+		],
+		"doc": "第一个任务检查点：识别左上角文字。确保进入到了咖啡厅，但是可能会有弹窗出现。进入后等待2秒"
+	},
+	"Cafe@RecognizeEarningsButton":{
+		"recognition": "ColorMatch",
+		"roi": [ 1094, 626, 6, 6 ],
+		"lower": [ 35, 60, 89 ],
+		"upper": [ 55, 80, 109 ],
+		"count": 32,
+		"next": "Stop",
+		"doc": "识别咖啡厅收益按钮处的色值判断是否关闭了所有弹窗"
+	},
+	"Cafe@RecognizeFirstTimePopup": {
+		"recognition": "OCR",
+        "text": "到访成员列表",
+		"roi": [ 520, 200, 220, 100 ],
+		"next": "Cafe@CloseFirstTimePopup",
+		"doc": "检查并关闭该时间段首次进入咖啡厅的弹窗"
+	},
+	"Cafe@CloseFirstTimePopup": {
+		"recognition": "TemplateMatch",
+        "template": "CloseButtonBlack.png",
+		"action": "Click"
+	},
+
+	"Cafe@ClickUnfoldButton": {
+		"recognition": "TemplateMatch",
+        "template": "CafeUnfoldButton.png",
+		"roi": [ 20, 585, 80, 80 ],
+        "action": "Click",
+		"post_delay": 1000,
+		"doc": "点击底部左侧UI栏的展开按钮"
+    }
+}

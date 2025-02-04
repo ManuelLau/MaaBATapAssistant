@@ -7,16 +7,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>False</UseWindowsForms>
-    <ApplicationIcon>resource\AppIcon_256x256.ico</ApplicationIcon>
+    <ApplicationIcon>resources\AppIcon_256x256.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Resource\AppIcon_256x256.ico">
+    <Content Include="resources\AppIcon_256x256.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="CalcBinding" Version="2.5.2" />
@@ -27,12 +26,14 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
 
-
-
+  <ItemGroup>
+    <None Update="resources\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
