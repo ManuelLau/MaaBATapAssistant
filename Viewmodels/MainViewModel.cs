@@ -7,6 +7,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using MaaBATapAssistant.Views;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace MaaBATapAssistant.ViewModels;
 
@@ -28,10 +30,17 @@ public partial class MainViewModel : ObservableObject
     public bool isStoppingCurrentTask = false;
     private AnnouncementWindow? announcementWindow;
 
+    [ObservableProperty]
+    public string createTaskButtonText;
+    [ObservableProperty]
+    public string refreshTaskButtonText;
+
     public MainViewModel()
     {
-        waitingTaskList = [];
+        WaitingTaskList = [];
         LogDataList = [];
+        CreateTaskButtonText = "生成任务";
+        RefreshTaskButtonText = "刷新任务";
         if (!Models.ProgramDataModel.Instance.SettingsData.DoNotShowAnnouncementAgain)
             Application.Current.Dispatcher.BeginInvoke(new Action(OpenAnnouncementWindow), System.Windows.Threading.DispatcherPriority.Input);
     }
@@ -60,7 +69,10 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public static void CreateButton()
     {
-        TaskManager.Instance.CreateTask();
+        // 用户手动点击，先清空当前任务列表
+        Instance.WaitingTaskList.Clear();
+        DateTime nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(DateTime.Now);
+        TaskManager.Instance.CreateTask(nextCafeRefreshDateTime);
     }
 
     public void OpenAnnouncementWindow()
@@ -80,10 +92,31 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    public void DeleteTaskChain(TaskChainModel item)
+    public async Task AppStart()
     {
-        WaitingTaskList.Remove(item);
-        TaskManager.Instance.RemoveFromCurrentTaskQueue(item);
+        // 读取存储的任务列表
+        if (File.Exists(MyConstant.CacheFilePath))
+        {
+            string json = File.ReadAllText(MyConstant.CacheFilePath);
+            ObservableCollection<TaskChainModel>? deserializedCollection = JsonConvert.DeserializeObject<ObservableCollection<TaskChainModel>>(json);
+            if (deserializedCollection != null)
+                WaitingTaskList = deserializedCollection;
+        }
+        // 启动时自动检测更新
+        if (ProgramData.SettingsData.IsAutoCheckAppUpdate)
+        {
+            await Task.Delay(2000); // 延迟2秒，以免无法发出提醒
+            await UpdateTool.CheckUpdate();
+        }
+    }
+
+    public void AppClosing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        // 存储当前任务列表
+        string json = JsonConvert.SerializeObject(WaitingTaskList);
+        File.WriteAllText(MyConstant.CacheFilePath, json);
+        // 释放连接模拟器的资源
+        TaskManager.Instance.MaaTaskerDispose();
     }
 
     [Obsolete]
@@ -91,16 +124,16 @@ public partial class MainViewModel : ObservableObject
     {
         MaaToolkit _maaToolkit = new(true);//init: true
         var devices = await _maaToolkit.AdbDevice.FindAsync();
-        if (devices.IsEmpty is true)
+        if (devices.IsEmpty)
         {
-            MessageBox.Show("is empty");
+            Utility.DebugWriteLine("找不到任何设备");
         }
         else
         {
-            MessageBox.Show($"一共有{devices.MaaSizeCount}个Adb设备");
+            Utility.DebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
             foreach (var e in devices)
             {
-                MessageBox.Show($"{e.Name}\n{e.AdbPath}\n{e.AdbSerial}\n{e.Config}");
+                Utility.DebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HandyControl.Controls;
 using MaaBATapAssistant.Models;
 using MaaBATapAssistant.Utils;
 using Newtonsoft.Json;
@@ -30,6 +31,8 @@ public partial class SettingsViewModel : ObservableObject
         }
         else
         {
+            Directory.CreateDirectory(MyConstant.ConfigJsonDirectory);
+            File.Create(MyConstant.ConfigJsonFilePath).Close();
             UpdateConfigJsonFile();
         }
     }
@@ -64,7 +67,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         string settingsJson = File.ReadAllText(MyConstant.ConfigJsonFilePath);
         SettingsData? settingsData = JsonConvert.DeserializeObject<SettingsData>(settingsJson);
-        if (settingsData is null)
+        if (settingsData == null)
         {
             throw new Exception("无法读取config.json");
         }
@@ -76,6 +79,12 @@ public partial class SettingsViewModel : ObservableObject
     {
         string formattedJson = JsonConvert.SerializeObject(ProgramDataModel.Instance.SettingsData, Formatting.Indented);
         File.WriteAllText(MyConstant.ConfigJsonFilePath, formattedJson);
+    }
+
+    [RelayCommand]
+    public static async Task CheckUpdate()
+    {
+        await UpdateTool.CheckUpdate();
     }
 
     [RelayCommand]

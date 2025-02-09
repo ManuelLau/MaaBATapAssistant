@@ -25,6 +25,8 @@ public class SettingsData
     public bool IsReconnectAfterDuplicatedLogin { get; set; }
     public bool IsCloseGameAfterLastTask { get; set; }
     public bool IsCloseEmulatorAfterLastTask { get; set; }
+    public bool IsAutoCheckResourceUpdate { get; set; }
+    public bool IsAutoCheckAppUpdate { get; set; }
     public bool IsAutoUpdateResource { get; set; }
     public bool IsAutoUpdateApp { get; set; }
     public bool DoNotShowAnnouncementAgain { get; set; }

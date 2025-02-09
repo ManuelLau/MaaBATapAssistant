@@ -9,6 +9,7 @@
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>resources\AppIcon_256x256.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>0.1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,9 +22,10 @@
     <PackageReference Include="CalcBinding" Version="2.5.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="HandyControl" Version="3.5.1" />
-    <PackageReference Include="Maa.Framework.Native" Version="2.3.1" />
-    <PackageReference Include="Maa.Framework.Runtime.win-x64" Version="2.4.2" />
+    <PackageReference Include="Maa.Framework.Native" Version="3.0.1-preview.25073.7" />
+    <PackageReference Include="Maa.Framework.Runtime.win-x64" Version="3.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SharpCompress" Version="0.39.0" />
   </ItemGroup>
 
   <ItemGroup>

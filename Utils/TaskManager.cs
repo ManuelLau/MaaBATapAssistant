@@ -2,7 +2,6 @@
 using MaaBATapAssistant.Models;
 using MaaFramework.Binding;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -23,7 +22,7 @@ public class TaskManager
     //用于界面显示的任务列表，包含执行中的、待机的任务
     private readonly ObservableCollection<TaskChainModel> _waitingTaskChainList = MainViewModel.Instance.WaitingTaskList;
     //要马上执行的任务队列，执行前会进行模拟器连接、启动游戏的流程，执行后进行返回主界面
-    private readonly List<TaskChainModel> _currentTaskChainList = new();
+    private readonly List<TaskChainModel> _currentTaskChainList = [];
     private readonly SettingsData _settingsData = ProgramDataModel.Instance.SettingsData;
     private CancellationTokenSource _cancellationTokenSource;
 
@@ -61,67 +60,53 @@ public class TaskManager
         MainViewModel.Instance.IsStoppingCurrentTask = true;
         PreventSleepTool.RestoreSleep();
         _cancellationTokenSource.Cancel();
-        await Task.Run(() =>
-        {
-            if (_maaTasker != null)
-            {
-                _maaTasker.Abort().Wait();
-                _maaTasker.Dispose();
-            }
-        });
+        await Task.Run(MaaTaskerDispose);
     }
 
-    public void CreateTask()
+    //生成从给定时间到下一次咖啡厅刷新时间前的任务
+    public DateTime CreateTask(DateTime taskDateTime)
     {
-        //Test();
-        
-        _waitingTaskChainList.Clear();
-
-        DateTime taskDateTime = DateTime.Now;
-        DateTime nextRefreshDateTime = GetNextRefreshDateTime(DateTime.Now); //04:00 or 03:00
-        DateTime pmRefreshTime = nextRefreshDateTime.AddHours(-12); //16:00 or 15:00
+        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(taskDateTime); //04:00 or 03:00
+        DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(taskDateTime);
         bool hasCreatedCafe1InviteTask = false;
         bool hasCreatedCafe2InviteTask = false;
         bool hasCreatedCafe1AMApplyLayoutTask = false;
         bool hasCreatedCafe1PMApplyLayoutTask = false;
         bool hasCreatedCafe2AMApplyLayoutTask = false;
         bool hasCreatedCafe2PMApplyLayoutTask = false;
-        bool hasResetTimeToPMRefresh = taskDateTime >= pmRefreshTime;
-        //循环生成当日任务
-        while (taskDateTime < nextRefreshDateTime)
+        //循环生成第一轮任务(直到下一次咖啡厅刷新时间)
+        while (taskDateTime < nextCafeRefreshDateTime)
         {
-            if (!hasResetTimeToPMRefresh && taskDateTime >= pmRefreshTime)
-            {
-                taskDateTime = pmRefreshTime;
-                hasResetTimeToPMRefresh = true;
-            }
             CreateTaskFragment(taskDateTime, ref hasCreatedCafe1InviteTask, ref hasCreatedCafe2InviteTask, ref hasCreatedCafe1AMApplyLayoutTask,
                 ref hasCreatedCafe1PMApplyLayoutTask, ref hasCreatedCafe2AMApplyLayoutTask, ref hasCreatedCafe2PMApplyLayoutTask);
             taskDateTime = taskDateTime.AddHours(3);
         }
-        //最后添加一个重启任务，只做展示作用，实际的重启在挂机任务里
-        Queue<TaskModel> emptyQueue = new();
-        AddToWaitingTaskList(new("重启游戏", nextRefreshDateTime, true, false, emptyQueue));
-
+        taskDateTime = nextCafeRefreshDateTime;
+        //如果时间到达服务器刷新时间，就添加一个重启任务
+        if (taskDateTime == nextServerRefreshDateTime)
+        {
+            Queue<TaskModel> taskQueue = new();
+            taskQueue.Enqueue(new("重启游戏", "RestartGame", string.Empty, ETaskType.RestartGame));
+            AddToWaitingTaskList(new("重启游戏", taskDateTime, true, true, "日期已变更，重启游戏中...", taskQueue));
+        }
+        return taskDateTime;
         //对任务按时间排序?
-        
     }
 
     //自动连接模拟器和Maa资源，选择搜索到的第一个模拟器
     private bool AutoConnect()
     {
         var devices = _maaToolkit.AdbDevice.Find();
-        if (devices.Count <= 0)
+        if (devices.IsEmpty)
         {
             MainViewModel.Instance.PrintLog("找不到模拟器，请先手动打开模拟器");
             return false;
         }
 
-        MaaResource maaSourcePath = new();
-        if (LoadMaaSource(ref maaSourcePath) is false)
+        if (!LoadMaaSource(out MaaResource? maaResource) || maaResource == null)
             return false;
 
-        if (_maaTasker is not null)
+        if (_maaTasker != null)
             if (_maaTasker.Initialized)
             {
                 MainViewModel.Instance.PrintLog("已连接至模拟器" + devices[0].Name);
@@ -135,7 +120,7 @@ public class TaskManager
             {
                 //默认使用第0个设备，后续再改
                 Controller = devices[0].ToAdbController(),
-                Resource = maaSourcePath,
+                Resource = maaResource,
                 DisposeOptions = DisposeOptions.All,
             };
         }
@@ -144,7 +129,7 @@ public class TaskManager
             MainViewModel.Instance.PrintLog("任务初始化失败，可能是ADB连接出现问题，请尝试重启模拟器或者重启系统");
             return false;
         }
-        if (_maaTasker is null || _maaTasker.Initialized is false)
+        if (_maaTasker == null || !_maaTasker.Initialized)
         {
             MainViewModel.Instance.PrintLog("任务初始化失败");
             return false;
@@ -154,10 +139,11 @@ public class TaskManager
         return true;
     }
 
-    private static bool LoadMaaSource(ref MaaResource _resource)
+    private static bool LoadMaaSource(out MaaResource? resource)
     {
+        resource = null;
         //根据配置里的客户端类型选项改变读取的文件路径
-        string[] maaSourcePath = ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
+        string[] maaSourcePaths = ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
         {
             (int)EClientTypeSettingOptions.Zh_CN => [MyConstant.MaaSourcePath],
             (int)EClientTypeSettingOptions.Zh_CN_Bilibili => [MyConstant.MaaSourcePath, MyConstant.MaaSourcePathBiliBiliOverride],
@@ -165,14 +151,13 @@ public class TaskManager
         };
         try
         {
-            _resource = new(maaSourcePath);
+            resource = new(maaSourcePaths);
         }
         catch (Exception)
         {
             MainViewModel.Instance.PrintLog("加载资源文件失败");
             return false;
         }
-        _resource = new(maaSourcePath);
         return true;
     }
 
@@ -180,35 +165,41 @@ public class TaskManager
     private async Task StartAfkTask(CancellationToken token)
     {
         bool firstTimeExecute = true;
-        DateTime nextRefreshDateTime = GetNextRefreshDateTime(DateTime.Now);
+        DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(DateTime.Now);
+        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(DateTime.Now);
 
         while (!token.IsCancellationRequested)
         {
-            if (DateTime.Now >= nextRefreshDateTime)
+            // 先清除上一个时间段的旧任务
+            DateTime previousCafeRefreshDateTime = nextCafeRefreshDateTime.AddHours(-12);
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                MainViewModel.Instance.PrintLog("日期已变更，重启游戏中...");
-                //到达服务器刷新时间，直接关闭游戏，同时重新生成任务队列，再继续执行新的任务队列
-                await Application.Current.Dispatcher.Invoke(async () =>
+                for (int i = 0; i < _waitingTaskChainList.Count; i++)
                 {
-                    Debug.WriteLine(DateTime.Now + "  日期已变更，重启游戏中..."); //，将返回标题画面...
-                    _maaTasker?.AppendPipeline(MyConstant.CloseBAPipelineEntry).Wait();
-                    await Task.Delay(3000);
-                    _waitingTaskChainList.Clear();
-                    GC.Collect();
-                    CreateTask();
-                });
-                nextRefreshDateTime = GetNextRefreshDateTime(DateTime.Now);
+                    if (_waitingTaskChainList[i].ExecuteDateTime < previousCafeRefreshDateTime)
+                    {
+                        _waitingTaskChainList.RemoveAt(i);
+                        i--;
+                    }
+                }
+            });
+
+            if (DateTime.Now >= nextCafeRefreshDateTime)
+            {
+                // 到达咖啡厅刷新时间，自动生成12小时后的任务队列
+                CreateTask(GetNextCafeRefreshDateTime(nextCafeRefreshDateTime));
+                nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(DateTime.Now);
             }
 
             var item = _waitingTaskChainList[0];
             if (item != null && DateTime.Now >= item.ExecuteDateTime)
             {
-                Debug.WriteLine(DateTime.Now + "  检测到有任务可以执行");
+                Utility.DebugWriteLine($"检测到有任务可以执行");
                 ProgramDataModel.Instance.IsCurrentTaskExecuting = true;
                 firstTimeExecute = false;
                 CreateCurrentTaskQueue();
                 ExecuteCurrentTask(_cancellationTokenSource.Token);
-                Debug.WriteLine(DateTime.Now + "  已入列的任务执行完成或者已停止");
+                Utility.DebugWriteLine($"已入列的任务执行完成或者已停止");
                 ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
             }
             else if(firstTimeExecute)
@@ -216,15 +207,14 @@ public class TaskManager
                 MainViewModel.Instance.PrintLog("暂无可执行任务，小助手待机中");
                 firstTimeExecute = false;
             }
-
-            await Task.Delay(1000); // 每秒检查一次
+            await Task.Delay(1000, CancellationToken.None); // 每秒检查一次
         }
-
         StopCurrentTask();
     }
 
     private void ExecuteCurrentTask(CancellationToken token)
     {
+        DateTime startDateTime = DateTime.Now;
         while (_currentTaskChainList.Count > 0)
         {
             if (token.IsCancellationRequested)
@@ -235,7 +225,7 @@ public class TaskManager
             var currentTaskChain = _currentTaskChainList[0];
             currentTaskChain.Status = ETaskChainStatus.Running;
 
-            Debug.WriteLine($"{DateTime.Now}   准备执行任务链：{currentTaskChain.Name}");
+            Utility.DebugWriteLine($"准备执行任务链 - {currentTaskChain.Name}");
             bool anyTaskFailed = false;
             if (currentTaskChain.NeedPrintLog)
             {
@@ -243,36 +233,45 @@ public class TaskManager
             }
             foreach (var taskItem in currentTaskChain.TaskQueue)
             {
-                Debug.WriteLine($"{DateTime.Now}   准备执行单个任务 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
-                if (_maaTasker is null)
+                Utility.DebugWriteLine($"准备执行单个任务 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                if (_maaTasker == null)
                 {
-                    Debug.WriteLine($"{DateTime.Now}   maaTasker is null!");
+                    Utility.DebugWriteLine($"maaTasker is null!");
                     return;
                 }
                 var status = taskItem.PipelineOverride == "" ?
-                    _maaTasker.AppendPipeline(taskItem.Entry).Wait() :
-                    _maaTasker.AppendPipeline(taskItem.Entry, taskItem.PipelineOverride).Wait();
+                    _maaTasker.AppendTask(taskItem.Entry).Wait() :
+                    _maaTasker.AppendTask(taskItem.Entry, taskItem.PipelineOverride).Wait();
                 if (status.IsSucceeded())
                 {
-                    Debug.WriteLine($"{DateTime.Now}   执行单个任务完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                    Utility.DebugWriteLine($"执行单个任务完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
                 }
                 else
                 {
                     if (currentTaskChain.NeedPrintLog)
                         MainViewModel.Instance.PrintLog(currentTaskChain.FailedLogMessage);
                     anyTaskFailed = true;
-                    Debug.WriteLine($"{DateTime.Now}   执行单个任务失败 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
+                    Utility.DebugWriteLine($"执行单个任务失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
                     break;
                 }
             }
-                
-            if (currentTaskChain.NeedPrintLog && anyTaskFailed is false)
-            {
-                MainViewModel.Instance.PrintLog(currentTaskChain.SucceededLogMessage);
-            }
-            Debug.WriteLine($"{DateTime.Now}   执行任务链完成：{currentTaskChain.Name}");
             
-            //移除任务链
+            if (anyTaskFailed)
+            {
+                Utility.DebugWriteLine($"执行任务链失败! - {currentTaskChain.Name}");
+            }
+            else
+            {
+                if (currentTaskChain.NeedPrintLog)
+                    MainViewModel.Instance.PrintLog(currentTaskChain.SucceededLogMessage);
+                Utility.DebugWriteLine($"执行任务链完成 - {currentTaskChain.Name}");
+            }
+            //移除任务链。如果是因为用户手动取消的话就不移除，并将状态设为等待中
+            if (token.IsCancellationRequested)
+            {
+                currentTaskChain.Status = ETaskChainStatus.Waiting;
+                return;
+            }
             _currentTaskChainList.Remove(currentTaskChain);
             if (currentTaskChain.NeedShowInWaitingTaskList)
             {
@@ -283,39 +282,37 @@ public class TaskManager
             }
         }
 
-        //刷新后续任务时间
-        DateTime endTime = DateTime.Now;
-        DateTime nextRefreshDateTime = GetNextRefreshDateTime(endTime);
-        DateTime pmRefreshDateTime = nextRefreshDateTime.AddHours(-12);
-        TimeSpan timeSpan = endTime.AddHours(3) - _waitingTaskChainList[0].ExecuteDateTime; //摸头cd固定3小时
-        Application.Current.Dispatcher.Invoke(() =>
+        DateTime endDateTime = DateTime.Now;
+        // 使用初始时间判断下一次刷新时间，以免执行期间刚好跨过咖啡厅刷新时间(To-do 待优化，以后检测到到达刷新时间自动终止当前所有任务)
+        DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(startDateTime);
+        if (endDateTime >= nextCafeRefreshDateTime)
+            return;
+
+        // 刷新后续任务时间，如果+3小时后时间还没到执行时间，则不用刷新任务时间。默认以用户输入的时间为准
+        if (_waitingTaskChainList[0].ExecuteDateTime < endDateTime.AddHours(3))
         {
-            for (int i = 0; i < _waitingTaskChainList.Count-1; i++)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                if (endTime < pmRefreshDateTime)
+                _waitingTaskChainList[0].ExecuteDateTime = endDateTime.AddHours(3);
+                for (int i = 1; i < _waitingTaskChainList.Count - 1; i++)
                 {
-                    if (_waitingTaskChainList[i].ExecuteDateTime < pmRefreshDateTime)
+                    //只处理当前时间段的
+                    if (_waitingTaskChainList[i].ExecuteDateTime < nextCafeRefreshDateTime)
                     {
-                        _waitingTaskChainList[i].ExecuteDateTime += timeSpan;
-                        if (_waitingTaskChainList[i].ExecuteDateTime >= pmRefreshDateTime)
+                        if (_waitingTaskChainList[i].ExecuteDateTime < _waitingTaskChainList[i - 1].ExecuteDateTime.AddHours(3))
                         {
-                            //排除延迟后跨时间段的任务
-                            _waitingTaskChainList.RemoveAt(i);
-                            i--;
+                            _waitingTaskChainList[i].ExecuteDateTime = _waitingTaskChainList[i - 1].ExecuteDateTime.AddHours(3);
+                            if (_waitingTaskChainList[i].ExecuteDateTime >= nextCafeRefreshDateTime)
+                            {
+                                //排除延迟后跨时间段的任务
+                                _waitingTaskChainList.RemoveAt(i);
+                                i--;
+                            }
                         }
                     }
                 }
-                else
-                {
-                    _waitingTaskChainList[i].ExecuteDateTime += timeSpan;
-                    if (_waitingTaskChainList[i].ExecuteDateTime >= nextRefreshDateTime)
-                    {
-                        _waitingTaskChainList.RemoveAt(i);
-                        i--;
-                    }
-                }
-            }
-        });
+            });
+        }
 
         MainViewModel.Instance.PrintLog("当前任务已完成，小助手待机中");
     }
@@ -330,7 +327,7 @@ public class TaskManager
     }
     
     //获取下一个服务器刷新的日期时间。读取"客户端类型"设置项来返回不同的时间
-    private DateTime GetNextRefreshDateTime(DateTime dateTime)
+    private DateTime GetNextServerRefreshDateTime(DateTime dateTime)
     {
         TimeOnly nextRefreshTimeOnly = _settingsData.ClientTypeSettingIndex switch
         {
@@ -345,6 +342,13 @@ public class TaskManager
         }
         return new(nextRefreshDateOnly.Year, nextRefreshDateOnly.Month, nextRefreshDateOnly.Day,
             nextRefreshTimeOnly.Hour, nextRefreshTimeOnly.Minute, nextRefreshTimeOnly.Second);
+    }
+    
+    //获取下一个咖啡厅刷新的日期时间
+    private DateTime GetNextCafeRefreshDateTime(DateTime dateTime)
+    {
+        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(dateTime);
+        return dateTime < nextServerRefreshDateTime.AddHours(-12) ? nextServerRefreshDateTime.AddHours(-12) : nextServerRefreshDateTime;
     }
 
     private void AddToWaitingTaskList(TaskChainModel item)
@@ -363,8 +367,8 @@ public class TaskManager
         ref bool _hasCreatedCafe1AMApplyLayoutTask, ref bool _hasCreatedCafe1PMApplyLayoutTask, 
         ref bool _hasCreatedCafe2AMApplyLayoutTask, ref bool _hasCreatedCafe2PMApplyLayoutTask)
     {
-        DateTime nextRefreshDateTime = GetNextRefreshDateTime(DateTime.Now); //04:00 or 03:00
-        DateTime pmRefreshDateTime = nextRefreshDateTime.AddHours(-12); //16:00
+        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(DateTime.Now); //04:00 or 03:00
+        DateTime pmRefreshDateTime = nextServerRefreshDateTime.AddHours(-12); //16:00
         Queue<TaskModel> tempQueue = new();
         
         //生成摸头任务
@@ -372,7 +376,7 @@ public class TaskManager
         tempQueue.Enqueue(new("(1号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
         tempQueue.Enqueue(new("进入2号咖啡厅", "MoveToCafe2", string.Empty, ETaskType.Normal));
         tempQueue.Enqueue(new("(2号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
-        AddToWaitingTaskList(new("咖啡厅摸头", executeDateTime, true, true, tempQueue));
+        AddToWaitingTaskList(new("咖啡厅摸头", executeDateTime, true, true, string.Empty, tempQueue));
         
         //生成2号咖啡厅邀请任务
         if (!_hasCreatedCafe2InviteTask && _settingsData.Cafe2InviteTimeSettingIndex != (int)ECafeInviteTimeSettingOptions.DoNotUse)
@@ -384,7 +388,7 @@ public class TaskManager
                 tempQueue.Enqueue(new("进入2号咖啡厅", "MoveToCafe2", string.Empty, ETaskType.Normal));
                 tempQueue.Enqueue(new("2号咖啡厅邀请", "CafeInvite", string.Empty, ETaskType.Cafe2Invite));
                 tempQueue.Enqueue(new("(2号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
-                AddToWaitingTaskList(new("2号咖啡厅邀请", inviteTime, true, true, tempQueue));
+                AddToWaitingTaskList(new("2号咖啡厅邀请", inviteTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe2InviteTask = true;
             }
         }
@@ -397,7 +401,7 @@ public class TaskManager
                 tempQueue = new();
                 tempQueue.Enqueue(new("进入2号咖啡厅", "MoveToCafe2", string.Empty, ETaskType.Normal));
                 tempQueue.Enqueue(new("2号咖啡厅应用家具预设AM", "CafeApplyLayout", string.Empty, ETaskType.Cafe2AMApplyLayout));
-                AddToWaitingTaskList(new("2号咖啡厅应用家具预设", executeDateTime, true, true, tempQueue));
+                AddToWaitingTaskList(new("2号咖啡厅应用家具预设", executeDateTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe2AMApplyLayoutTask = true;
             }
             if (_hasCreatedCafe2PMApplyLayoutTask == false && executeDateTime >= pmRefreshDateTime)
@@ -405,7 +409,7 @@ public class TaskManager
                 tempQueue = new();
                 tempQueue.Enqueue(new("进入2号咖啡厅", "MoveToCafe2", string.Empty, ETaskType.Normal));
                 tempQueue.Enqueue(new("2号咖啡厅应用家具预设PM", "CafeApplyLayout", string.Empty, ETaskType.Cafe2PMApplyLayout));
-                AddToWaitingTaskList(new("2号咖啡厅应用家具预设", executeDateTime, true, true, tempQueue));
+                AddToWaitingTaskList(new("2号咖啡厅应用家具预设", executeDateTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe2PMApplyLayoutTask = true;
             }
         }
@@ -421,7 +425,7 @@ public class TaskManager
                 tempQueue.Enqueue(new("进入1号咖啡厅", "MoveToCafe1", string.Empty, ETaskType.Normal));
                 tempQueue.Enqueue(new("1号咖啡厅邀请", "CafeInvite", string.Empty, ETaskType.Cafe1Invite));
                 tempQueue.Enqueue(new("(1号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
-                AddToWaitingTaskList(new("1号咖啡厅邀请", inviteTime, true, true, tempQueue));
+                AddToWaitingTaskList(new("1号咖啡厅邀请", inviteTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe1InviteTask = true;
             }
         }
@@ -434,7 +438,7 @@ public class TaskManager
                 tempQueue = new();
                 tempQueue.Enqueue(new("进入1号咖啡厅", "MoveToCafe1", string.Empty, ETaskType.Normal));
                 tempQueue.Enqueue(new("1号咖啡厅应用家具预设", "CafeApplyLayout", string.Empty, ETaskType.Cafe1AMApplyLayout));
-                AddToWaitingTaskList(new("1号咖啡厅应用家具预设", executeDateTime, true, true, tempQueue));
+                AddToWaitingTaskList(new("1号咖啡厅应用家具预设", executeDateTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe1AMApplyLayoutTask = true;
             }
             if (_hasCreatedCafe1PMApplyLayoutTask == false && executeDateTime >= pmRefreshDateTime)
@@ -442,34 +446,32 @@ public class TaskManager
                 tempQueue = new();
                 tempQueue.Enqueue(new("进入1号咖啡厅", "MoveToCafe1", string.Empty, ETaskType.Normal));
                 tempQueue.Enqueue(new("1号咖啡厅应用家具预设", "CafeApplyLayout", string.Empty, ETaskType.Cafe1PMApplyLayout));
-                AddToWaitingTaskList(new("1号咖啡厅应用家具预设", executeDateTime, true, true, tempQueue));
+                AddToWaitingTaskList(new("1号咖啡厅应用家具预设", executeDateTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe1PMApplyLayoutTask = true;
             }
         }
     }
 
+    /// <summary>获取邀请任务的时间</summary>
+    /// <returns>返回MaxValue则表示不生成</returns>
     private DateTime GetInviteTaskDateTime(int _settingIndex, DateTime currentDateTime)
     {
-        ///返回MaxValue则表示不生成
-        ///生成邀请任务规则:选择AM：4:00-15:55:00之间 立即; 选择PM：16:00-次日3:59之间 立即,4:00-16:00之间 16:00
-        ///特殊处理：距离刷新只剩3分钟的时候不生成任何任务，避免使用邀请券的时候刚好到了刷新时间
-        DateTime nextRefreshDateTime = GetNextRefreshDateTime(DateTime.Now); //04:00 or 03:00
-        DateTime lastRefreshDateTime = nextRefreshDateTime.AddHours(-24); //04:00
-        DateTime pmRefreshDateTime = nextRefreshDateTime.AddHours(-12); //16:00
-
+        /// 生成邀请任务规则:
+        /// 选择AM： 4:00-15:59之间 立即, 16:00-次日3:59之间 不生成
+        /// 选择PM： 4:00-15:59之间 不生成, 16:00-次日3:59之间 立即
+        /// To-do特殊处理：距离刷新只剩3分钟的时候不生成任何任务，避免使用邀请券的时候刚好到了刷新时间
+        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(currentDateTime); //04:00 or 03:00
+        DateTime pmRefreshDateTime = nextServerRefreshDateTime.AddHours(-12); //16:00 or 15:00
         switch (_settingIndex)
         {
             case (int)ECafeInviteTimeSettingOptions.AM:
-                if (currentDateTime >= lastRefreshDateTime && currentDateTime < pmRefreshDateTime)
+                if (currentDateTime < pmRefreshDateTime)
                     return currentDateTime;
                 else
                     return DateTime.MaxValue;
             case (int)ECafeInviteTimeSettingOptions.PM:
-                if (currentDateTime >= pmRefreshDateTime && currentDateTime < nextRefreshDateTime)
+                if (currentDateTime >= pmRefreshDateTime)
                     return currentDateTime;
-                else if (currentDateTime >= lastRefreshDateTime && currentDateTime < pmRefreshDateTime)
-                    return new(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, 
-                        pmRefreshDateTime.Hour, pmRefreshDateTime.Minute, pmRefreshDateTime.Second);
                 else
                     return DateTime.MaxValue;
             case (int)ECafeInviteTimeSettingOptions.Immediately:
@@ -479,24 +481,23 @@ public class TaskManager
         }
     }
 
-    //把已经到达时间的任务入列
+    // 把已经到达时间的任务入列。同时在头部添加一个启动游戏的任务，在尾部添加一个返回主界面的任务。
     private void CreateCurrentTaskQueue()
     {
-        //先判断有无已经到达时间的任务
-        //int i = 0;
-        //foreach (var item in _waitingTaskChainList)
-        //    if (DateTime.Now >= item.ExecuteDateTime) i++;
-        //if (i == 0) return;
-
-        Queue<TaskModel> tempQueue0 = new();
-        tempQueue0.Enqueue(new("启动游戏", "StartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
-        _currentTaskChainList.Add(new("启动游戏", DateTime.Now, false, true, tempQueue0));
+        // 如果第一个是重启游戏任务，那么就不用再添加启动游戏任务了
+        if (_waitingTaskChainList[0].TaskQueue.Peek().Type != ETaskType.RestartGame)
+        {
+            Queue<TaskModel> tempQueue0 = new();
+            tempQueue0.Enqueue(new("启动游戏", "StartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
+            _currentTaskChainList.Add(new("启动游戏", DateTime.Now, false, true, string.Empty, tempQueue0));
+        }
 
         foreach (var taskChainItem in _waitingTaskChainList)
         {
+            // 判断有无已经到达时间的任务
             if (DateTime.Now >= taskChainItem.ExecuteDateTime)
             {
-                //读取设置
+                // 读取设置(进入执行中队列时候才会读取)
                 foreach(var taskItem in taskChainItem.TaskQueue)
                 {
                     taskItem.PipelineOverride = GetOverrideJsonWithReadConfig(taskItem.Type);
@@ -507,14 +508,14 @@ public class TaskManager
 
         Queue<TaskModel> tempQueue1 = new();
         tempQueue1.Enqueue(new("返回主界面", "ClickHomeButton", string.Empty, ETaskType.Normal));
-        _currentTaskChainList.Add(new("返回主界面", DateTime.Now, false, false, tempQueue1));
+        _currentTaskChainList.Add(new("返回主界面", DateTime.Now, false, false, string.Empty, tempQueue1));
         foreach (var item in _currentTaskChainList)
         {
-            Debug.WriteLine(item.ExecuteDateTime + " - " + item.Name);
+            Utility.DebugWriteLine($"{item.ExecuteDateTime} - {item.Name}");
         }
     }
 
-    //读取设置来生成所需的pipeline override json
+    // 读取设置来生成所需的pipeline override json
     private string GetOverrideJsonWithReadConfig(ETaskType type)
     {
         string overrideJson;
@@ -554,11 +555,11 @@ public class TaskManager
                     "\"CafeInvite@RecognizeSortOrder\":{\"template\":\"" + overrideSortOrder + "\"}";
                 if (_settingsData.Cafe1InviteIndexSettingIndex != 0)
                     overrideJson += ",\"CafeInvite@Invite\":{\"index\":" + _settingsData.Cafe1InviteIndexSettingIndex + "}";
-                if (_settingsData.IsCafe1AllowInviteNeighboring is false)
+                if (!_settingsData.IsCafe1AllowInviteNeighboring)
                     overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboring\":{\"next\":\"CafeInvite@InviteCancel\"}";
-                if (_settingsData.IsCafe1AllowInviteNeighboringSwapAlt is false)
+                if (!_settingsData.IsCafe1AllowInviteNeighboringSwapAlt)
                     overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
-                if (_settingsData.IsCafe1AllowInviteSwapAlt is false)
+                if (!_settingsData.IsCafe1AllowInviteSwapAlt)
                     overrideJson += ",\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
                 overrideJson += "}";
                 return overrideJson;
@@ -594,11 +595,11 @@ public class TaskManager
                     "\"CafeInvite@RecognizeSortOrder\":{\"template\":\"" + overrideSortOrder + "\"}";
                 if (_settingsData.Cafe2InviteIndexSettingIndex != 0)
                     overrideJson += ",\"CafeInvite@Invite\":{\"index\":" + _settingsData.Cafe2InviteIndexSettingIndex + "}";
-                if (_settingsData.IsCafe2AllowInviteNeighboring is false)
+                if (!_settingsData.IsCafe2AllowInviteNeighboring)
                     overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboring\":{\"next\":\"CafeInvite@InviteCancel\"}";
-                if (_settingsData.IsCafe2AllowInviteNeighboringSwapAlt is false)
+                if (!_settingsData.IsCafe2AllowInviteNeighboringSwapAlt)
                     overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
-                if (_settingsData.IsCafe2AllowInviteSwapAlt is false)
+                if (!_settingsData.IsCafe2AllowInviteSwapAlt)
                     overrideJson += ",\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
                 overrideJson += "}";
                 return overrideJson;
@@ -612,9 +613,18 @@ public class TaskManager
         }
     }
 
-    public void RemoveFromCurrentTaskQueue(TaskChainModel item)
+    public void RemoveFromCurrentTaskChainQueue(TaskChainModel item)
     {
         _currentTaskChainList.Remove(item);
+    }
+
+    public void MaaTaskerDispose()
+    {
+        if (_maaTasker != null)
+        {
+            _maaTasker.Abort().Wait();
+            _maaTasker.Dispose();
+        }
     }
 
     //从json里读取配置并使用配置初始化
@@ -630,15 +640,5 @@ public class TaskManager
 
         MaaAdbController controller = new(adbPath, adbSerial, adbScreencapMethods, inputMethods, config);
         return controller;
-    }
-
-    private void Test()
-    {
-        Debug.WriteLine(DateTime.Now + "  准备AutoConnect()");
-        AutoConnect();
-        Debug.WriteLine(DateTime.Now + "  准备X");
-        //TaskCafeInvite.CheckTicketAvailable(_maaTasker);
-        Debug.WriteLine(DateTime.Now + "  完成X");
-        
     }
 }

@@ -1,13 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using MaaBATapAssistant.ViewModels;
+using Newtonsoft.Json;
 
 namespace MaaBATapAssistant.Models;
 
 public enum ETaskChainStatus
 {
     Waiting, //等待进入执行任务队列
-    InCurrentQueue, //时间已经到了，在执行任务的队列中，等待执行
+    InCurrentQueue, //时间已经到了，在执行任务的队列中，等待执行(未使用)
     Running, //当前正在执行
 }
 
@@ -17,14 +16,24 @@ public enum ETaskChainStatus
 public partial class TaskChainModel : ObservableObject
 {
     [ObservableProperty]
-    public string name = string.Empty;
+    [JsonIgnore]
+    public string name;
     [ObservableProperty]
+    [JsonIgnore]
     public DateTime executeDateTime;
     [ObservableProperty]
+    [JsonIgnore]
     public ETaskChainStatus status;
 
-    public string StartLogMessage { get => "开始任务：" + Name; }
+    public string OverrideStartLogMessage { get; set; }
+    [JsonIgnore]
+    public string StartLogMessage
+    { 
+        get => string.IsNullOrEmpty(OverrideStartLogMessage) ? "开始任务：" + Name : OverrideStartLogMessage;
+    }
+    [JsonIgnore]
     public string SucceededLogMessage { get => Name + "已完成"; }
+    [JsonIgnore]
     public string FailedLogMessage { get => Name + "失败！"; }
 
     //是否在任务列表里显示出来
@@ -41,6 +50,7 @@ public partial class TaskChainModel : ObservableObject
         DateTime _executeDateTime,
         bool _needShowInWaitingTaskList,
         bool _needPrintLog,
+        string _overrideStartLogMessage,
         Queue<TaskModel> _taskQueue)
     {
         Name = _name;
@@ -49,18 +59,15 @@ public partial class TaskChainModel : ObservableObject
 
         NeedShowInWaitingTaskList = _needShowInWaitingTaskList;
         NeedPrintLog = _needPrintLog;
-        //StartLogMessage = startLogMessage;
-        //SucceededLogMessage = succeededLogMessage;
-        //FailedLogMessage = failedLogMessage;
         TaskQueue = _taskQueue;
         //Action = action;
+        OverrideStartLogMessage = _overrideStartLogMessage;
     }
 
-    [RelayCommand]
-    public void DeleteTaskChain()
-    {
-        MainViewModel.Instance.DeleteTaskChain(this);
-    }
+    //public void DeleteTaskChain()
+    //{
+    //    MainViewModel.Instance.DeleteTaskChain(this);
+    //}
 
     //public bool Run()
     //{

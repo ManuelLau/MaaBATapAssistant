@@ -29,24 +29,29 @@ public enum ECafeInviteSortTypeSettingOptions
 
 public partial class ProgramDataModel : ObservableObject
 {
-    /// <summary>挂机任务是否开始执行</summary>
-    [ObservableProperty]
-    public bool isAfkTaskRunning;
-    /// <summary>当前任务是否正在执行</summary>
-    [ObservableProperty]
-    public bool isCurrentTaskExecuting;
-    public SettingsData SettingsData { get; set; }
-
     private static readonly ProgramDataModel _instance = new();
     public static ProgramDataModel Instance
     {
         get => _instance ?? new();
     }
 
+    /// <summary>挂机任务是否开始执行</summary>
+    [ObservableProperty]
+    public bool isAfkTaskRunning;
+    /// <summary>当前任务是否正在执行</summary>
+    [ObservableProperty]
+    public bool isCurrentTaskExecuting;
+    /// <summary>是否正在下载更新文件</summary>
+    //[ObservableProperty]
+    //public bool isDownloadingFiles;
+
+    public SettingsData SettingsData { get; set; }
+
     public ProgramDataModel()
     {
         IsAfkTaskRunning = false;
         IsCurrentTaskExecuting = false;
+        //IsDownloadingFiles = false;
 
         #region 设置配置文件默认值
         SettingsData = new()
@@ -73,6 +78,8 @@ public partial class ProgramDataModel : ObservableObject
             IsReconnectAfterDuplicatedLogin = true, //后续改为默认false
             IsCloseGameAfterLastTask = false,
             IsCloseEmulatorAfterLastTask = false,
+            IsAutoCheckResourceUpdate = false,
+            IsAutoCheckAppUpdate = true,
             IsAutoUpdateResource = false,
             IsAutoUpdateApp = false,
             DoNotShowAnnouncementAgain = true

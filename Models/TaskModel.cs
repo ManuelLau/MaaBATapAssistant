@@ -1,10 +1,11 @@
 ﻿namespace MaaBATapAssistant.Models;
 
-//非Normal类型表示会根据设置来覆写Pipeline
+//非Normal、RestartGame类型表示会根据设置来覆写Pipeline
 public enum ETaskType
 {
     Normal = 0,
     StartGame,
+    RestartGame,
     Cafe1Invite,
     Cafe2Invite,
     Cafe1AMApplyLayout,
@@ -16,7 +17,7 @@ public enum ETaskType
 //单个Pipeline任务
 public class TaskModel
 {
-    public string Name = string.Empty;
+    public string Name;
     /// <summary>可以根据Entry是否为empty来判断是哪种类型任务</summary>
     public string Entry { get; set; }
     public string PipelineOverride { get; set; }
