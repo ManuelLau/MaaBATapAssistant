@@ -12,11 +12,13 @@ class TaskStatusToColorConverter : IValueConverter
         switch ((ETaskChainStatus)value)
         {
             case ETaskChainStatus.Waiting:
-                return new string("#E0E0E0");//浅绿90EE90
-            case ETaskChainStatus.Running:
-                return new string("#00F268");
-            default:
                 return new string("#E0E0E0");//灰色E0E0E0
+            case ETaskChainStatus.InCurrentQueue:
+                return new string("#00BFFF");//道奇蓝#1e90ff
+            case ETaskChainStatus.Running:
+                return new string("#00F268");//绿
+            default:
+                return new string("#E0E0E0");
         }
     }
 

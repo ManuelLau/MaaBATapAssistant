@@ -10,37 +10,46 @@ using System.Reflection;
 using HandyControl.Controls;
 using SharpCompress.Archives;
 using SharpCompress.Common;
+using MaaBATapAssistant.Views;
+using MaaBATapAssistant.ViewModels;
 
 namespace MaaBATapAssistant.Utils;
 
 public static class UpdateTool
 {
-    public static async Task CheckUpdate()
+    public static async Task CheckUpdate(bool needGrowl)
     {
         await Task.Run(() =>
         {
-            if (CheckNewVersion(out string newVersionString, out _))
+            if (CheckNewVersion(out string newVersionString, out _, needGrowl))
             {
-                Growl.Ask($"发现新版本{newVersionString}，是否更新?", isConfirmed =>
+                if (needGrowl)
                 {
-                    if (isConfirmed)
+                    Utility.MyGrowlAsk($"发现新版本{newVersionString}，是否更新?", isConfirmed =>
                     {
-                        Utility.DebugWriteLine("执行更新");
-                        UpdateApp();
-                    }
-                    return true;
-                });
+                        if (isConfirmed)
+                        {
+                            Utility.MyDebugWriteLine("开始更新流程");
+                            UpdateApp();
+                        }
+                        return true;
+                    });
+                }
+                else
+                {
+                    Utility.PrintLog($"发现新版本{newVersionString}，请前往设置页面手动更新");
+                }
             }
         });
     }
 
     public static async void UpdateApp()
     {
-        if (!CheckNewVersion(out string? latestVersionString, out string downloadUrl))
+        if (!CheckNewVersion(out string? latestVersionString, out string downloadUrl, true))
         {
-            Utility.DebugWriteLine($"开始更新至 {latestVersionString}");
             return;
         }
+        Utility.MyDebugWriteLine($"开始更新至 {latestVersionString}");
 
         // 创建临时文件存放路径temp\
         var tempFileDirectory = @".\temp";
@@ -55,55 +64,66 @@ public static class UpdateTool
         {
             tempFileName = downloadUrl.Substring(lastIndex + 1);
         }
-        // 下载+解压文件到temp\下
-        Growl.Info("正在下载 " + tempFileName);
+        // 下载+解压文件到temp\
+        MainViewModel.Instance.ProgramData.IsDownloadingFiles = true;
+        Utility.MyGrowlInfo("正在下载 " + tempFileName);
         if (!await DownloadAndExtractFile(downloadUrl, tempFileDirectory, tempFileName))
         {
-            Utility.DebugWriteLine("文件下载失败!");
-            Growl.Error("文件下载失败!");
+            Utility.MyDebugWriteLine("文件下载失败!");
+            Utility.MyGrowlError("文件下载失败!");
             return;
         }
-        Utility.DebugWriteLine($"文件{tempFileName}下载完成");
+        MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
+        Utility.MyDebugWriteLine($"文件{tempFileName}下载完成");
 
         // 询问是否应用更新
-        Growl.Ask($"文件下载完成，是否重启?", isConfirmed =>
+        var result = HandyControl.Controls.MessageBox.Show("是否重启并更新软件?", "文件下载完成", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        switch (result)
         {
-            if (isConfirmed)
-            {
+            case MessageBoxResult.Yes:
                 ApplyUpdate(tempFileName);
-            }
-            return true;
-        });
+                break;
+            case MessageBoxResult.None:
+            case MessageBoxResult.Cancel:
+            case MessageBoxResult.No:
+                Utility.MyDebugWriteLine("文件下载完成，用户不执行更新");
+                break;
+        }
     }
 
-    public static bool CheckNewVersion(out string latestVersionString, out string downloadUrl)
+    public static bool CheckNewVersion(out string latestVersionString, out string downloadUrl, bool needGrowl)
     {
         // 获取并检查Version是否非空
         Version? localVersion = Assembly.GetExecutingAssembly().GetName().Version;
         if (!GetLatestVersionAndDownloadUrl(MyConstant.GitHubApiUrl, MyConstant.PlatformTag, out latestVersionString, out downloadUrl))
         {
-            Utility.DebugWriteLine("检查版本号出错!");
-            Growl.Error("检查新版本时网络请求出错");
+            Utility.MyDebugWriteLine("检查版本号出错!");
+            if (needGrowl)
+                Utility.MyGrowlError("检查新版本时网络请求出错");
             return false;
         }
         if (localVersion is null || string.IsNullOrEmpty(latestVersionString) || string.IsNullOrEmpty(downloadUrl))
         {
-            Utility.DebugWriteLine("LocalVersion 或 LatestVersionString 或 DownloadUrl 为空");
-            Utility.DebugWriteLine($"{localVersion} 或 {latestVersionString} 或 {downloadUrl} 为空");
-            Growl.Error("检查新版本失败");
+            Utility.MyDebugWriteLine("LocalVersion 或 LatestVersionString 或 DownloadUrl 为空");
+            Utility.MyDebugWriteLine($"{localVersion} 或 {latestVersionString} 或 {downloadUrl} 为空");
+            if (needGrowl)
+                Utility.MyGrowlError("检查新版本失败");
             return false;
         }
 
         // 比较版本号大小
         Version latestVersion = new(RemoveFirstLetterV(latestVersionString));
-        Utility.DebugWriteLine($"LocalVersion:{localVersion} | LatestVersion:{latestVersion}");
-        Utility.DebugWriteLine("DownloadUrl:" + downloadUrl);
+        Utility.MyDebugWriteLine($"LocalVersion:{localVersion} | LatestVersion:{latestVersion}");
+        Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
         if (localVersion.CompareTo(latestVersion) >= 0)
         {
-            Growl.Info("当前已是最新版本");
+            if (needGrowl)
+                Utility.MyGrowlInfo("当前已是最新版本");
+            else
+                Utility.PrintLog("当前已是最新版本");
             return false;
         }
-        Utility.DebugWriteLine($"发现新版本 v{latestVersionString}");
+        Utility.MyDebugWriteLine($"发现新版本 {latestVersionString}");
         return true;
     }
 
@@ -135,13 +155,13 @@ public static class UpdateTool
                 JObject json = JObject.Parse(jsonString);
                 if (json == null)
                 {
-                    Utility.DebugWriteLine("获取的Json为空");
+                    Utility.MyDebugWriteLine("获取的Json为空");
                     return false;
                 }
                 var tagNameToken = json["tag_name"];
                 if (tagNameToken == null)
                 {
-                    Utility.DebugWriteLine("获取的tag_name为空");
+                    Utility.MyDebugWriteLine("获取的tag_name为空");
                     return false;
                 }
                 latestVersionString = tagNameToken.ToString();
@@ -163,7 +183,7 @@ public static class UpdateTool
                             }
                             else
                             {
-                                Utility.DebugWriteLine("下载链接中找不到对应的PlatformTag");
+                                Utility.MyDebugWriteLine("下载链接中找不到对应的PlatformTag");
                             }
                         }
                     }
@@ -171,13 +191,13 @@ public static class UpdateTool
             }
             else
             {
-                Utility.DebugWriteLine($"检查新版本时网络请求出错: {response.StatusCode} - {response.ReasonPhrase}");
+                Utility.MyDebugWriteLine($"检查新版本时网络请求出错: {response.StatusCode} - {response.ReasonPhrase}");
                 return false;
             }
         }
         catch (Exception e)
         {
-            Utility.DebugWriteLine($"检查新版本时网络请求出错: {e.Message}");
+            Utility.MyDebugWriteLine($"检查新版本时网络请求出错: {e.Message}");
             return false;
         }
         finally
@@ -203,7 +223,9 @@ public static class UpdateTool
     private static async Task<bool> DownloadAndExtractFile(string url, string tempFileDirectory, string tempFileName)
     {
         string tempFilePath = Path.Combine(tempFileDirectory, tempFileName);
-        Utility.DebugWriteLine(tempFilePath);
+        Utility.MyDebugWriteLine(tempFilePath);
+        MainViewModel.Instance.ProgramData.DownloadProgress = 0;
+        MainViewModel.Instance.ProgramData.DownloadedSizeInfo = "";
         try
         {
             using var client = new HttpClient();
@@ -224,8 +246,8 @@ public static class UpdateTool
                     double percentage = ((double)totalRead / contentLength.Value) * 100;
                     string totalReadMB = ((double)totalRead / 1024f / 1024f).ToString("0.00");
                     string contentLengthMB = ((double)contentLength / 1024f / 1024f).ToString("0.00");
-                    //mainWindow.downloadInfoText.Text = $"{totalReadMB}MB / {contentLengthMB}MB";
-                    //mainWindow.downloadProgressBar.Value = percentage;
+                    MainViewModel.Instance.ProgramData.DownloadProgress = percentage;
+                    MainViewModel.Instance.ProgramData.DownloadedSizeInfo = $"已下载 {totalReadMB}MB / {contentLengthMB}MB";
                 }
                 // 保存文件
                 await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
@@ -240,7 +262,7 @@ public static class UpdateTool
             }
             if (!File.Exists(tempFilePath))
             {
-                Utility.DebugWriteLine("找不到已下载的文件!");
+                Utility.MyDebugWriteLine("找不到已下载的文件!");
                 return false;
             }
             switch (Path.GetExtension(tempFilePath))
@@ -272,17 +294,17 @@ public static class UpdateTool
         }
         catch (HttpRequestException httpEx)
         {
-            Utility.DebugWriteLine($"HTTP请求出现异常: {httpEx.Message}");
+            Utility.MyDebugWriteLine($"HTTP请求出现异常: {httpEx.Message}");
             return false;
         }
         catch (IOException ioEx)
         {
-            Utility.DebugWriteLine($"文件操作出现异常: {ioEx.Message}");
+            Utility.MyDebugWriteLine($"文件操作出现异常: {ioEx.Message}");
             return false;
         }
         catch (Exception ex)
         {
-            Utility.DebugWriteLine($"出现未知异常: {ex.Message}");
+            Utility.MyDebugWriteLine($"出现未知异常: {ex.Message}");
             return false;
         }
         return true;
@@ -293,10 +315,19 @@ public static class UpdateTool
     /// </summary>
     private static async void ApplyUpdate(string tempFileName)
     {
+        if (!Directory.Exists(Path.Combine(@".\temp", Path.GetFileNameWithoutExtension(tempFileName))))
+        {
+            Utility.MyGrowlError("解压的文件不存在!");
+            return;
+        }
+        // 把不提醒公告的设置改为false
+        MainViewModel.Instance.ProgramData.SettingsData.DoNotShowAnnouncementAgain = false;
+        SettingsViewModel.UpdateConfigJsonFile();
+
         var assembly = Assembly.GetEntryAssembly();
         if (assembly == null)
         {
-            Utility.DebugWriteLine("GetEntryAssembly 失败");
+            Utility.MyDebugWriteLine("GetEntryAssembly 失败");
             return;
         }
         var currentExeFileName = assembly.GetName().Name + ".exe";

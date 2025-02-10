@@ -172,14 +172,24 @@
                 <hc:Divider Content="软件设置" Margin="10 10 10 10"/>
                 <Grid Margin="0 0 0 0" HorizontalAlignment="Center">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
+                        <RowDefinition Height="36"/>
                         <RowDefinition Height="32"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" Content="检查更新" Width="80" Height="36" Margin="0 0 0 6"
+                    <Button Grid.Row="0" Content="检查更新" Width="80" Height="36" Margin="0 0 0 0"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Visibility="{c:Binding !ProgramData.IsDownloadingFiles}"
                         Command="{Binding CheckUpdateCommand}"/>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 0">
-                        <hc:Shield Subject="软件版本" Status="{x:Static utils:MyConstant.ResourceVersion}" HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Visibility="{c:Binding ProgramData.IsDownloadingFiles}">
+                        <hc:CircleProgressBar Grid.Row="0" ShowText="False" Width="24" Height="24" ArcThickness="6"
+                            Value="{Binding ProgramData.DownloadProgress}"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10 0 0 0"
+                            Text="{Binding ProgramData.DownloadedSizeInfo}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 6 0 0">
+                        <hc:Shield Subject="软件版本" Status="{x:Static utils:MyConstant.AppVersion}" HorizontalAlignment="Center"/>
                         <CheckBox Content="自动检查更新" Margin="16 0 0 0"
                             IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
                             Click="SettingsCheckBoxClick">
@@ -204,7 +214,6 @@
                         <TextBlock Margin="10 0 0 0" Text="←点个Star吧求求了" VerticalAlignment="Center" TextAlignment="Center"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
-                    
                 </Grid>
             </StackPanel>
         </hc:ScrollViewer>

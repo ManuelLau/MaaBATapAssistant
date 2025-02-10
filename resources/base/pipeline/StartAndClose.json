@@ -157,6 +157,7 @@
 	"RestartGame": {
 		"action": "StopApp",
 		"package": "com.RoamingStar.BlueArchive",
+		"post_delay": 3000,
 		"next": "StartGame"
 	}
 }

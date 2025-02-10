@@ -42,8 +42,12 @@ public partial class ProgramDataModel : ObservableObject
     [ObservableProperty]
     public bool isCurrentTaskExecuting;
     /// <summary>是否正在下载更新文件</summary>
-    //[ObservableProperty]
-    //public bool isDownloadingFiles;
+    [ObservableProperty]
+    public bool isDownloadingFiles;
+    [ObservableProperty]
+    public double downloadProgress;
+    [ObservableProperty]
+    public string downloadedSizeInfo = string.Empty;
 
     public SettingsData SettingsData { get; set; }
 
@@ -51,7 +55,7 @@ public partial class ProgramDataModel : ObservableObject
     {
         IsAfkTaskRunning = false;
         IsCurrentTaskExecuting = false;
-        //IsDownloadingFiles = false;
+        IsDownloadingFiles = false;
 
         #region 设置配置文件默认值
         SettingsData = new()
@@ -82,7 +86,7 @@ public partial class ProgramDataModel : ObservableObject
             IsAutoCheckAppUpdate = true,
             IsAutoUpdateResource = false,
             IsAutoUpdateApp = false,
-            DoNotShowAnnouncementAgain = true
+            DoNotShowAnnouncementAgain = false,
         };
         #endregion
     }

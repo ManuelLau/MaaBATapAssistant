@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading;
-using System.Diagnostics;
 
 namespace MaaBATapAssistant.Utils;
 
@@ -36,7 +35,7 @@ public class TaskManager
     {
         if (_waitingTaskChainList.Count <= 0)
         {
-            MainViewModel.Instance.PrintLog("暂无任务，请先生成任务");
+            Utility.PrintLog("暂无任务，请先生成任务");
             return;
         }
         ProgramDataModel.Instance.IsAfkTaskRunning = true;
@@ -56,8 +55,12 @@ public class TaskManager
 
     public async void Stop()
     {
-        MainViewModel.Instance.PrintLog("正在停止...");
+        Utility.PrintLog("正在停止...");
         MainViewModel.Instance.IsStoppingCurrentTask = true;
+        foreach (var taskChainTtem in _waitingTaskChainList)
+        {
+            taskChainTtem.Status = ETaskChainStatus.Waiting;
+        }
         PreventSleepTool.RestoreSleep();
         _cancellationTokenSource.Cancel();
         await Task.Run(MaaTaskerDispose);
@@ -99,7 +102,7 @@ public class TaskManager
         var devices = _maaToolkit.AdbDevice.Find();
         if (devices.IsEmpty)
         {
-            MainViewModel.Instance.PrintLog("找不到模拟器，请先手动打开模拟器");
+            Utility.PrintLog("找不到模拟器，请先手动打开模拟器");
             return false;
         }
 
@@ -109,11 +112,11 @@ public class TaskManager
         if (_maaTasker != null)
             if (_maaTasker.Initialized)
             {
-                MainViewModel.Instance.PrintLog("已连接至模拟器" + devices[0].Name);
+                Utility.PrintLog("已连接至模拟器" + devices[0].Name);
                 return true;
             }
 
-        MainViewModel.Instance.PrintLog("正在连接模拟器...");
+        Utility.PrintLog("正在连接模拟器...");
         try
         {
             _maaTasker = new()
@@ -126,16 +129,15 @@ public class TaskManager
         }
         catch (Exception)
         {
-            MainViewModel.Instance.PrintLog("任务初始化失败，可能是ADB连接出现问题，请尝试重启模拟器或者重启系统");
+            Utility.PrintLog("设备初始化失败，可能是ADB连接出现问题，请尝试重启模拟器、ADB或者重启系统");
             return false;
         }
         if (_maaTasker == null || !_maaTasker.Initialized)
         {
-            MainViewModel.Instance.PrintLog("任务初始化失败");
+            Utility.PrintLog("设备初始化失败，可能是ADB连接出现问题，请尝试重启模拟器、ADB或者重启系统");
             return false;
-            throw new InvalidOperationException();
         }
-        MainViewModel.Instance.PrintLog("成功连接至模拟器" + devices[0].Name);
+        Utility.PrintLog("成功连接至模拟器" + devices[0].Name);
         return true;
     }
 
@@ -155,7 +157,7 @@ public class TaskManager
         }
         catch (Exception)
         {
-            MainViewModel.Instance.PrintLog("加载资源文件失败");
+            Utility.PrintLog("加载资源文件失败");
             return false;
         }
         return true;
@@ -191,20 +193,24 @@ public class TaskManager
                 nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(DateTime.Now);
             }
 
-            var item = _waitingTaskChainList[0];
-            if (item != null && DateTime.Now >= item.ExecuteDateTime)
+            // 判断有无已经到达时间的任务
+            foreach (var taskChainItem in _waitingTaskChainList)
             {
-                Utility.DebugWriteLine($"检测到有任务可以执行");
-                ProgramDataModel.Instance.IsCurrentTaskExecuting = true;
-                firstTimeExecute = false;
-                CreateCurrentTaskQueue();
-                ExecuteCurrentTask(_cancellationTokenSource.Token);
-                Utility.DebugWriteLine($"已入列的任务执行完成或者已停止");
-                ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
+                if (DateTime.Now >= taskChainItem.ExecuteDateTime)
+                {
+                    Utility.MyDebugWriteLine($"检测到有任务可以执行");
+                    ProgramDataModel.Instance.IsCurrentTaskExecuting = true;
+                    firstTimeExecute = false;
+                    CreateCurrentTaskQueue();
+                    ExecuteCurrentTask(_cancellationTokenSource.Token);
+                    Utility.MyDebugWriteLine($"已入列的任务执行完成或者已停止");
+                    ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
+                    break;
+                }
             }
-            else if(firstTimeExecute)
+            if(firstTimeExecute)
             {
-                MainViewModel.Instance.PrintLog("暂无可执行任务，小助手待机中");
+                Utility.PrintLog("暂无可执行任务，小助手待机中");
                 firstTimeExecute = false;
             }
             await Task.Delay(1000, CancellationToken.None); // 每秒检查一次
@@ -219,52 +225,67 @@ public class TaskManager
         {
             if (token.IsCancellationRequested)
             {
-                //StopCurrentTask();
                 return;
             }
             var currentTaskChain = _currentTaskChainList[0];
             currentTaskChain.Status = ETaskChainStatus.Running;
 
-            Utility.DebugWriteLine($"准备执行任务链 - {currentTaskChain.Name}");
+            Utility.MyDebugWriteLine($"准备执行任务链 - {currentTaskChain.Name}");
             bool anyTaskFailed = false;
             if (currentTaskChain.NeedPrintLog)
             {
-                MainViewModel.Instance.PrintLog(currentTaskChain.StartLogMessage);
+                Utility.PrintLog(currentTaskChain.StartLogMessage);
+            }
+            if (_maaTasker == null)
+            {
+                Utility.MyDebugWriteLine($"maaTasker is null!");
+                Utility.PrintLog("设备失去连接！");
+                return;
+            }
+            var device = _maaTasker.Toolkit.AdbDevice.Find();
+            if (device.IsEmpty || device.IsInvalid)
+            {
+                Utility.MyDebugWriteLine($"设备失去连接！");
+                Utility.PrintLog("设备失去连接！");
+                Stop();
+                return;
             }
             foreach (var taskItem in currentTaskChain.TaskQueue)
             {
-                Utility.DebugWriteLine($"准备执行单个任务 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
-                if (_maaTasker == null)
-                {
-                    Utility.DebugWriteLine($"maaTasker is null!");
-                    return;
-                }
+                Utility.MyDebugWriteLine($"准备执行单个任务 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
                 var status = taskItem.PipelineOverride == "" ?
                     _maaTasker.AppendTask(taskItem.Entry).Wait() :
                     _maaTasker.AppendTask(taskItem.Entry, taskItem.PipelineOverride).Wait();
                 if (status.IsSucceeded())
                 {
-                    Utility.DebugWriteLine($"执行单个任务完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                    Utility.MyDebugWriteLine($"执行单个任务完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
                 }
                 else
                 {
-                    if (currentTaskChain.NeedPrintLog)
-                        MainViewModel.Instance.PrintLog(currentTaskChain.FailedLogMessage);
                     anyTaskFailed = true;
-                    Utility.DebugWriteLine($"执行单个任务失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
-                    break;
+                    Utility.MyDebugWriteLine($"执行单个任务失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
+
+                    // 检测是否因为用户停止任务导致释放了maaTasker，如果不break会导致闪退
+                    if (token.IsCancellationRequested)
+                    {
+                        Utility.MyDebugWriteLine("停止任务,break - 跳出当前任务链的任务队列遍历");
+                        break;
+                    }
+                    // 不是手动停止的话,有Pipeline失败后会继续执行后面的Pipeline
                 }
             }
             
             if (anyTaskFailed)
             {
-                Utility.DebugWriteLine($"执行任务链失败! - {currentTaskChain.Name}");
+                if (currentTaskChain.NeedPrintLog)
+                    Utility.PrintLog(currentTaskChain.FailedLogMessage);
+                Utility.MyDebugWriteLine($"执行任务链过程中出现异常！ - {currentTaskChain.Name}");
             }
             else
             {
                 if (currentTaskChain.NeedPrintLog)
-                    MainViewModel.Instance.PrintLog(currentTaskChain.SucceededLogMessage);
-                Utility.DebugWriteLine($"执行任务链完成 - {currentTaskChain.Name}");
+                    Utility.PrintLog(currentTaskChain.SucceededLogMessage);
+                Utility.MyDebugWriteLine($"执行任务链完成 - {currentTaskChain.Name}");
             }
             //移除任务链。如果是因为用户手动取消的话就不移除，并将状态设为等待中
             if (token.IsCancellationRequested)
@@ -285,36 +306,35 @@ public class TaskManager
         DateTime endDateTime = DateTime.Now;
         // 使用初始时间判断下一次刷新时间，以免执行期间刚好跨过咖啡厅刷新时间(To-do 待优化，以后检测到到达刷新时间自动终止当前所有任务)
         DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(startDateTime);
-        if (endDateTime >= nextCafeRefreshDateTime)
-            return;
-
-        // 刷新后续任务时间，如果+3小时后时间还没到执行时间，则不用刷新任务时间。默认以用户输入的时间为准
-        if (_waitingTaskChainList[0].ExecuteDateTime < endDateTime.AddHours(3))
+        if (endDateTime.AddHours(3) < nextCafeRefreshDateTime)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            // 刷新后续任务时间，如果+3小时后时间还没到执行时间，则不用刷新任务时间。默认以用户输入的时间为准
+            if (_waitingTaskChainList[0].ExecuteDateTime < endDateTime.AddHours(3))
             {
-                _waitingTaskChainList[0].ExecuteDateTime = endDateTime.AddHours(3);
-                for (int i = 1; i < _waitingTaskChainList.Count - 1; i++)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    //只处理当前时间段的
-                    if (_waitingTaskChainList[i].ExecuteDateTime < nextCafeRefreshDateTime)
+                    _waitingTaskChainList[0].ExecuteDateTime = endDateTime.AddHours(3);
+                    for (int i = 1; i < _waitingTaskChainList.Count - 1; i++)
                     {
-                        if (_waitingTaskChainList[i].ExecuteDateTime < _waitingTaskChainList[i - 1].ExecuteDateTime.AddHours(3))
+                        //只处理当前时间段的
+                        if (_waitingTaskChainList[i].ExecuteDateTime < nextCafeRefreshDateTime)
                         {
-                            _waitingTaskChainList[i].ExecuteDateTime = _waitingTaskChainList[i - 1].ExecuteDateTime.AddHours(3);
-                            if (_waitingTaskChainList[i].ExecuteDateTime >= nextCafeRefreshDateTime)
+                            if (_waitingTaskChainList[i].ExecuteDateTime < _waitingTaskChainList[i - 1].ExecuteDateTime.AddHours(3))
                             {
+                                _waitingTaskChainList[i].ExecuteDateTime = _waitingTaskChainList[i - 1].ExecuteDateTime.AddHours(3);
                                 //排除延迟后跨时间段的任务
-                                _waitingTaskChainList.RemoveAt(i);
-                                i--;
+                                if (_waitingTaskChainList[i].ExecuteDateTime >= nextCafeRefreshDateTime)
+                                {
+                                    _waitingTaskChainList.RemoveAt(i);
+                                    i--;
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
         }
-
-        MainViewModel.Instance.PrintLog("当前任务已完成，小助手待机中");
+        Utility.PrintLog("当前任务已完成，小助手待机中");
     }
 
     private void StopCurrentTask()
@@ -323,7 +343,7 @@ public class TaskManager
         ProgramDataModel.Instance.IsAfkTaskRunning = false;
         ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
         MainViewModel.Instance.IsStoppingCurrentTask = false;
-        MainViewModel.Instance.PrintLog("已停止");
+        Utility.PrintLog("已停止");
     }
     
     //获取下一个服务器刷新的日期时间。读取"客户端类型"设置项来返回不同的时间
@@ -497,8 +517,9 @@ public class TaskManager
             // 判断有无已经到达时间的任务
             if (DateTime.Now >= taskChainItem.ExecuteDateTime)
             {
+                taskChainItem.Status = ETaskChainStatus.InCurrentQueue;
                 // 读取设置(进入执行中队列时候才会读取)
-                foreach(var taskItem in taskChainItem.TaskQueue)
+                foreach (var taskItem in taskChainItem.TaskQueue)
                 {
                     taskItem.PipelineOverride = GetOverrideJsonWithReadConfig(taskItem.Type);
                 }
@@ -511,7 +532,7 @@ public class TaskManager
         _currentTaskChainList.Add(new("返回主界面", DateTime.Now, false, false, string.Empty, tempQueue1));
         foreach (var item in _currentTaskChainList)
         {
-            Utility.DebugWriteLine($"{item.ExecuteDateTime} - {item.Name}");
+            Utility.MyDebugWriteLine($"{item.ExecuteDateTime} - {item.Name}");
         }
     }
 

@@ -45,15 +45,6 @@ public partial class MainViewModel : ObservableObject
             Application.Current.Dispatcher.BeginInvoke(new Action(OpenAnnouncementWindow), System.Windows.Threading.DispatcherPriority.Input);
     }
 
-    /// <summary>打印Log到程序界面上</summary>
-    public void PrintLog(string content)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            LogDataList.Add(DateTime.Now.ToString("MM/dd HH:mm:ss") + "   " + content);
-        });
-    }
-
     [RelayCommand]
     public static void StartTaskButton()
     {
@@ -92,7 +83,7 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    public async Task AppStart()
+    public void AppStart()
     {
         // 读取存储的任务列表
         if (File.Exists(MyConstant.CacheFilePath))
@@ -101,12 +92,19 @@ public partial class MainViewModel : ObservableObject
             ObservableCollection<TaskChainModel>? deserializedCollection = JsonConvert.DeserializeObject<ObservableCollection<TaskChainModel>>(json);
             if (deserializedCollection != null)
                 WaitingTaskList = deserializedCollection;
+            foreach (var taskChainTtem in WaitingTaskList)
+            {
+                taskChainTtem.Status = ETaskChainStatus.Waiting;
+            }
         }
         // 启动时自动检测更新
         if (ProgramData.SettingsData.IsAutoCheckAppUpdate)
         {
-            await Task.Delay(2000); // 延迟2秒，以免无法发出提醒
-            await UpdateTool.CheckUpdate();
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000); // 延迟1秒
+                await UpdateTool.CheckUpdate(false);
+            });
         }
     }
 
@@ -126,14 +124,14 @@ public partial class MainViewModel : ObservableObject
         var devices = await _maaToolkit.AdbDevice.FindAsync();
         if (devices.IsEmpty)
         {
-            Utility.DebugWriteLine("找不到任何设备");
+            Utility.MyDebugWriteLine("找不到任何设备");
         }
         else
         {
-            Utility.DebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
+            Utility.MyDebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
             foreach (var e in devices)
             {
-                Utility.DebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
+                Utility.MyDebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
             }
         }
     }

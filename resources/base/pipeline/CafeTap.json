@@ -11,7 +11,7 @@
 			"CloseReward",
 			"ClosePopup"
 		],
-		"timeout": 3000,
+		"timeout": 4000,
 		"on_error": "CafeTap@RefreshStep0",
 		"doc": "开始摸头，前置条件是处于咖啡厅且关闭了所有弹窗"
     },
@@ -51,7 +51,7 @@
 			"CloseReward",
 			"ClosePopup"
 		],
-		"timeout": 3000,
+		"timeout": 4000,
 		"on_error": "CafeTap@RefreshAgainStep0"
     },
 	"CafeTap@RefreshAgainStep0": {
@@ -79,7 +79,7 @@
 			"CloseReward",
 			"ClosePopup"
 		],
-		"timeout": 3000,
+		"timeout": 4000,
 		"on_error": "Stop"
     },
 

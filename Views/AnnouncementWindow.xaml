@@ -4,14 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        xmlns:viewmodels="clr-namespace:MaaBATapAssistant.ViewModels"
         xmlns:models="clr-namespace:MaaBATapAssistant.Models"
-        d:DataContext="{d:DesignInstance Type=viewmodels:AnnouncementViewModel}"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=models:ProgramDataModel}"
         Title="公告" Height="480" Width="600" MinHeight="480" MinWidth="600" Topmost="True">
-    <Window.Resources>
-        <models:ProgramDataModel x:Key="ProgramDataModel"/>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -19,19 +15,19 @@
         </Grid.RowDefinitions>
         <hc:ScrollViewer Grid.Row="0" Margin="20 10 20 0">
             <StackPanel Grid.Row="0">
-                <TextBlock Text="{Binding MainTitle}" FontSize="32" Margin="0 0 0 4" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <TextBlock Text="{Binding Title0}" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBlock Text="{Binding Str0}" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
+                <TextBlock x:Name="MainTitle" FontSize="32" Margin="0 0 0 4" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock x:Name="Title0" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
+                <TextBlock x:Name="Content0" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
                 <hc:Divider Margin="10 10 20 10"/>
-                <TextBlock Text="{Binding Title1}" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBlock Text="{Binding Str1}" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
+                <TextBlock x:Name="Title1" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
+                <TextBlock x:Name="Content1" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
                 <hc:Divider Margin="10 10 20 10"/>
-                <TextBlock Text="{Binding Title2}" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBlock Text="{Binding Str2}" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
+                <TextBlock x:Name="Title2" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
+                <TextBlock x:Name="Content2" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
             </StackPanel>
         </hc:ScrollViewer>
         <CheckBox Grid.Row="1" Content="下次更新前不再提示" HorizontalAlignment="Center"
-                  IsChecked="{Binding ProgramData.SettingsData.DoNotShowAnnouncementAgain}"
+                  IsChecked="{Binding SettingsData.DoNotShowAnnouncementAgain}"
                   Click="CheckBoxOnClick"/>
     </Grid>
 </Window>

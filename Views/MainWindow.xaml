@@ -115,6 +115,7 @@
                         </hc:ScrollViewer>
                     </Grid>
                 </TabItem>
+
                 <TabItem Header="设置" IsSelected="False">
                     <Border>
                         <views:SettingsView/>

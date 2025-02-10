@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HandyControl.Controls;
 using MaaBATapAssistant.Models;
 using MaaBATapAssistant.Utils;
 using Newtonsoft.Json;
@@ -84,7 +83,7 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public static async Task CheckUpdate()
     {
-        await UpdateTool.CheckUpdate();
+        await UpdateTool.CheckUpdate(true);
     }
 
     [RelayCommand]
