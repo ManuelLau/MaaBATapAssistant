@@ -253,6 +253,7 @@ public class TaskManager
             foreach (var taskItem in currentTaskChain.TaskQueue)
             {
                 Utility.MyDebugWriteLine($"准备执行单个任务 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                Utility.MyDebugWriteLine($"PipelineOverride - {taskItem.PipelineOverride}");
                 var status = taskItem.PipelineOverride == "" ?
                     _maaTasker.AppendTask(taskItem.Entry).Wait() :
                     _maaTasker.AppendTask(taskItem.Entry, taskItem.PipelineOverride).Wait();
@@ -387,7 +388,7 @@ public class TaskManager
         ref bool _hasCreatedCafe1AMApplyLayoutTask, ref bool _hasCreatedCafe1PMApplyLayoutTask, 
         ref bool _hasCreatedCafe2AMApplyLayoutTask, ref bool _hasCreatedCafe2PMApplyLayoutTask)
     {
-        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(DateTime.Now); //04:00 or 03:00
+        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(executeDateTime); //04:00 or 03:00
         DateTime pmRefreshDateTime = nextServerRefreshDateTime.AddHours(-12); //16:00
         Queue<TaskModel> tempQueue = new();
         

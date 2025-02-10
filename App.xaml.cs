@@ -11,7 +11,9 @@ public partial class App : Application
     public App()
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.File(MaaBATapAssistant.Utils.MyConstant.LogFilePath, rollingInterval: RollingInterval.Day)
+            .WriteTo.File(MaaBATapAssistant.Utils.MyConstant.LogFilePath, 
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 10)
             .CreateLogger();
     }
 }
