@@ -3,12 +3,13 @@
 public static class AnnouncementContent
 {
     public const string MainTitle = "公告";
-    public const string Title0 = $"v0.1.2 更新内容";
+    public const string Title0 = $"v0.1.3 更新内容";
     public const string Content0 = "当前版本功能已经基本完善了，除了一些特殊的异常情况，其他时候都能稳定运行。" +
-        "\n*新增：程序更新功能" +
-        "\n*新增：任务列表会保存到本地，以便下次再打开的时候继续执行" +
-        "\n*修复了很多bug" +
-        "\n*添加了其他的一些小功能";
+        "\n新增：程序更新功能" +
+        "\n新增：任务列表会保存到本地，以便下次再打开的时候继续执行" +
+        "\n修复了生成任务时间读取错误导致的其他bug" +
+        "\n修复了其他的很多bug" +
+        "\n添加了其他的一些小功能";
     public const string Title1 = "使用须知";
     public const string Content1 = "使用前请务必先查看使用说明文档！" +
         "\n使用挂机脚本可能会违反用户协议及相关条款，悠星有权采取包括但不限于封禁账号、限制账号权限等措施。" +

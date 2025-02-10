@@ -21,7 +21,7 @@ public static class UpdateTool
     {
         await Task.Run(() =>
         {
-            if (CheckNewVersion(out string newVersionString, out _, needGrowl))
+            if (CheckNewVersion(out string newVersionString, out string downloadUrl, needGrowl))
             {
                 if (needGrowl)
                 {
@@ -30,7 +30,7 @@ public static class UpdateTool
                         if (isConfirmed)
                         {
                             Utility.MyDebugWriteLine("开始更新流程");
-                            UpdateApp();
+                            UpdateApp(newVersionString, downloadUrl);
                         }
                         return true;
                     });
@@ -43,13 +43,9 @@ public static class UpdateTool
         });
     }
 
-    public static async void UpdateApp()
+    public static async void UpdateApp(string latestVersionString, string downloadUrl)
     {
-        if (!CheckNewVersion(out string? latestVersionString, out string downloadUrl, true))
-        {
-            return;
-        }
-        Utility.MyDebugWriteLine($"开始更新至 {latestVersionString}");
+        Utility.MyDebugWriteLine($"开始执行更新 - 由v{MyConstant.AppVersion}更新至{latestVersionString}");
 
         // 创建临时文件存放路径temp\
         var tempFileDirectory = @".\temp";
@@ -71,6 +67,7 @@ public static class UpdateTool
         {
             Utility.MyDebugWriteLine("文件下载失败!");
             Utility.MyGrowlError("文件下载失败!");
+            MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
             return;
         }
         MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
