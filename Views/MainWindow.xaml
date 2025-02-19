@@ -15,6 +15,7 @@
 
     <hc:Window.Resources>
         <utils:TaskStatusToColorConverter x:Key="TaskStatusToColorConverter" />
+        <utils:LogItemColorConverter x:Key="LogItemColorConverter" />
     </hc:Window.Resources>
     
     <hc:Window.NonClientAreaContent>
@@ -62,7 +63,7 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="36"
-                                            IsEnabled="{c:Binding 'Status != models:ETaskChainStatus.Running'}">
+                                            IsEnabled="{c:Binding 'Status == models:ETaskChainStatus.Waiting'}">
                                             <Ellipse Width="10" Height="10"
                                                 Fill="{Binding Status, Converter={StaticResource TaskStatusToColorConverter}}"/>
                                             <hc:SimpleText Width="148" Margin="6 0 0 0" TextWrapping="Wrap"
@@ -108,7 +109,11 @@
                             <ItemsControl ItemsSource="{Binding LogDataList}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}" Margin="10 3 0 3" Foreground="Gray" TextWrapping="Wrap"/>
+                                        <TextBlock Margin="10 3 0 3" TextWrapping="Wrap">
+                                            <Run Text="{Binding DateTime}" Foreground="Gray"/>
+                                            <Run Text="{Binding Content}" 
+                                                Foreground="{Binding IsRed, Converter={StaticResource LogItemColorConverter}}"/>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

@@ -12,17 +12,17 @@
 			"ClickHomeButton",
 			"IdelTapScreen"
 		],
-		"doc": "已优化，可以在任务地方进入到1号咖啡厅"
-    },
+		"doc": "可以在任务地方进入到1号咖啡厅"
+	},
 	"MoveToCafe1@RecognizeNumberText": {
 		"recognition": "OCR",
-        "text": "号店",
+		"text": "号店",
 		"roi": [ 5, 55, 385, 125 ],
 		"next": [
 			"MoveToCafe1@InCafe1",
 			"MoveToCafe1@MoveToCafe1"
 		]
-    },
+	},
 	"MoveToCafe1@InCafe1":{
 		"recognition": "ColorMatch",
 		"roi": [ 72, 160, 6, 6 ],
@@ -30,19 +30,17 @@
 		"upper": [ 54, 79, 109 ],
 		"count": 30,
 		"next": "Cafe@CloseMoveCafeButtonThenDoJob",
-		"timeout": 2000,
 		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
 	},
 	"MoveToCafe1@MoveToCafe1": {
 		"recognition": "OCR",
-        "text": "1号店",
+		"text": "1号店",
 		"roi": [ 5, 55, 385, 125 ],
 		"action": "Click",
 		"post_delay": 1000,
 		"next": "Cafe@RecognizeTopLeftText",
-		"interrupt": "WaitLoading",
-		"timeout": 2000
-    },
+		"interrupt": "WaitLoading"
+	},
 
 
 	"MoveToCafe2": {
@@ -58,16 +56,16 @@
 			"ClickHomeButton",
 			"IdelTapScreen"
 		]
-    },
+	},
 	"MoveToCafe2@RecognizeNumberText": {
 		"recognition": "OCR",
-        "text": "号店",
+		"text": "号店",
 		"roi": [ 5, 55, 385, 125 ],
 		"next": [
 			"MoveToCafe2@InCafe2",
 			"MoveToCafe2@MoveToCafe2"
 		]
-    },
+	},
 	"MoveToCafe2@InCafe2":{
 		"recognition": "ColorMatch",
 		"roi": [ 214, 160, 6, 6 ],
@@ -75,24 +73,22 @@
 		"upper": [ 54, 79, 109 ],
 		"count": 30,
 		"next": "Cafe@CloseMoveCafeButtonThenDoJob",
-		"timeout": 2000,
 		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
 	},
 	"MoveToCafe2@MoveToCafe2": {
 		"recognition": "OCR",
-        "text": "2号店",
+		"text": "2号店",
 		"roi": [ 5, 55, 385, 125 ],
 		"action": "Click",
 		"post_delay": 1000,
 		"next": "Cafe@RecognizeTopLeftText",
-		"interrupt": "WaitLoading",
-		"timeout": 2000
-    },
+		"interrupt": "WaitLoading"
+	},
 	"MoveToCafe2@EnterCafeThenMoveToCafe2": {
 		"recognition": "TemplateMatch",
-        "template": "CafeButton.png",
+		"template": "CafeButton.png",
 		"roi": [ 0, 600, 150, 120 ],
-        "action": "Click",
+		"action": "Click",
 		"post_delay": 1000,
 		"next": "MoveToCafe2@RecognizeNumberText",
 		"interrupt": [
@@ -102,37 +98,36 @@
 			"ClosePopup"
 		],
 		"doc": "从主界面进入咖啡厅，然后切换到2号咖啡厅"
-    },
+	},
 
 	"Cafe@ClickMoveCafeButton": {
 		"recognition": "OCR",
-        "text": "前往咖啡厅",
+		"text": "前往咖啡",
 		"roi": [ 5, 55, 385, 125 ],
 		"action": "Click",
 		"post_delay": 1000
-    },
+	},
 	"Cafe@CloseMoveCafeButtonThenDoJob": {
 		"recognition": "OCR",
-        "text": "前往咖啡厅",
+		"text": "前往咖啡",
 		"roi": [ 5, 55, 385, 125 ],
 		"action": "Click",
 		"post_delay": 1000,
-		"next": "Stop",
-		"timeout": 2000
-    },
+		"next": "Stop"
+	},
 	"Cafe@ClickCafeButton": {
 		"recognition": "TemplateMatch",
-        "template": "CafeButton.png",
+		"template": "CafeButton.png",
 		"roi": [ 0, 600, 150, 120 ],
-        "action": "Click",
+		"action": "Click",
 		"post_delay": 1000
-    },
+	},
 
 	"Cafe@EnterCafe": {
 		"recognition": "TemplateMatch",
-        "template": "CafeButton.png",
-		"roi": [ 0, 600, 150, 120 ],
-        "action": "Click",
+		"template": "CafeButton.png",
+		"roi": [ 50, 610, 90, 110 ],
+		"action": "Click",
 		"post_delay": 1000,
 		"next": "Cafe@RecognizeTopLeftText",
 		"interrupt": [
@@ -140,11 +135,11 @@
 			"Cafe@ClickCafeButton"
 		],
 		"doc": "从主界面进入咖啡厅。默认会先进入1号咖啡厅，所以使用另外的pipeline"
-    },
+	},
 	"Cafe@RecognizeTopLeftText": {
-		"recognition": "OCR",
-        "text": "沙勒附属咖啡厅",
-		"roi": [ 30, 0, 300, 50 ],
+		"recognition": "TemplateMatch",
+		"template": "CafeTopLeftText.png",
+		"roi": [ 84, 0, 218, 50 ],
 		"post_delay": 1000,
 		"next": "Cafe@RecognizeEarningsButton",
 		"interrupt": [
@@ -164,23 +159,23 @@
 	},
 	"Cafe@RecognizeFirstTimePopup": {
 		"recognition": "OCR",
-        "text": "到访成员列表",
+		"text": "到访成员列表",
 		"roi": [ 520, 200, 220, 100 ],
 		"next": "Cafe@CloseFirstTimePopup",
 		"doc": "检查并关闭该时间段首次进入咖啡厅的弹窗"
 	},
 	"Cafe@CloseFirstTimePopup": {
 		"recognition": "TemplateMatch",
-        "template": "CloseButtonBlack.png",
+		"template": "CloseButtonBlack.png",
 		"action": "Click"
 	},
 
 	"Cafe@ClickUnfoldButton": {
 		"recognition": "TemplateMatch",
-        "template": "CafeUnfoldButton.png",
+		"template": "CafeUnfoldButton.png",
 		"roi": [ 20, 585, 80, 80 ],
-        "action": "Click",
+		"action": "Click",
 		"post_delay": 1000,
 		"doc": "点击底部左侧UI栏的展开按钮"
-    }
+	}
 }

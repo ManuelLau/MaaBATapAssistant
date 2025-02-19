@@ -3,10 +3,10 @@
 		"next": "CafeInvite@RecognizeTicketAvailable",
 		"timeout": 2000,
 		"doc": "默认是在咖啡厅内，且无弹窗不处于闲置界面，正常看得到UI。"
-    },
+	},
 	"CafeInvite@RecognizeTicketAvailable": {
 		"recognition": "OCR",
-        "text": "可以使用",
+		"text": "可以使用",
 		"roi": [770, 562, 130, 158],
 		"action": "Click",
 		"target_offset": [0, 65, 0, 0],
@@ -14,7 +14,7 @@
 	},
 	"CafeInvite@ClickSortTypeButton": {
 		"recognition": "OCR",
-        "text": ["精选", "学院", "好感等级"],
+		"text": ["好感等级", "精选", "学院", "名字"],
 		"roi": [636, 126, 136, 53],
 		"action": "Click",
 		"next": "CafeInvite@ChangeSortType",
@@ -22,7 +22,7 @@
 	},
 	"CafeInvite@ChangeSortType": {
 		"recognition": "OCR",
-        "text": "好感等级",
+		"text": "好感等级",
 		"roi": [414, 227, 449, 204],
 		"action": "Click",
 		"next": "CafeInvite@ChangeSortConfirm",
@@ -30,7 +30,7 @@
 	},
 	"CafeInvite@ChangeSortConfirm": {
 		"recognition": "OCR",
-        "text": "确认",
+		"text": "确认",
 		"roi": [414, 227, 449, 204],
 		"action": "Click",
 		"next": "CafeInvite@RecognizeSortOrder",
@@ -38,33 +38,33 @@
 	},
 	"CafeInvite@RecognizeSortOrder": {
 		"recognition": "TemplateMatch",
-        "template": "SortHighToLow.png",
+		"template": "SortHighToLow.png",
 		"roi": [822, 136, 22, 30],
 		"next": "CafeInvite@Invite",
 		"doc": "*更改排序顺序。根据用户选择重载这里的template字段"
 	},
 	"CafeInvite@InverseSortOrder": {
 		"recognition": "TemplateMatch",
-        "template": ["SortHighToLow.png", "SortLowToHigh.png"],
+		"template": ["SortHighToLow.png", "SortLowToHigh.png"],
 		"roi": [822, 136, 22, 30],
 		"action": "Click",
 		"doc": "反转排序顺序"
 	},
 	"CafeInvite@SortHighToLow": {
 		"recognition": "TemplateMatch",
-        "template": "SortHighToLow.png",
+		"template": "SortHighToLow.png",
 		"roi": [745, 85, 151, 133],
 		"next": "Stop"
 	},
 	"CafeInvite@SortLowToHigh": {
 		"recognition": "TemplateMatch",
-        "template": "SortLowToHigh.png",
+		"template": "SortLowToHigh.png",
 		"roi": [745, 85, 151, 133],
 		"next": "Stop"
 	},
 	"CafeInvite@Invite": {
 		"recognition": "OCR",
-        "text": "邀请",
+		"text": "邀请",
 		"roi": [698, 180, 173, 400],
 		"order_by": "Vertical",
 		"index": 0,
@@ -80,14 +80,14 @@
 	},
 	"CafeInvite@InviteConfirmPopupNormal": {
 		"recognition": "OCR",
-        "text": "到咖啡厅",
+		"text": "到咖啡厅",
 		"roi": [405, 195, 470, 270],
 		"next": "CafeInvite@InviteConfirm",
 		"doc": "正常情况的邀请"
 	},
 	"CafeInvite@InviteConfirmPopupNeighboring": {
 		"recognition": "OCR",
-        "text": "成员会离开",
+		"text": "成员会离开",
 		"roi": [405, 195, 470, 270],
 		"action": "Click",
 		"target": [767, 500, 0, 0],
@@ -97,43 +97,43 @@
 	},
 	"CafeInvite@InviteConfirmPopupNeighboringAgain": {
 		"recognition": "OCR",
-        "text": "带过来",
+		"text": "带过来",
 		"roi": [405, 195, 470, 270],
 		"next": "CafeInvite@InviteConfirm"
 	},
 	"CafeInvite@InviteConfirmPopupNeighboringSwapAlt": {
 		"recognition": "OCR",
-        "text": "带过来",
+		"text": "带过来",
 		"roi": [405, 195, 470, 270],
 		"next": "CafeInvite@InviteConfirm",
 		"doc": "*根据是否允许邀请隔壁咖啡厅学生且更换服装来重载next字段"
 	},
 	"CafeInvite@InviteConfirmPopupSwapAlt": {
 		"recognition": "OCR",
-        "text": "更换服装",
+		"text": "更换服装",
 		"roi": [405, 195, 470, 270],
 		"next": "CafeInvite@InviteConfirm",
 		"doc": "*根据是否允许学生更换服装来重载next字段"
 	},
 	"CafeInvite@InviteConfirm": {
-		"recognition": "OCR",
-        "text": "确认",
+		"recognition": "TemplateMatch",
+		"template": "ConfirmButton.png",
 		"roi": [362, 456, 558, 118],
 		"action": "Click",
 		"next": "CafeInvite@CloseMomoTalk",
 		"doc": "*测试用target: [1240, 680, 0, 0],"
 	},
 	"CafeInvite@InviteCancel": {
-		"recognition": "OCR",
-        "text": "取消",
-		"roi": [362, 456, 558, 118],
+		"recognition": "TemplateMatch",
+		"template": "CancleButton.png",
+		"roi": [360, 456, 560, 120],
 		"action": "Click",
 		"next": "CafeInvite@CloseMomoTalk",
 		"doc": "取消邀请，并通知用户。随后关闭邀请界面"
 	},
 	"CafeInvite@CloseMomoTalk": {
 		"recognition": "TemplateMatch",
-        "template": "CloseButtonMomoTalk.png",
+		"template": "CloseButtonMomoTalk.png",
 		"action": "Click",
 		"next": "Stop"
 	}

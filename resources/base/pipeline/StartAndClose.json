@@ -1,11 +1,21 @@
 {
 	"StartGame": {
-        "action": "StartApp",
+		"action": "StartApp",
 		"package": "com.RoamingStar.BlueArchive/com.yostar.supersdk.activity.YoStarSplashActivity",
 		"post_delay": 2000,
 		"next": "RefreshGame@IdelClick",
 		"doc": "启动游戏入口，先识别非从头启动的内容，检测不到再开始检测从头启动"
-    },
+	},
+	"CloseGame": {
+		"action": "StopApp",
+		"package": "com.RoamingStar.BlueArchive"
+	},
+	"RestartGame": {
+		"action": "StopApp",
+		"package": "com.RoamingStar.BlueArchive",
+		"post_delay": 3000,
+		"next": "StartGame"
+	},
 	
 	"StartUp@FirstCheck": {
 		"next": [
@@ -14,8 +24,7 @@
 		"interrupt": [
 			"ClickHomeButton",
 			"ClosePopup",
-			"CloseReward",
-			"StartUp@WaitLoading"
+			"CloseReward"
 		],
 		"timeout": 2000,
 		"on_error": "StartUp@Start",
@@ -28,20 +37,22 @@
 		"interrupt": [
 			"StartUp@UpdatePopUp",
 			"StartUp@TitleScreen",
+			"StartUp@LoginPopUp",
 			"StartUp@DailyCheckIn",
 			"ClosePopup",
 			"CloseReward",
 			"StartUp@WaitLoading",
 			"ClickHomeButton"
 		],
-		"rate_limit": 2000,
+		"rate_limit": 1000,
 		"pre_delay": 5000,
 		"timeout": 120000,
 		"doc": "从头启动游戏"
 	},
 	"StartUp@RecognizeLabel":{
 		"recognition": "TemplateMatch",
-        "template": "HomePageLabel.png",
+		"template": "HomePageLabel.png",
+		"roi": [ 1000, 0, 280, 66 ],
 		"next": "StartUp@RecognizeMailButton",
 		"interrupt": [
 			"ClickHomeButton",
@@ -53,21 +64,23 @@
 	"StartUp@RecognizeMailButton":{
 		"recognition": "ColorMatch",
 		"roi": [ 1137, 43, 12, 4 ],
-		"lower": [ 69, 98, 151 ],
-		"upper": [ 71, 100, 153 ],
+		"lower": [ 60, 89, 142 ],
+		"upper": [ 99, 117, 165 ],
 		"count": 46,
 		"next": "StartUp@FinalCheck",
-		"timeout": 3000
+		"timeout": 3000,
+		"doc": "国服日服70,99,152 国际服89,107,155,rgb的范围扩大"
 	},
 	"StartUp@RecognizeLabelInverse":{
 		"inverse": true,
 		"recognition": "TemplateMatch",
-        "template": "HomePageLabel.png",
+		"template": "HomePageLabel.png",
 		"next": "StartUp@RecognizeLabel",
 		"interrupt": [
 			"ClickHomeButton",
 			"ClosePopup",
 			"StartUp@TitleScreen",
+			"StartUp@LoginPopUp",
 			"StartUp@DailyCheckIn",
 			"CloseReward",
 			"StartUp@WaitLoading"
@@ -77,14 +90,15 @@
 		"inverse": true,
 		"recognition": "ColorMatch",
 		"roi": [ 1137, 43, 12, 4 ],
-		"lower": [ 69, 98, 151 ],
-		"upper": [ 71, 100, 153 ],
+		"lower": [ 60, 89, 142 ],
+		"upper": [ 99, 117, 165 ],
 		"count": 46,
 		"next": "StartUp@RecognizeLabel",
 		"interrupt": [
 			"ClickHomeButton",
 			"ClosePopup",
 			"StartUp@TitleScreen",
+			"StartUp@LoginPopUp",
 			"StartUp@DailyCheckIn",
 			"CloseReward",
 			"StartUp@WaitLoading"
@@ -102,20 +116,24 @@
 
 	"StartUp@WaitLoading": {
 		"recognition": "OCR",
-        "text": [
+		"text": [
 			"正在加载",
 			"Initialize",
 			"正在确认",
 			"正在更新",
-			"初始化"
+			"初始化",
+			"验证"
 		],
 		"roi": [0, 500, 1280, 220],
 		"post_delay": 1000
 	},
 	"StartUp@TitleScreen": {
-        "recognition": "TemplateMatch",
-        "template": "TitleScreen.png",
-        "action": "Click",
+		"recognition": "TemplateMatch",
+		"template": "MenuButton.png",
+		"roi": [16, 606, 106, 54],
+		"green_mask": true,
+		"pre_delay": 1000,
+		"action": "Click",
 		"target": [640, 360, 0, 0],
 		"post_delay": 8000,
 		"post_wait_freezes": {
@@ -129,35 +147,29 @@
 	},
 	"StartUp@DailyCheckIn": {
 		"recognition": "OCR",
-		"text": "签到",
+		"text": ["签到", "剩余时间"],
+		"roi": [430, 0, 850, 200],
 		"action": "Click",
 		"target": [640, 360, 0, 0],
 		"doc": "识别签到界面"
 	},
 	"StartUp@UpdatePopUp": {
 		"recognition": "OCR",
-		"text": "更新提醒",
+		"text": ["更新提醒", "需要下载"],
 		"roi": [285, 48, 718, 614],
 		"next": "StartUp@UpdatePopUpConfirm",
 		"doc": "识别下载弹窗"
 	},
 	"StartUp@UpdatePopUpConfirm": {
-		"recognition": "OCR",
-		"text": "确认",
-		"action": "Click",
-		"target": [285, 48, 718, 614],
-		"next": "StartUp@FirstCheck"
+		"recognition": "TemplateMatch",
+		"template": "ConfirmButton.png",
+		"roi": [285, 48, 718, 614],
+		"action": "Click"
 	},
-	
-	
-	"CloseGame": {
-		"action": "StopApp",
-		"package": "com.RoamingStar.BlueArchive"
-    },
-	"RestartGame": {
-		"action": "StopApp",
-		"package": "com.RoamingStar.BlueArchive",
-		"post_delay": 3000,
-		"next": "StartGame"
+	"StartUp@LoginPopUp": {
+		"recognition": "OCR",
+		"text": "今日不再显示",
+		"action": "Click",
+		"doc": "外服用，登录时候的弹窗。例如国际服的活动提示弹窗、日服的绑定邮箱弹窗等"
 	}
 }

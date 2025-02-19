@@ -1,0 +1,50 @@
+{
+	"StartGame": {
+		"action": "StartApp",
+		"package": "com.nexon.bluearchive/.MxUnityPlayerActivity",
+		"post_delay": 2000,
+		"next": "RefreshGame@IdelClick"
+	},
+	"CloseGame": {
+		"action": "StopApp",
+		"package": "com.nexon.bluearchive"
+	},
+	"RestartGame": {
+		"action": "StopApp",
+		"package": "com.nexon.bluearchive",
+		"post_delay": 3000,
+		"next": "StartGame"
+	},
+
+	"StartUp@WaitLoading": {
+		"recognition": "OCR",
+		"text": [
+			"Load",
+			"Initialize",
+			"重置遊戲資料",
+			"正在更新",
+			"驗證"
+		],
+		"roi": [0, 500, 1280, 220],
+		"post_delay": 1000
+	},
+	"StartUp@DailyCheckIn": {
+		"recognition": "OCR",
+		"text": ["簽到", "剩餘時間"],
+		"roi": [430, 0, 850, 200],
+		"action": "Click",
+		"target": [640, 360, 0, 0]
+	},
+	"StartUp@UpdatePopUp": {
+		"recognition": "OCR",
+		"text": ["下載必要內容", "需要下載遊戲"],
+		"roi": [285, 48, 718, 614],
+		"next": "StartUp@UpdatePopUpConfirm"
+	},
+	"StartUp@LoginPopUp": {
+		"recognition": "OCR",
+		"text": "今日不再顯示",
+		"action": "Click",
+		"doc": "外服用，登录时候的弹窗。例如国际服的活动提示弹窗、日服的绑定邮箱弹窗等"
+	}
+}

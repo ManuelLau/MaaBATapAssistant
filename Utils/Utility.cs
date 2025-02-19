@@ -1,4 +1,6 @@
-﻿namespace MaaBATapAssistant.Utils;
+﻿using System.Windows;
+
+namespace MaaBATapAssistant.Utils;
 
 public static class Utility
 {
@@ -13,11 +15,19 @@ public static class Utility
     /// <summary>打印输出到主界面上</summary>
     public static void PrintLog(string content)
     {
-        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+        Application.Current.Dispatcher.Invoke(() =>
         {
-            MaaBATapAssistant.ViewModels.MainViewModel.Instance.LogDataList.Add(DateTime.Now.ToString("MM/dd HH:mm:ss") + "   " + content);
+            MaaBATapAssistant.ViewModels.MainViewModel.Instance.LogDataList.Add(new($"{DateTime.Now.ToString("MM/dd HH:mm:ss")}   ", content, false));
         });
         Serilog.Log.Information(content);
+    }
+    public static void PrintError(string content)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            MaaBATapAssistant.ViewModels.MainViewModel.Instance.LogDataList.Add(new($"{DateTime.Now.ToString("MM/dd HH:mm:ss")}   ", content, true));
+        });
+        Serilog.Log.Error(content);
     }
 
     public static void MyGrowlInfo(string content)
@@ -27,7 +37,7 @@ public static class Utility
     }
     public static void MyGrowlError(string content)
     {
-        Serilog.Log.Information(content);
+        Serilog.Log.Error(content);
         HandyControl.Controls.Growl.Error(content);
     }
     public static void MyGrowlAsk(string content, Func<bool, bool> funcBeforeClose)

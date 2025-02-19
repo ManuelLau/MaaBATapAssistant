@@ -25,7 +25,7 @@ public partial class MainViewModel : ObservableObject
     //等待执行的任务队列，该队列中的任务也可以选择是否显示在主界面任务列表内
     public ObservableCollection<TaskChainModel> waitingTaskList;
     [ObservableProperty]
-    public ObservableCollection<string> logDataList;
+    public ObservableCollection<MainViewLogItemModel> logDataList;
     [ObservableProperty]
     public bool isStoppingCurrentTask = false;
     private AnnouncementWindow? announcementWindow;

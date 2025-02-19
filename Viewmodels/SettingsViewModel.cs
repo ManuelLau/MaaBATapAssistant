@@ -43,6 +43,7 @@ public partial class SettingsViewModel : ObservableObject
         [
             "官服",
             "B服",
+            "国际服-繁体",
         ];
         CafeInviteTimeSettingOptionsText =
         [
@@ -65,7 +66,7 @@ public partial class SettingsViewModel : ObservableObject
     private static void LoadConfigJsonFile()
     {
         string settingsJson = File.ReadAllText(MyConstant.ConfigJsonFilePath);
-        SettingsData? settingsData = JsonConvert.DeserializeObject<SettingsData>(settingsJson);
+        SettingsDataModel? settingsData = JsonConvert.DeserializeObject<SettingsDataModel>(settingsJson);
         if (settingsData == null)
         {
             throw new Exception("无法读取config.json");

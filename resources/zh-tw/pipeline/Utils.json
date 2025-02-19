@@ -1,0 +1,22 @@
+{
+	"CloseReward": {
+		"recognition": "OCR",
+		"text": "獲得獎勵",
+		"action": "Click",
+		"target": [640, 560, 0, 0],
+		"doc": "关闭获得奖励界面"
+	},
+	"RefreshGame@RecognizeDisconnected": {
+		"recognition": "OCR",
+		"text": ["認證信息已超時", "日期已變更"],
+		"roi": [363, 132, 554, 444],
+		"next": "RefreshGame@Reconnect"
+	},
+	"RefreshGame@RecognizeDuplicatedLogin": {
+		"recognition": "OCR",
+		"text": "發現重複登錄",
+		"roi": [363, 132, 554, 444],
+		"next": "RefreshGame@Reconnect",
+		"doc": "*检测重复登录，后面触发登录流程。根据用户配置重载next字段来决定是否自动重连，选择重连的话后续触发启动游戏流程"
+	}
+}

@@ -49,7 +49,7 @@ public partial class ProgramDataModel : ObservableObject
     [ObservableProperty]
     public string downloadedSizeInfo = string.Empty;
 
-    public SettingsData SettingsData { get; set; }
+    public SettingsDataModel SettingsData { get; set; }
 
     public ProgramDataModel()
     {
