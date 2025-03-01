@@ -26,7 +26,7 @@
                     <TextBlock Text="客户端类型" Style="{StaticResource SettingTextBlockStyle}"/>
                     <hc:ComboBox ItemsSource="{Binding ClientTypeSettingOptionsText}"
                                  SelectedIndex="{Binding ProgramData.SettingsData.ClientTypeSettingIndex}"
-                                 SelectionChanged="SettingsComboBoxSelectionChanged"
+                                 SelectionChanged="SettingsClientTypeSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                     </hc:ComboBox>
@@ -58,28 +58,28 @@
                                  IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe1InviteTimeSettingIndex != 3'}">
                     </hc:ComboBox>
                 </StackPanel>
-                <CheckBox Content="允许1号咖啡厅邀请隔壁咖啡厅学生(同一服装)" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <CheckBox Content="允许1号咖啡厅邀请隔壁咖啡厅学生(同一服装)" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsCafe1AllowInviteNeighboring}"
                           Click="SettingsCheckBoxClick" 
                           IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe1InviteTimeSettingIndex != 3'}">
                 </CheckBox>
-                <CheckBox Content="允许1号咖啡厅邀请隔壁咖啡厅学生且更换服装" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <CheckBox Content="允许1号咖啡厅邀请隔壁咖啡厅学生且更换服装" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsCafe1AllowInviteNeighboringSwapAlt}"
                           Click="SettingsCheckBoxClick" 
                           IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe1InviteTimeSettingIndex != 3'}">
                 </CheckBox>
-                <CheckBox Content="允许1号咖啡厅邀请学生更换服装" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <CheckBox Content="允许1号咖啡厅邀请学生更换服装" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsCafe1AllowInviteSwapAlt}"
                           Click="SettingsCheckBoxClick" 
                           IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe1InviteTimeSettingIndex != 3'}">
                 </CheckBox>
-                <CheckBox Content="启用1号咖啡厅应用家具预设" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <CheckBox Content="启用1号咖啡厅应用家具预设" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsCafe1EnableApplyLayout}"
                           Click="SettingsCheckBoxClick" 
                           IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                 </CheckBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="4:00~15:59时间段1号咖啡厅应用家具预设序号" Style="{StaticResource SettingTextBlockStyle}"/>
+                    <TextBlock Text="{Binding Cafe1ApplyLayoutAMText}" Style="{StaticResource SettingTextBlockStyle}"/>
                     <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1AMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
@@ -87,7 +87,7 @@
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe1EnableApplyLayout}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="16:00~次日3:55时间段1号咖啡厅应用家具预设序号" Style="{StaticResource SettingTextBlockStyle}"/>
+                    <TextBlock Text="{Binding Cafe1ApplyLayoutPMText}" Style="{StaticResource SettingTextBlockStyle}"/>
                     <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1PMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
@@ -135,13 +135,13 @@
                           Click="SettingsCheckBoxClick"
                           IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe2InviteTimeSettingIndex != 3'}">
                 </CheckBox>
-                <CheckBox Content="启用2号咖啡厅应用家具预设" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <CheckBox Content="启用2号咖啡厅应用家具预设" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsCafe2EnableApplyLayout}"
                           Click="SettingsCheckBoxClick" 
                           IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                 </CheckBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="4:00~15:59时间段2号咖啡厅应用家具预设序号" Style="{StaticResource SettingTextBlockStyle}"/>
+                    <TextBlock Text="{Binding Cafe2ApplyLayoutAMText}" Style="{StaticResource SettingTextBlockStyle}"/>
                     <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2AMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
@@ -149,24 +149,20 @@
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe2EnableApplyLayout}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="16:00~次日3:55时间段2号咖啡厅应用家具预设序号" Style="{StaticResource SettingTextBlockStyle}"/>
+                    <TextBlock Text="{Binding Cafe2ApplyLayoutPMText}" Style="{StaticResource SettingTextBlockStyle}"/>
                     <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2PMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe2EnableApplyLayout}"/>
                 </StackPanel>
-                <CheckBox Content="发现重复登录后自动重连(功能调试中，暂时默认开启)" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <CheckBox Content="学生好感等级提升自动截图" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding ProgramData.SettingsData.IsRelationshipRankUpAutoScreenShot}"
+                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                </CheckBox>
+                <CheckBox Content="发现重复登录后自动重连" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsReconnectAfterDuplicatedLogin}"
-                          Click="SettingsCheckBoxClick" IsEnabled="False">
-                </CheckBox>
-                <CheckBox Content="完成当日最后一个任务后关闭游戏(开发中)" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          IsChecked="{Binding ProgramData.SettingsData.IsCloseGameAfterLastTask}"
-                          Click="SettingsCheckBoxClick" IsEnabled="False">
-                </CheckBox>
-                <CheckBox Content="完成当日最后一个任务后关闭模拟器(开发中)" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          IsChecked="{Binding ProgramData.SettingsData.IsCloseEmulatorAfterLastTask}"
-                          Click="SettingsCheckBoxClick" IsEnabled="False">
+                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                 </CheckBox>
 
                 <hc:Divider Content="软件设置" Margin="10 10 10 10"/>

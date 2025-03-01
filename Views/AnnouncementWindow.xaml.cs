@@ -17,8 +17,8 @@ public partial class AnnouncementWindow : Window
         Content0.Text = AnnouncementContent.Content0;
         Title1.Text = AnnouncementContent.Title1;
         Content1.Text = AnnouncementContent.Content1;
-        Title2.Text = AnnouncementContent.Title2;
-        Content2.Text = AnnouncementContent.Content2;
+        //Title2.Text = AnnouncementContent.Title2;
+        //Content2.Text = AnnouncementContent.Content2;
     }
 
     private void CheckBoxOnClick(object sender, RoutedEventArgs e)

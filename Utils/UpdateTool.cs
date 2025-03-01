@@ -30,6 +30,7 @@ public static class UpdateTool
                         if (isConfirmed)
                         {
                             Utility.MyDebugWriteLine("开始更新流程");
+                            Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
                             UpdateApp(newVersionString, downloadUrl);
                         }
                         return true;
@@ -111,7 +112,6 @@ public static class UpdateTool
         // 比较版本号大小
         Version latestVersion = new(RemoveFirstLetterV(latestVersionString));
         Utility.MyDebugWriteLine($"LocalVersion:{localVersion} | LatestVersion:{latestVersion}");
-        Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
         if (localVersion.CompareTo(latestVersion) >= 0)
         {
             if (needGrowl)

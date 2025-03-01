@@ -1,0 +1,70 @@
+{
+	"StartGame": {
+		"package": "com.YostarJP.BlueArchive/com.yostarjp.bluearchive.MxUnityPlayerActivity"
+	},
+	"CloseGame": {
+		"package": "com.YostarJP.BlueArchive"
+	},
+	"RestartGame": {
+		"package": "com.YostarJP.BlueArchive"
+	},
+
+	"StartUp@Start": {
+		"interrupt": [
+			"StartUp@UpdatePopUp",
+			"StartUp@JpBindingPage",
+			"StartUp@JpCloseRequestFail300300",
+			"RefreshGame@MaintenancePopUp",
+			"StartUp@ClientUpdatePopUp",
+			"ClosePopup",
+			"StartUp@TitleScreen",
+			"StartUp@DailyCheckIn",
+			"StartUp@EventCheckIn",
+			"CloseReward",
+			"StartUp@WaitLoading",
+			"ClickHomeButton"
+		]
+	},
+	"StartUp@WaitLoading": {
+		"text": [
+			"Load",
+			"Initialize",
+			"ゲームに必要なリソースファイルを解凍しています",
+			"ゲームデータをイニシャライズしています",
+			"ゲーム開始に必要なリソースを確認中です",
+			"アップデート中です",
+			"確認しました"
+		]
+	},
+	"StartUp@JpBindingPage": {
+        "recognition": "TemplateMatch",
+		"template": "BindingPageDoNotRemind.png",
+		"roi": [610, 577, 130, 43],
+		"action": "Click",
+		"next": "StartUp@JpCloseBindingPage",
+		"doc": "日服-关闭绑定邮箱的界面"
+    },
+	"StartUp@JpCloseBindingPage": {
+		"recognition": "TemplateMatch",
+		"template": "BindingPageCloseButton.png",
+		"roi": [1212, 0, 67, 52],
+		"action": "Click",
+		"post_delay": 1000
+	},
+	"StartUp@JpCloseRequestFail300300": {
+		"recognition": "TemplateMatch",
+		"template": "RequestFail300300.png",
+		"roi": [310, 82, 660, 546],
+		"pre_delay": 1000,
+		"next": "ClickConfirmButton"
+	},
+	"StartUp@EventCheckIn": {
+		"text": "残り"
+	},
+	"StartUp@UpdatePopUp": {
+		"text": ["アップデートが必要です", "ダウンロード設定"]
+	},
+	"StartUp@ClientUpdatePopUp": {
+		"text": "最新バ一ジョンのクライアント"
+	}
+}

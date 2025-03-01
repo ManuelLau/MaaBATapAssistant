@@ -1,33 +1,39 @@
-﻿namespace MaaBATapAssistant.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 
-public class SettingsDataModel
+namespace MaaBATapAssistant.Models;
+
+public partial class SettingsDataModel : ObservableObject
 {
     // 所有设置项目
-    public int ClientTypeSettingIndex { get; set; }
-    public int Cafe1InviteTimeSettingIndex { get; set; }
-    public int Cafe1InviteSortTypeSettingIndex { get; set; }
-    public int Cafe1InviteIndexSettingIndex { get; set; }
-    public bool IsCafe1AllowInviteNeighboring { get; set; }
-    public bool IsCafe1AllowInviteNeighboringSwapAlt { get; set; }
-    public bool IsCafe1AllowInviteSwapAlt { get; set; }
-    public bool IsCafe1EnableApplyLayout {  get; set; }
-    public int Cafe1AMApplyLayoutIndex {  get; set; }
-    public int Cafe1PMApplyLayoutIndex {  get; set; }
-    public int Cafe2InviteTimeSettingIndex { get; set; }
-    public int Cafe2InviteSortTypeSettingIndex { get; set; }
-    public int Cafe2InviteIndexSettingIndex { get; set; }
-    public bool IsCafe2AllowInviteNeighboring { get; set; }
-    public bool IsCafe2AllowInviteNeighboringSwapAlt { get; set; }
-    public bool IsCafe2AllowInviteSwapAlt { get; set; }
-    public bool IsCafe2EnableApplyLayout { get; set; }
-    public int Cafe2AMApplyLayoutIndex { get; set; }
-    public int Cafe2PMApplyLayoutIndex { get; set; }
-    public bool IsReconnectAfterDuplicatedLogin { get; set; }
-    public bool IsCloseGameAfterLastTask { get; set; }
-    public bool IsCloseEmulatorAfterLastTask { get; set; }
-    public bool IsAutoCheckResourceUpdate { get; set; }
-    public bool IsAutoCheckAppUpdate { get; set; }
-    public bool IsAutoUpdateResource { get; set; }
-    public bool IsAutoUpdateApp { get; set; }
-    public bool DoNotShowAnnouncementAgain { get; set; }
+    public int ClientTypeSettingIndex { get; set; } = (int)EClientTypeSettingOptions.Zh_CN;
+    [ObservableProperty][JsonIgnore]
+    public int cafe1InviteTimeSettingIndex = (int)ECafeInviteTimeSettingOptions.AM;
+    public int Cafe1InviteSortTypeSettingIndex { get; set; } = (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow;
+    public int Cafe1InviteIndexSettingIndex { get; set; } = 0;
+    public bool IsCafe1AllowInviteNeighboring { get; set; } = true;
+    public bool IsCafe1AllowInviteNeighboringSwapAlt { get; set; } = true;
+    public bool IsCafe1AllowInviteSwapAlt { get; set; } = true;
+    [ObservableProperty][JsonIgnore]
+    public bool isCafe1EnableApplyLayout = false;
+    public int Cafe1AMApplyLayoutIndex { get; set; } = 0;
+    public int Cafe1PMApplyLayoutIndex { get; set; } = 1;
+    [ObservableProperty][JsonIgnore]
+    public int cafe2InviteTimeSettingIndex = (int)ECafeInviteTimeSettingOptions.PM;
+    public int Cafe2InviteSortTypeSettingIndex { get; set; } = (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow;
+    public int Cafe2InviteIndexSettingIndex { get; set; } = 0;
+    public bool IsCafe2AllowInviteNeighboring { get; set; } = true;
+    public bool IsCafe2AllowInviteNeighboringSwapAlt { get; set; } = true;
+    public bool IsCafe2AllowInviteSwapAlt { get; set; } = true;
+    [ObservableProperty][JsonIgnore]
+    public bool isCafe2EnableApplyLayout = false;
+    public int Cafe2AMApplyLayoutIndex { get; set; } = 1;
+    public int Cafe2PMApplyLayoutIndex { get; set; } = 0;
+    public bool IsRelationshipRankUpAutoScreenShot { get; set; } = true;
+    public bool IsReconnectAfterDuplicatedLogin { get; set; } = true;
+    //public bool IsAutoCheckResourceUpdate { get; set; } = false; // 未使用
+    public bool IsAutoCheckAppUpdate { get; set; } = true;
+    //public bool IsAutoUpdateResource { get; set; } = false; // 未使用
+    //public bool IsAutoUpdateApp { get; set; } = false; // 未使用
+    public bool DoNotShowAnnouncementAgain { get; set; } = false;
 }

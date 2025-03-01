@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading;
+using static MaaBATapAssistant.Utils.CustomTask;
 
 namespace MaaBATapAssistant.Utils;
 
 public class TaskManager
 {
+    /// <summary>当前任务链是否需要打印任务结束的Log，包括成功、失败、无效</summary>
+    public bool CurrentTaskChainPrintFinishedLog;
     private static TaskManager? _instance;
     public static TaskManager Instance
     {
@@ -152,11 +155,18 @@ public class TaskManager
         {
             _maaTasker = new()
             {
-                //默认使用第0个设备，后续再改
+                //默认使用第0个设备，后续再改To-do
                 Controller = devices[0].ToAdbController(),
                 Resource = maaResource,
                 DisposeOptions = DisposeOptions.All,
             };
+            // 注册自定义识别、动作
+            _maaTasker.Resource.Register(new RelationshipRankUpScreenShot());
+            _maaTasker.Resource.Register(new InviteUnavailableSkipTask());
+            _maaTasker.Resource.Register(new InviteCancelNotify());
+            _maaTasker.Resource.Register(new DuplicatedLoginStopTask());
+            _maaTasker.Resource.Register(new MaintenanceStopTask());
+            _maaTasker.Resource.Register(new ClientUpdateStopTask());
         }
         catch (Exception)
         {
@@ -263,7 +273,7 @@ public class TaskManager
             var currentTaskChain = _currentTaskChainList[0];
             currentTaskChain.Status = ETaskChainStatus.Running;
 
-            Utility.MyDebugWriteLine($"准备执行任务链 - {currentTaskChain.Name}");
+            Utility.MyDebugWriteLine($"[任务链]   - 执行 - {currentTaskChain.Name}");
             if (currentTaskChain.NeedPrintLog)
             {
                 Utility.PrintLog(currentTaskChain.StartLogMessage);
@@ -271,40 +281,40 @@ public class TaskManager
             if (_maaTasker == null)
             {
                 Utility.MyDebugWriteLine($"maaTasker is null!");
-                Utility.PrintLog("设备失去连接！");
+                Utility.PrintError("设备失去连接！");
                 return;
             }
             var device = _maaTasker.Toolkit.AdbDevice.Find();
             if (device.IsEmpty || device.IsInvalid)
             {
                 Utility.MyDebugWriteLine($"设备失去连接！");
-                Utility.PrintLog("设备失去连接！");
+                Utility.PrintError("设备失去连接！");
                 Stop();
                 return;
             }
 
             bool anyTaskFailed = false;
-            bool printTaskFailed = true;
+            CurrentTaskChainPrintFinishedLog = true; // 是否打印任务结束的信息(成功、失败、异常)
             foreach (var taskItem in currentTaskChain.TaskQueue)
             {
-                Utility.MyDebugWriteLine($"准备执行单个任务 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                Utility.MyDebugWriteLine($"[单个任务] - 执行 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
                 Utility.MyDebugWriteLine($"PipelineOverride - {taskItem.PipelineOverride}");
-                var status = taskItem.PipelineOverride == "" ?
+                var status = string.IsNullOrEmpty(taskItem.PipelineOverride) ?
                     _maaTasker.AppendTask(taskItem.Entry).Wait() :
                     _maaTasker.AppendTask(taskItem.Entry, taskItem.PipelineOverride).Wait();
                 if (status.IsSucceeded())
                 {
-                    Utility.MyDebugWriteLine($"执行单个任务完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                    Utility.MyDebugWriteLine($"[单个任务] - 完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
                 }
                 else
                 {
                     anyTaskFailed = true;
-                    Utility.MyDebugWriteLine($"执行单个任务失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
+                    Utility.MyDebugWriteLine($"[单个任务] - 失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
 
                     // 检测是否因为用户停止任务导致释放了maaTasker，如果不break会导致闪退
                     if (token.IsCancellationRequested)
                     {
-                        printTaskFailed = false;
+                        CurrentTaskChainPrintFinishedLog = false;
                         Utility.MyDebugWriteLine("手动停止任务 - 跳出当前任务链");
                         break;
                     }
@@ -314,29 +324,31 @@ public class TaskManager
             
             if (anyTaskFailed)
             {
-                if (printTaskFailed && currentTaskChain.NeedPrintLog)
+                if (CurrentTaskChainPrintFinishedLog && currentTaskChain.NeedPrintLog)
                     Utility.PrintError(currentTaskChain.FailedLogMessage);
-                Utility.MyDebugWriteLine($"执行任务链过程中出现异常！ - {currentTaskChain.Name}");
+                Utility.MyDebugWriteLine($"[任务链]   - 异常! - 执行任务链过程中出现异常 - {currentTaskChain.Name}");
             }
             else
             {
-                if (currentTaskChain.NeedPrintLog)
+                if (CurrentTaskChainPrintFinishedLog && currentTaskChain.NeedPrintLog)
                     Utility.PrintLog(currentTaskChain.SucceededLogMessage);
-                Utility.MyDebugWriteLine($"执行任务链完成 - {currentTaskChain.Name}");
+                Utility.MyDebugWriteLine($"[任务链]   - 完成 - {currentTaskChain.Name}");
             }
             //移除任务链。如果是因为用户手动取消的话就不移除，并将状态设为等待中
             if (token.IsCancellationRequested)
             {
                 currentTaskChain.Status = ETaskChainStatus.Waiting;
-                return;
             }
-            _currentTaskChainList.Remove(currentTaskChain);
-            if (currentTaskChain.NeedShowInWaitingTaskList)
+            else
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                _currentTaskChainList.Remove(currentTaskChain);
+                if (currentTaskChain.NeedShowInWaitingTaskList)
                 {
-                    _waitingTaskChainList.Remove(currentTaskChain);
-                });
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        _waitingTaskChainList.Remove(currentTaskChain);
+                    });
+                }
             }
         }
 
@@ -443,8 +455,7 @@ public class TaskManager
             {
                 tempQueue = new();
                 tempQueue.Enqueue(new("进入2号咖啡厅", "MoveToCafe2", string.Empty, ETaskType.Normal));
-                tempQueue.Enqueue(new("2号咖啡厅邀请", "CafeInvite", string.Empty, ETaskType.Cafe2Invite));
-                tempQueue.Enqueue(new("(2号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
+                tempQueue.Enqueue(new("2号咖啡厅邀请+摸头", "CafeInvite", string.Empty, ETaskType.Cafe2Invite));
                 AddToWaitingTaskList(new("2号咖啡厅邀请", inviteTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe2InviteTask = true;
             }
@@ -480,8 +491,7 @@ public class TaskManager
 
                 tempQueue = new();
                 tempQueue.Enqueue(new("进入1号咖啡厅", "MoveToCafe1", string.Empty, ETaskType.Normal));
-                tempQueue.Enqueue(new("1号咖啡厅邀请", "CafeInvite", string.Empty, ETaskType.Cafe1Invite));
-                tempQueue.Enqueue(new("(1号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
+                tempQueue.Enqueue(new("1号咖啡厅邀请+摸头", "CafeInvite", string.Empty, ETaskType.Cafe1Invite));
                 AddToWaitingTaskList(new("1号咖啡厅邀请", inviteTime, true, true, string.Empty, tempQueue));
                 _hasCreatedCafe1InviteTask = true;
             }
@@ -565,7 +575,7 @@ public class TaskManager
         }
 
         Queue<TaskModel> tempQueue1 = new();
-        tempQueue1.Enqueue(new("返回主界面", "ClickHomeButton", string.Empty, ETaskType.Normal));
+        tempQueue1.Enqueue(new("返回主界面", "RefreshGame@BackToHomePage", string.Empty, ETaskType.Normal));
         _currentTaskChainList.Add(new("返回主界面", DateTime.Now, false, false, string.Empty, tempQueue1));
         foreach (var item in _currentTaskChainList)
         {
@@ -586,64 +596,68 @@ public class TaskManager
             //启动游戏
             case ETaskType.StartGame:
                 return _settingsData.IsReconnectAfterDuplicatedLogin ?
-                    string.Empty : "{\"RefreshGame@RecognizeDuplicatedLogin\":{\"next\":\"Stop\"}}";
+                    string.Empty : "{\"RefreshGame@DuplicatedLoginPopUp\":{\"next\":\"RefreshGame@DuplicatedLoginStopTask\"}}";
             //1号咖啡厅邀请
             case ETaskType.Cafe1Invite:
-                if (_settingsData.ClientTypeSettingIndex == (int)EClientTypeSettingOptions.Zh_TW)
+                overrideSortType = string.Empty;
+                overrideSortOrder = string.Empty;
+                switch (_settingsData.ClientTypeSettingIndex)
                 {
-                    switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
-                    {
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow:
-                            overrideSortType = "羈絆等級";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
-                            overrideSortType = "羈絆等級";
-                            overrideSortOrder = "SortLowToHigh.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.Pinned:
-                            overrideSortType = "精選";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        default:
-                            overrideSortType = "羈絆等級";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                    }
+                    default:
+                        switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
+                        {
+                            case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
+                                overrideSortType = "好感等级";
+                                overrideSortOrder = "SortLowToHigh.png";
+                                break;
+                            case (int)ECafeInviteSortTypeSettingOptions.Pinned:
+                                overrideSortType = "精选";
+                                overrideSortOrder = "SortHighToLow.png";
+                                break;
+                        }
+                        break;
+                    case (int)EClientTypeSettingOptions.Zh_TW:
+                        switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
+                        {
+                            case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
+                                overrideSortType = "羈絆等級";
+                                overrideSortOrder = "SortLowToHigh.png";
+                                break;
+                            case (int)ECafeInviteSortTypeSettingOptions.Pinned:
+                                overrideSortType = "精選";
+                                overrideSortOrder = "SortHighToLow.png";
+                                break;
+                        }
+                        break;
+                    case (int)EClientTypeSettingOptions.Jp:
+                        switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
+                        {
+                            case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
+                                overrideSortType = "絆ランク";
+                                overrideSortOrder = "SortLowToHigh.png";
+                                break;
+                            case (int)ECafeInviteSortTypeSettingOptions.Pinned:
+                                overrideSortType = "お気に入";
+                                overrideSortOrder = "SortHighToLow.png";
+                                break;
+                        }
+                        break;
                 }
-                else
-                {
-                    switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
-                    {
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow:
-                            overrideSortType = "好感等级";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
-                            overrideSortType = "好感等级";
-                            overrideSortOrder = "SortLowToHigh.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.Pinned:
-                            overrideSortType = "精选";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        default:
-                            overrideSortType = "好感等级";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                    }
-                }
-                overrideJson = "{" +
-                    "\"CafeInvite@ChangeSortType\":{\"text\":\"" + overrideSortType + "\"}," +
-                    "\"CafeInvite@RecognizeSortOrder\":{\"template\":\"" + overrideSortOrder + "\"}";
+                overrideJson = "{";
+                if (!string.IsNullOrEmpty(overrideSortType))
+                    overrideJson += "\"CafeInvite@ChangeSortType\":{\"text\":\"" + overrideSortType + "\"},";
+                if (!string.IsNullOrEmpty(overrideSortOrder))
+                    overrideJson += "\"CafeInvite@RecognizeSortOrder\":{\"template\":\"" + overrideSortOrder + "\"},";
                 if (_settingsData.Cafe1InviteIndexSettingIndex != 0)
-                    overrideJson += ",\"CafeInvite@Invite\":{\"index\":" + _settingsData.Cafe1InviteIndexSettingIndex + "}";
+                    overrideJson += "\"CafeInvite@Invite\":{\"index\":" + _settingsData.Cafe1InviteIndexSettingIndex + "},";
                 if (!_settingsData.IsCafe1AllowInviteNeighboring)
-                    overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboring\":{\"next\":\"CafeInvite@InviteCancel\"}";
+                    overrideJson += "\"CafeInvite@InviteConfirmPopupNeighboring\":{\"next\":\"CafeInvite@InviteCancel\"},";
                 if (!_settingsData.IsCafe1AllowInviteNeighboringSwapAlt)
-                    overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
+                    overrideJson += "\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
                 if (!_settingsData.IsCafe1AllowInviteSwapAlt)
-                    overrideJson += ",\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
+                    overrideJson += "\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
+                if (overrideJson.EndsWith(','))
+                    overrideJson = overrideJson.Substring(0, overrideJson.Length - 1);
                 overrideJson += "}";
                 return overrideJson;
             //1号咖啡厅应用家具预设
@@ -653,62 +667,65 @@ public class TaskManager
                 return "{\"CafeLayout@ApplyLayout\":{\"index\":" + _settingsData.Cafe1PMApplyLayoutIndex + "}}";
             //2号咖啡厅邀请
             case ETaskType.Cafe2Invite:
-                if (_settingsData.ClientTypeSettingIndex == (int)EClientTypeSettingOptions.Zh_TW)
+                overrideSortType = string.Empty;
+                overrideSortOrder = string.Empty;
+                switch (_settingsData.ClientTypeSettingIndex)
                 {
-                    switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
-                    {
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow:
-                            overrideSortType = "羈絆等級";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
-                            overrideSortType = "羈絆等級";
-                            overrideSortOrder = "SortLowToHigh.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.Pinned:
-                            overrideSortType = "精選";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        default:
-                            overrideSortType = "羈絆等級";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                    }
+                    default:
+                        switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
+                        {
+                            case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
+                                overrideSortType = "好感等级";
+                                overrideSortOrder = "SortLowToHigh.png";
+                                break;
+                            case (int)ECafeInviteSortTypeSettingOptions.Pinned:
+                                overrideSortType = "精选";
+                                overrideSortOrder = "SortHighToLow.png";
+                                break;
+                        }
+                        break;
+                    case (int)EClientTypeSettingOptions.Zh_TW:
+                        switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
+                        {
+                            case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
+                                overrideSortType = "羈絆等級";
+                                overrideSortOrder = "SortLowToHigh.png";
+                                break;
+                            case (int)ECafeInviteSortTypeSettingOptions.Pinned:
+                                overrideSortType = "精選";
+                                overrideSortOrder = "SortHighToLow.png";
+                                break;
+                        }
+                        break;
+                    case (int)EClientTypeSettingOptions.Jp:
+                        switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
+                        {
+                            case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
+                                overrideSortType = "絆ランク";
+                                overrideSortOrder = "SortLowToHigh.png";
+                                break;
+                            case (int)ECafeInviteSortTypeSettingOptions.Pinned:
+                                overrideSortType = "お気に入";
+                                overrideSortOrder = "SortHighToLow.png";
+                                break;
+                        }
+                        break;
                 }
-                else
-                {
-                    switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
-                    {
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow:
-                            overrideSortType = "好感等级";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
-                            overrideSortType = "好感等级";
-                            overrideSortOrder = "SortLowToHigh.png";
-                            break;
-                        case (int)ECafeInviteSortTypeSettingOptions.Pinned:
-                            overrideSortType = "精选";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                        default:
-                            overrideSortType = "好感等级";
-                            overrideSortOrder = "SortHighToLow.png";
-                            break;
-                    }
-                }
-                overrideJson =
-                    "{" +
-                    "\"CafeInvite@ChangeSortType\":{\"text\":\"" + overrideSortType + "\"}," +
-                    "\"CafeInvite@RecognizeSortOrder\":{\"template\":\"" + overrideSortOrder + "\"}";
+                overrideJson = "{";
+                if (!string.IsNullOrEmpty(overrideSortType))
+                    overrideJson += "\"CafeInvite@ChangeSortType\":{\"text\":\"" + overrideSortType + "\"},";
+                if (!string.IsNullOrEmpty(overrideSortOrder))
+                    overrideJson += "\"CafeInvite@RecognizeSortOrder\":{\"template\":\"" + overrideSortOrder + "\"},";
                 if (_settingsData.Cafe2InviteIndexSettingIndex != 0)
-                    overrideJson += ",\"CafeInvite@Invite\":{\"index\":" + _settingsData.Cafe2InviteIndexSettingIndex + "}";
+                    overrideJson += "\"CafeInvite@Invite\":{\"index\":" + _settingsData.Cafe2InviteIndexSettingIndex + "},";
                 if (!_settingsData.IsCafe2AllowInviteNeighboring)
-                    overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboring\":{\"next\":\"CafeInvite@InviteCancel\"}";
+                    overrideJson += "\"CafeInvite@InviteConfirmPopupNeighboring\":{\"next\":\"CafeInvite@InviteCancel\"},";
                 if (!_settingsData.IsCafe2AllowInviteNeighboringSwapAlt)
-                    overrideJson += ",\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
+                    overrideJson += "\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
                 if (!_settingsData.IsCafe2AllowInviteSwapAlt)
-                    overrideJson += ",\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"}";
+                    overrideJson += "\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
+                if (overrideJson.EndsWith(','))
+                    overrideJson = overrideJson.Substring(0, overrideJson.Length - 1);
                 overrideJson += "}";
                 return overrideJson;
             //2号咖啡厅应用家具预设

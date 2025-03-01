@@ -1,46 +1,14 @@
 {
 	"MoveToCafe1@RecognizeNumberText": {
-		"recognition": "OCR",
-		"text": "號店",
-		"roi": [ 5, 55, 385, 125 ],
-		"next": [
-			"MoveToCafe1@InCafe1",
-			"MoveToCafe1@MoveToCafe1"
-		]
+		"text": "號店"
 	},
 	"MoveToCafe1@MoveToCafe1": {
-		"recognition": "OCR",
-		"text": "1號店",
-		"roi": [ 5, 55, 385, 125 ],
-		"action": "Click",
-		"post_delay": 1000,
-		"next": "Cafe@RecognizeTopLeftText",
-		"interrupt": "WaitLoading",
-		"timeout": 2000
+		"text": "1號店"
 	},
 	"MoveToCafe2@RecognizeNumberText": {
-		"recognition": "OCR",
-		"text": "號店",
-		"roi": [ 5, 55, 385, 125 ],
-		"next": [
-			"MoveToCafe2@InCafe2",
-			"MoveToCafe2@MoveToCafe2"
-		]
+		"text": "號店"
 	},
 	"MoveToCafe2@MoveToCafe2": {
-		"recognition": "OCR",
-		"text": "2號店",
-		"roi": [ 5, 55, 385, 125 ],
-		"action": "Click",
-		"post_delay": 1000,
-		"next": "Cafe@RecognizeTopLeftText",
-		"interrupt": "WaitLoading",
-		"timeout": 2000
-	},
-	"Cafe@RecognizeFirstTimePopup": {
-		"recognition": "OCR",
-		"text": "訪問學生目錄",
-		"roi": [ 520, 200, 220, 100 ],
-		"next": "Cafe@CloseFirstTimePopup"
+		"text": "2號店"
 	}
 }

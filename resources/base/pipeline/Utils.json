@@ -1,25 +1,30 @@
 {
 	"Stop": {
 		"action": "StopTask",
-		"doc": "停止当前任务链，可用作流程的终点"
+		"doc": "停止当前PostPipeline传入的单个任务链"
 	},
 	"ClickHomeButton": {
 		"recognition": "TemplateMatch",
 		"template": "HomePageButton.png",
-		"roi": [ 1200, 0, 80, 45 ],
+		"roi": [1200, 0, 80, 45],
 		"action": "Click",
 		"post_delay": 2000
+	},
+	"ClickConfirmButton": {
+		"recognition": "TemplateMatch",
+		"template": "ConfirmButton.png",
+		"roi": [310, 82, 660, 546],
+		"action": "Click"
 	},
 	"ClosePopup": {
 		"recognition": "TemplateMatch",
 		"template": [
 			"CloseButtonBlack.png",
-			"CloseButtonWhite.png",
-			"CloseButtonNexon.png"
+			"CloseButtonWhite.png"
 		],
 		"green_mask": true,
 		"action": "Click",
-		"doc": "关闭带有X的弹窗，不论颜色"
+		"doc": "关闭带有X的弹窗，不论颜色[一般弹窗的roi:310, 82, 660, 546]"
 	},
 	"IdelTapScreen": {
 		"recognition": "TemplateMatch",
@@ -33,7 +38,7 @@
 	"WaitLoading": {
 		"recognition": "OCR",
 		"text": ["正在加载","Load"],
-		"roi": [930, 600, 315, 95],
+		"roi": [900, 600, 350, 100],
 		"post_delay": 1000
 	},
 	"CloseReward": {
@@ -55,23 +60,29 @@
 			"RefreshGame@BackToHomePage",
 			"RefreshGame@GoToStudentsPage"
 		],
+		"interrupt":[
+			"ClosePopup"
+		],
 		"timeout": 2000,
 		"on_error": "StartUp@FirstCheck",
-		"doc": "准备执行任务，刷新游戏，检测掉线、重复登录状态。前置条件是已经执行过启动游戏任务，当前在游戏内。如果识别到主页按钮说明不在主界面，直接返回即可；如果在主界面则点进学生界面再返回主页"
+		"doc": "刷新游戏，检测掉线、重复登录等状态。前置条件是当前在游戏内。如果识别到主页按钮直接返回即可；如果在主界面则点进学生界面再返回主页"
 	},
 	"RefreshGame@BackToHomePage": {
 		"recognition": "TemplateMatch",
 		"template": "HomePageButton.png",
-		"roi": [ 1200, 0, 80, 45 ],
+		"roi": [1200, 0, 80, 45],
 		"action": "Click",
 		"post_delay": 2000,
 		"next": [
-			"RefreshGame@RecognizeDisconnected",
-			"RefreshGame@RecognizeDuplicatedLogin"
+			"RefreshGame@DisconnectedPopUp",
+			"RefreshGame@DuplicatedLoginPopUp",
+			"RefreshGame@MaintenancePopUp",
+			"RefreshGame@BackToHomePage"
 		],
+		"interrupt": "WaitLoading",
 		"timeout": 2000,
 		"on_error": "Stop",
-		"doc": "返回到主界面后循环检测2秒"
+		"doc": "回到主界面后循环检测2秒"
 	},
 	"RefreshGame@GoToStudentsPage": {
 		"recognition": "TemplateMatch",
@@ -80,9 +91,10 @@
 		"action": "Click",
 		"post_delay": 2000,
 		"next": [
-			"RefreshGame@BackToHomePage",
-			"RefreshGame@RecognizeDisconnected",
-			"RefreshGame@RecognizeDuplicatedLogin"
+			"RefreshGame@DisconnectedPopUp",
+			"RefreshGame@DuplicatedLoginPopUp",
+			"RefreshGame@MaintenancePopUp",
+			"RefreshGame@BackToHomePage"
 		],
 		"interrupt":[
 			"ClosePopup",
@@ -96,29 +108,53 @@
 		"action": "Click",
 		"post_delay": 2000
 	},
-	"RefreshGame@RecognizeDisconnected": {
+	"RefreshGame@DisconnectedPopUp": {
 		"recognition": "OCR",
 		"text": ["认证信息已超时", "日期已变更"],
-		"roi": [363, 132, 554, 444],
+		"roi": [310, 82, 660, 546],
 		"next": "RefreshGame@Reconnect",
-		"doc": "检测掉线，后面触发启动游戏流程。"
-	},
-	"RefreshGame@RecognizeDuplicatedLogin": {
-		"recognition": "OCR",
-		"text": "发现重复登录",
-		"roi": [363, 132, 554, 444],
-		"next": "RefreshGame@Reconnect",
-		"doc": "*检测重复登录，后面触发登录流程。根据用户配置重载next字段来决定是否自动重连，选择重连的话后续触发启动游戏流程"
+		"doc": "检测掉线，后面执行启动游戏的检测流程"
 	},
 	"RefreshGame@Reconnect": {
 		"recognition": "TemplateMatch",
 		"template": "ConfirmButton.png",
-		"roi": [363, 132, 554, 444],
+		"roi": [310, 82, 660, 546],
 		"action": "Click",
 		"post_delay": 2000,
 		"next": "RefreshGame@Reconnect",
 		"timeout": 2000,
 		"on_error": "StartUp@FirstCheck",
 		"doc": "有些弹窗需要点击2次确认才生效，循环检测"
+	},
+	"RefreshGame@DuplicatedLoginPopUp": {
+		"recognition": "OCR",
+		"text": "发现重复登录",
+		"roi": [310, 82, 660, 546],
+		"next": "RefreshGame@Reconnect",
+		"doc": "*检测重复登录，后面触发登录流程。根据用户配置重载next字段来决定是否自动重连，选择重连的话后续触发启动游戏流程"
+	},
+	"RefreshGame@DuplicatedLoginStopTask": {
+		"action": "Custom",
+		"custom_action": "DuplicatedLoginStopTask",
+		"doc": "检测到重复登录后，停止任务，在override中调用"
+	},
+	"RefreshGame@MaintenancePopUp": {
+		"recognition": "OCR",
+		"text": "服务器维护",
+		"roi": [310, 82, 660, 546],
+		"next": "RefreshGame@MaintenanceConfirm",
+		"doc": "检测服务器维护，自动停止任务"
+	},
+	"RefreshGame@MaintenanceConfirm": {
+		"recognition": "TemplateMatch",
+		"template": "ConfirmButton.png",
+		"roi": [310, 82, 660, 546],
+		"action": "Click",
+		"next": "RefreshGame@MaintenanceStopTask"
+	},
+	"RefreshGame@MaintenanceStopTask": {
+		"action": "Custom",
+		"custom_action": "MaintenanceStopTask",
+		"doc": "检测到服务器维护后，停止任务"
 	}
 }

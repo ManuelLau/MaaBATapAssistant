@@ -11,7 +11,7 @@
 	"CafeLayout@ClickLayoutButton": {
 		"recognition": "TemplateMatch",
 		"template": "CafeLayoutButton.png",
-		"roi": [ 314, 604, 120, 60 ],
+		"roi": [314, 604, 120, 60],
 		"green_mask": true,
 		"action": "Click",
 		"post_delay": 1000
@@ -37,7 +37,7 @@
 	"CafeLayout@IsCheck": {
 		"recognition": "TemplateMatch",
 		"template": "CafeApplyLayoutCheck.png",
-		"roi": [ 380, 380, 68, 68 ],
+		"roi": [380, 380, 68, 68],
 		"next": "CafeLayout@Confirm"
 	},
 	"CafeLayout@Confirm": {

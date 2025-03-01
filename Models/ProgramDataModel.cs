@@ -9,8 +9,8 @@ public enum EClientTypeSettingOptions
     [Description("官服")] Zh_CN = 0,
     [Description("B服")] Zh_CN_Bilibili,
     [Description("国际服-繁体中文")] Zh_TW,
-    [Description("国际服-英文")] En,
     [Description("日服")] Jp,
+    [Description("国际服-英文")] En,
 };
 public enum ECafeInviteTimeSettingOptions
 {
@@ -57,38 +57,7 @@ public partial class ProgramDataModel : ObservableObject
         IsCurrentTaskExecuting = false;
         IsDownloadingFiles = false;
 
-        #region 设置配置文件默认值
-        SettingsData = new()
-        {
-            ClientTypeSettingIndex = (int)EClientTypeSettingOptions.Zh_CN,
-            Cafe1InviteTimeSettingIndex = (int)ECafeInviteTimeSettingOptions.AM,
-            Cafe1InviteSortTypeSettingIndex = (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow,
-            Cafe1InviteIndexSettingIndex = 0,
-            IsCafe1AllowInviteNeighboring = true,
-            IsCafe1AllowInviteNeighboringSwapAlt = true,
-            IsCafe1AllowInviteSwapAlt = true,
-            IsCafe1EnableApplyLayout = false,
-            Cafe1AMApplyLayoutIndex = 0,
-            Cafe1PMApplyLayoutIndex = 1,
-            Cafe2InviteTimeSettingIndex = (int)ECafeInviteTimeSettingOptions.PM,
-            Cafe2InviteSortTypeSettingIndex = (int)ECafeInviteSortTypeSettingOptions.BondLvFromHighToLow,
-            Cafe2InviteIndexSettingIndex = 0,
-            IsCafe2AllowInviteNeighboring = true,
-            IsCafe2AllowInviteNeighboringSwapAlt = true,
-            IsCafe2AllowInviteSwapAlt = true,
-            IsCafe2EnableApplyLayout = false,
-            Cafe2AMApplyLayoutIndex = 1,
-            Cafe2PMApplyLayoutIndex = 0,
-            IsReconnectAfterDuplicatedLogin = true, //后续改为默认false
-            IsCloseGameAfterLastTask = false,
-            IsCloseEmulatorAfterLastTask = false,
-            IsAutoCheckResourceUpdate = false,
-            IsAutoCheckAppUpdate = true,
-            IsAutoUpdateResource = false,
-            IsAutoUpdateApp = false,
-            DoNotShowAnnouncementAgain = false,
-        };
-        #endregion
+        SettingsData = new();
     }
     static ProgramDataModel()
     {

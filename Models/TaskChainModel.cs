@@ -15,14 +15,11 @@ public enum ETaskChainStatus
 /// </summary>
 public partial class TaskChainModel : ObservableObject
 {
-    [ObservableProperty]
-    [JsonIgnore]
+    [ObservableProperty][JsonIgnore]
     public string name;
-    [ObservableProperty]
-    [JsonIgnore]
+    [ObservableProperty][JsonIgnore]
     public DateTime executeDateTime;
-    [ObservableProperty]
-    [JsonIgnore]
+    [ObservableProperty][JsonIgnore]
     public ETaskChainStatus status;
 
     public string OverrideStartLogMessage { get; set; }
@@ -63,11 +60,6 @@ public partial class TaskChainModel : ObservableObject
         //Action = action;
         OverrideStartLogMessage = _overrideStartLogMessage;
     }
-
-    //public void DeleteTaskChain()
-    //{
-    //    MainViewModel.Instance.DeleteTaskChain(this);
-    //}
 
     //public bool Run()
     //{

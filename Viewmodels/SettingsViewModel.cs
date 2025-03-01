@@ -3,17 +3,27 @@ using CommunityToolkit.Mvvm.Input;
 using MaaBATapAssistant.Models;
 using MaaBATapAssistant.Utils;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace MaaBATapAssistant.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
-    public List<string>? ClientTypeSettingOptionsText { get; set; }
-    public List<string>? CafeInviteTimeSettingOptionsText { set; get; }
-    public List<string>? CafeInviteSortTypeSettingOptionsText { set; get; }
-    public List<int>? CafeInviteIndexSettingOptionsText { set; get; }
-    public List<int>? CafeApplyLayoutSettingOptionsText { set; get; }
+    public List<string> ClientTypeSettingOptionsText { get; set; }
+    public ObservableCollection<string> CafeInviteTimeSettingOptionsText { set; get; }
+    public List<string> CafeInviteSortTypeSettingOptionsText { set; get; }
+    public List<int> CafeInviteIndexSettingOptionsText { set; get; }
+    public List<int> CafeApplyLayoutSettingOptionsText { set; get; }
+    [ObservableProperty]
+    public string cafe1ApplyLayoutAMText;
+    [ObservableProperty]
+    public string cafe1ApplyLayoutPMText;
+    [ObservableProperty]
+    public string cafe2ApplyLayoutAMText;
+    [ObservableProperty]
+    public string cafe2ApplyLayoutPMText;
+
     [ObservableProperty]
     public ProgramDataModel programData = ProgramDataModel.Instance;
     [ObservableProperty]
@@ -21,29 +31,13 @@ public partial class SettingsViewModel : ObservableObject
 
     public SettingsViewModel()
     {
-        InitSettingsOptionsText();
-
-        //查找config.json,如果没有则使用默认的规则生成配置文件
-        if (File.Exists(MyConstant.ConfigJsonFilePath))
-        {
-            LoadConfigJsonFile();
-        }
-        else
-        {
-            Directory.CreateDirectory(MyConstant.ConfigJsonDirectory);
-            File.Create(MyConstant.ConfigJsonFilePath).Close();
-            UpdateConfigJsonFile();
-        }
-    }
-
-    //设置里下拉选项显示的文本
-    private void InitSettingsOptionsText()
-    {
+        // 初始化设置选项文本
         ClientTypeSettingOptionsText =
         [
             "官服",
             "B服",
             "国际服-繁体",
+            "日服"
         ];
         CafeInviteTimeSettingOptionsText =
         [
@@ -60,6 +54,23 @@ public partial class SettingsViewModel : ObservableObject
         ];
         CafeInviteIndexSettingOptionsText = [1, 2, 3, 4, 5];
         CafeApplyLayoutSettingOptionsText = [1, 2, 3];
+        Cafe1ApplyLayoutAMText = "4:00~15:59时间段1号咖啡厅应用家具预设序号";
+        Cafe1ApplyLayoutPMText = "16:00~次日3:59时间段1号咖啡厅应用家具预设序号";
+        Cafe2ApplyLayoutAMText = "4:00~15:59时间段2号咖啡厅应用家具预设序号";
+        Cafe2ApplyLayoutPMText = "16:00~次日3:59时间段2号咖啡厅应用家具预设序号";
+
+        //查找config.json,如果没有则使用默认的规则生成配置文件
+        if (File.Exists(MyConstant.ConfigJsonFilePath))
+        {
+            LoadConfigJsonFile();
+            UpdateConfigJsonFile();
+        }
+        else
+        {
+            Directory.CreateDirectory(MyConstant.ConfigJsonDirectory);
+            File.Create(MyConstant.ConfigJsonFilePath).Close();
+            UpdateConfigJsonFile();
+        }
     }
 
     //从config.json文件中读取配置
@@ -79,6 +90,35 @@ public partial class SettingsViewModel : ObservableObject
     {
         string formattedJson = JsonConvert.SerializeObject(ProgramDataModel.Instance.SettingsData, Formatting.Indented);
         File.WriteAllText(MyConstant.ConfigJsonFilePath, formattedJson);
+    }
+
+    // 更改客户端后刷新UI(时间段相关的文字)
+    public void UpdateSettingUI()
+    {
+        int cafe1Index = ProgramDataModel.Instance.SettingsData.Cafe1InviteTimeSettingIndex;
+        int cafe2Index = ProgramDataModel.Instance.SettingsData.Cafe2InviteTimeSettingIndex;
+        switch ((EClientTypeSettingOptions)ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex)
+        {
+            default:
+                CafeInviteTimeSettingOptionsText[0] = "4:00~15:59";
+                CafeInviteTimeSettingOptionsText[1] = "16:00~次日3:59";
+                Cafe1ApplyLayoutAMText = "4:00~15:59时间段1号咖啡厅应用家具预设序号";
+                Cafe1ApplyLayoutPMText = "16:00~次日3:59时间段1号咖啡厅应用家具预设序号";
+                Cafe2ApplyLayoutAMText = "4:00~15:59时间段2号咖啡厅应用家具预设序号";
+                Cafe2ApplyLayoutPMText = "16:00~次日3:59时间段2号咖啡厅应用家具预设序号";
+                break;
+            case EClientTypeSettingOptions.Zh_TW:
+            case EClientTypeSettingOptions.Jp:
+                CafeInviteTimeSettingOptionsText[0] = "3:00~14:59";
+                CafeInviteTimeSettingOptionsText[1] = "15:00~次日2:59";
+                Cafe1ApplyLayoutAMText = "3:00~14:59时间段1号咖啡厅应用家具预设序号";
+                Cafe1ApplyLayoutPMText = "15:00~次日2:59时间段1号咖啡厅应用家具预设序号";
+                Cafe2ApplyLayoutAMText = "3:00~14:59时间段2号咖啡厅应用家具预设序号";
+                Cafe2ApplyLayoutPMText = "15:00~次日2:59时间段2号咖啡厅应用家具预设序号";
+                break;
+        }
+        ProgramDataModel.Instance.SettingsData.Cafe1InviteTimeSettingIndex = cafe1Index;
+        ProgramDataModel.Instance.SettingsData.Cafe2InviteTimeSettingIndex = cafe2Index;
     }
 
     [RelayCommand]

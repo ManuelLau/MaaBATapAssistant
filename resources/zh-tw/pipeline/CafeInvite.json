@@ -1,85 +1,8 @@
 {
-	"CafeInvite@RecognizeTicketAvailable": {
-		"recognition": "OCR",
-		"text": "可使用",
-		"roi": [770, 562, 130, 158],
-		"action": "Click",
-		"target_offset": [0, 65, 0, 0],
-		"next": "CafeInvite@ClickSortTypeButton"
-	},
 	"CafeInvite@ClickSortTypeButton": {
-		"recognition": "OCR",
-		"text": ["羈絆等級", "精選", "學園", "名字"],
-		"roi": [636, 126, 136, 53],
-		"action": "Click",
-		"next": "CafeInvite@ChangeSortType"
+		"text": ["羈絆等級", "精選", "學園", "名字"]
 	},
 	"CafeInvite@ChangeSortType": {
-		"recognition": "OCR",
-		"text": "羈絆等級",
-		"roi": [414, 227, 449, 204],
-		"action": "Click",
-		"next": "CafeInvite@ChangeSortConfirm",
-		"doc": "*更改排序类型。根据用户选择重载这里的text字段"
-	},
-	"CafeInvite@ChangeSortConfirm": {
-		"recognition": "OCR",
-		"text": "確認",
-		"roi": [414, 227, 449, 204],
-		"action": "Click",
-		"next": "CafeInvite@RecognizeSortOrder",
-		"interrupt": "CafeInvite@InverseSortOrder"
-	},
-	"CafeInvite@Invite": {
-		"recognition": "OCR",
-		"text": "邀請",
-		"roi": [698, 180, 173, 400],
-		"order_by": "Vertical",
-		"index": 0,
-		"action": "Click",
-		"post_delay": 1000,
-		"next": [
-			"CafeInvite@InviteConfirmPopupNormal",
-			"CafeInvite@InviteConfirmPopupNeighboring",
-			"CafeInvite@InviteConfirmPopupNeighboringSwapAlt",
-			"CafeInvite@InviteConfirmPopupSwapAlt"
-		],
-		"doc": "*邀请第X个学生。根据用户选择重载这里的index字段"
-	},
-	"CafeInvite@InviteConfirmPopupNormal": {
-		"recognition": "OCR",
-		"text": "到咖啡廳",
-		"roi": [405, 195, 470, 270],
-		"next": "CafeInvite@InviteConfirm"
-	},
-	"CafeInvite@InviteConfirmPopupNeighboring": {
-		"recognition": "OCR",
-		"text": "學生會離開",
-		"roi": [405, 195, 470, 270],
-		"action": "Click",
-		"target": [767, 500, 0, 0],
-		"post_delay": 1000,
-		"next": "CafeInvite@InviteConfirmPopupNeighboringAgain",
-		"doc": "*根据是否允许邀请隔壁咖啡厅学生(同一服装)来重载next字段，不重载的话下一个任务直接默认确认"
-	},
-	"CafeInvite@InviteConfirmPopupNeighboringAgain": {
-		"recognition": "OCR",
-		"text": "帶過來",
-		"roi": [405, 195, 470, 270],
-		"next": "CafeInvite@InviteConfirm"
-	},
-	"CafeInvite@InviteConfirmPopupNeighboringSwapAlt": {
-		"recognition": "OCR",
-		"text": "帶過來",
-		"roi": [405, 195, 470, 270],
-		"next": "CafeInvite@InviteConfirm",
-		"doc": "*根据是否允许邀请隔壁咖啡厅学生且更换服装来重载next字段"
-	},
-	"CafeInvite@InviteConfirmPopupSwapAlt": {
-		"recognition": "OCR",
-		"text": "更換拜訪的學生",
-		"roi": [405, 195, 470, 270],
-		"next": "CafeInvite@InviteConfirm",
-		"doc": "*根据是否允许学生更换服装来重载next字段"
+		"text": "羈絆等級"
 	}
 }

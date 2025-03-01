@@ -1,50 +1,74 @@
 {
 	"StartGame": {
-		"action": "StartApp",
-		"package": "com.nexon.bluearchive/.MxUnityPlayerActivity",
-		"post_delay": 2000,
-		"next": "RefreshGame@IdelClick"
+		"package": "com.nexon.bluearchive/.MxUnityPlayerActivity"
 	},
 	"CloseGame": {
-		"action": "StopApp",
 		"package": "com.nexon.bluearchive"
 	},
 	"RestartGame": {
-		"action": "StopApp",
-		"package": "com.nexon.bluearchive",
-		"post_delay": 3000,
-		"next": "StartGame"
+		"package": "com.nexon.bluearchive"
 	},
 
+	"StartUp@Start": {
+		"interrupt": [
+			"StartUp@UpdatePopUp",
+			"StartUp@NexonLoginPopUp",
+			"RefreshGame@MaintenancePopUp",
+			"StartUp@ClientUpdatePopUp",
+			"ClosePopup",
+			"StartUp@TitleScreen",
+			"StartUp@DailyCheckIn",
+			"StartUp@EventCheckIn",
+			"CloseReward",
+			"StartUp@WaitLoading",
+			"ClickHomeButton"
+		]
+	},
 	"StartUp@WaitLoading": {
-		"recognition": "OCR",
 		"text": [
 			"Load",
 			"Initialize",
 			"重置遊戲資料",
 			"正在更新",
 			"驗證"
+		]
+	},
+	"StartUp@TitleScreen": {
+		"next": "StartUp@NexonCheckAnnouncementCloseButtonEntry",
+		"doc": "国际服-覆写登录流程。从标题页面进入到主页，固定会弹公告，检测公告弹窗的关闭按钮，防止使用国服的判断方式因为网络问题出现异常"
+	},
+	"StartUp@NexonCheckAnnouncementCloseButtonEntry": {
+		"next": "StartUp@NexonCheckAnnouncementCloseButton",
+		"interrupt": [
+			"StartUp@UpdatePopUp",
+			"StartUp@NexonLoginPopUp",
+			"RefreshGame@MaintenancePopUp",
+			"StartUp@DailyCheckIn",
+			"StartUp@EventCheckIn",
+			"StartUp@WaitLoading",
+			"StartUp@TitleScreen"
 		],
-		"roi": [0, 500, 1280, 220],
-		"post_delay": 1000
+		"timeout": 120000
 	},
-	"StartUp@DailyCheckIn": {
-		"recognition": "OCR",
-		"text": ["簽到", "剩餘時間"],
-		"roi": [430, 0, 850, 200],
-		"action": "Click",
-		"target": [640, 360, 0, 0]
+	"StartUp@NexonCheckAnnouncementCloseButton": {
+		"recognition": "TemplateMatch",
+		"template": "CloseButtonNexon.png",
+		"green_mask": true,
+		"action": "Click"
 	},
-	"StartUp@UpdatePopUp": {
-		"recognition": "OCR",
-		"text": ["下載必要內容", "需要下載遊戲"],
-		"roi": [285, 48, 718, 614],
-		"next": "StartUp@UpdatePopUpConfirm"
-	},
-	"StartUp@LoginPopUp": {
+	"StartUp@NexonLoginPopUp": {
 		"recognition": "OCR",
 		"text": "今日不再顯示",
 		"action": "Click",
-		"doc": "外服用，登录时候的弹窗。例如国际服的活动提示弹窗、日服的绑定邮箱弹窗等"
+		"doc": "国际服-关闭活动提示弹窗"
+	},
+	"StartUp@EventCheckIn": {
+		"text": "剩餘時間"
+	},
+	"StartUp@UpdatePopUp": {
+		"text": ["下載必要內容", "需要下載遊戲"]
+	},
+	"StartUp@ClientUpdatePopUp": {
+		"text": "應用程式更新"
 	}
 }

@@ -2,8 +2,8 @@
 
 public static class MyConstant
 {
-    public const string AppVersion = "0.2.0";
-    public const string ResourceVersion = "0.2.0";
+    public const string AppVersion = "0.2.1";
+    public const string ResourceVersion = "0.2.1";
     public const string PlatformTag = "win-x";
     public const string ProjectUrl = "https://github.com/ManuelLau/MaaBATapAssistant";
     public const string GitHubApiUrl = "https://api.github.com/repos/ManuelLau/MaaBATapAssistant/releases";

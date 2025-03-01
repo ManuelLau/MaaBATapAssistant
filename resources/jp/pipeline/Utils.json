@@ -1,0 +1,14 @@
+{
+	"CloseReward": {
+		"text": "報酬獲得"
+	},
+	"RefreshGame@DisconnectedPopUp": {
+		"text": ["有効期限を過ぎた認証情報", "日付が変わりました"]
+	},
+	"RefreshGame@DuplicatedLoginPopUp": {
+		"text": "ログインの重複が検知されました"
+	},
+	"RefreshGame@MaintenancePopUp": {
+		"text": "ンテナンス"
+	}
+}

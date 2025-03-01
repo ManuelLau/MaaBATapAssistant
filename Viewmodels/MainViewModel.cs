@@ -41,7 +41,7 @@ public partial class MainViewModel : ObservableObject
         LogDataList = [];
         CreateTaskButtonText = "生成任务";
         RefreshTaskButtonText = "刷新任务";
-        if (!Models.ProgramDataModel.Instance.SettingsData.DoNotShowAnnouncementAgain)
+        if (!ProgramDataModel.Instance.SettingsData.DoNotShowAnnouncementAgain)
             Application.Current.Dispatcher.BeginInvoke(new Action(OpenAnnouncementWindow), System.Windows.Threading.DispatcherPriority.Input);
     }
 

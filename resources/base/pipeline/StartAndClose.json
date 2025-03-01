@@ -22,8 +22,8 @@
 			"StartUp@RecognizeLabel"
 		],
 		"interrupt": [
-			"ClickHomeButton",
 			"ClosePopup",
+			"ClickHomeButton",
 			"CloseReward"
 		],
 		"timeout": 2000,
@@ -35,13 +35,15 @@
 			"StartUp@RecognizeLabel"
 		],
 		"interrupt": [
-			"StartUp@UpdatePopUp",
-			"StartUp@TitleScreen",
-			"StartUp@LoginPopUp",
-			"StartUp@DailyCheckIn",
-			"ClosePopup",
-			"CloseReward",
 			"StartUp@WaitLoading",
+			"StartUp@UpdatePopUp",
+			"RefreshGame@MaintenancePopUp",
+			"StartUp@ClientUpdatePopUp",
+			"ClosePopup",
+			"StartUp@TitleScreen",
+			"StartUp@DailyCheckIn",
+			"StartUp@EventCheckIn",
+			"CloseReward",
 			"ClickHomeButton"
 		],
 		"rate_limit": 1000,
@@ -52,20 +54,20 @@
 	"StartUp@RecognizeLabel":{
 		"recognition": "TemplateMatch",
 		"template": "HomePageLabel.png",
-		"roi": [ 1000, 0, 280, 66 ],
+		"roi": [1000, 0, 280, 66],
 		"next": "StartUp@RecognizeMailButton",
 		"interrupt": [
-			"ClickHomeButton",
+			"StartUp@WaitLoading",
 			"ClosePopup",
-			"CloseReward",
-			"StartUp@WaitLoading"
+			"ClickHomeButton",
+			"CloseReward"
 		]
 	},
 	"StartUp@RecognizeMailButton":{
 		"recognition": "ColorMatch",
-		"roi": [ 1137, 43, 12, 4 ],
-		"lower": [ 60, 89, 142 ],
-		"upper": [ 99, 117, 165 ],
+		"roi": [1137, 43, 12, 4],
+		"lower": [60, 89, 142],
+		"upper": [99, 117, 165],
 		"count": 46,
 		"next": "StartUp@FinalCheck",
 		"timeout": 3000,
@@ -77,31 +79,25 @@
 		"template": "HomePageLabel.png",
 		"next": "StartUp@RecognizeLabel",
 		"interrupt": [
-			"ClickHomeButton",
+			"StartUp@WaitLoading",
 			"ClosePopup",
-			"StartUp@TitleScreen",
-			"StartUp@LoginPopUp",
-			"StartUp@DailyCheckIn",
-			"CloseReward",
-			"StartUp@WaitLoading"
+			"ClickHomeButton",
+			"CloseReward"
 		]
 	},
 	"StartUp@RecognizeMailButtonInverse":{
 		"inverse": true,
 		"recognition": "ColorMatch",
-		"roi": [ 1137, 43, 12, 4 ],
-		"lower": [ 60, 89, 142 ],
-		"upper": [ 99, 117, 165 ],
+		"roi": [1137, 43, 12, 4],
+		"lower": [60, 89, 142],
+		"upper": [99, 117, 165],
 		"count": 46,
 		"next": "StartUp@RecognizeLabel",
 		"interrupt": [
-			"ClickHomeButton",
+			"StartUp@WaitLoading",
 			"ClosePopup",
-			"StartUp@TitleScreen",
-			"StartUp@LoginPopUp",
-			"StartUp@DailyCheckIn",
-			"CloseReward",
-			"StartUp@WaitLoading"
+			"ClickHomeButton",
+			"CloseReward"
 		]
 	},
 	"StartUp@FinalCheck":{
@@ -135,41 +131,38 @@
 		"pre_delay": 1000,
 		"action": "Click",
 		"target": [640, 360, 0, 0],
-		"post_delay": 8000,
-		"post_wait_freezes": {
-			"time": 2000,
-			"target": [ 34, 680, 28, 28],
-			"threshold": 0.5,
-			"rate_limit": 100,
-			"timeout": 120000
-		},
+		"post_delay": 5000,
 		"doc": "识别到标题画面。进入登录流程"
 	},
 	"StartUp@DailyCheckIn": {
-		"recognition": "OCR",
-		"text": ["签到", "剩余时间"],
+		"recognition": "TemplateMatch",
+		"template": ["DailyCheckIn.png", "EventCheckIn.png"],
 		"roi": [430, 0, 850, 200],
 		"action": "Click",
 		"target": [640, 360, 0, 0],
-		"doc": "识别签到界面"
+		"doc": "识别每日签到+活动签到界面"
+	},
+	"StartUp@EventCheckIn": {
+		"recognition": "OCR",
+		"text": "剩余时间",
+		"roi": [430, 0, 850, 200],
+		"action": "Click",
+		"target": [640, 360, 0, 0],
+		"doc": "文字识别活动签到界面，以免素材不通用"
 	},
 	"StartUp@UpdatePopUp": {
 		"recognition": "OCR",
-		"text": ["更新提醒", "需要下载"],
-		"roi": [285, 48, 718, 614],
-		"next": "StartUp@UpdatePopUpConfirm",
+		"text": ["更新提醒", "下载"],
+		"roi": [310, 82, 660, 546],
+		"next": "ClickConfirmButton",
 		"doc": "识别下载弹窗"
 	},
-	"StartUp@UpdatePopUpConfirm": {
-		"recognition": "TemplateMatch",
-		"template": "ConfirmButton.png",
-		"roi": [285, 48, 718, 614],
-		"action": "Click"
-	},
-	"StartUp@LoginPopUp": {
+	"StartUp@ClientUpdatePopUp": {
 		"recognition": "OCR",
-		"text": "今日不再显示",
-		"action": "Click",
-		"doc": "外服用，登录时候的弹窗。例如国际服的活动提示弹窗、日服的绑定邮箱弹窗等"
+		"text": "App需要更新",
+		"roi": [310, 82, 660, 546],
+		"action": "Custom",
+		"custom_action": "ClientUpdateStopTask",
+		"doc": "识别客户端更新提示弹窗"
 	}
 }

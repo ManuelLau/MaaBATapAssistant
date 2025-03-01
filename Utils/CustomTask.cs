@@ -1,0 +1,100 @@
+﻿using MaaBATapAssistant.Models;
+using MaaFramework.Binding;
+using MaaFramework.Binding.Custom;
+using System.IO;
+using System.Windows.Media.Imaging;
+
+namespace MaaBATapAssistant.Utils;
+
+public static class CustomTask
+{
+    public class RelationshipRankUpScreenShot : IMaaCustomRecognition
+    {
+        public string Name { get; set; } = nameof(RelationshipRankUpScreenShot);
+
+        public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
+        {
+            if (ProgramDataModel.Instance.SettingsData.IsRelationshipRankUpAutoScreenShot)
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = args.Image.EncodedDataStream;
+                bitmap.EndInit();
+                bitmap.Freeze(); // 冻结图像以提高性能
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                string directory = @".\images";
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                string filePath = Path.Combine(directory, $"RelationshipRankUp-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
+                using FileStream fileStream = new(filePath, FileMode.Create);
+                encoder.Save(fileStream);
+                Utility.PrintLog("好感等级提升，已截图至images目录");
+            }
+            return true;
+        }
+    }
+
+    public class InviteUnavailableSkipTask : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(InviteUnavailableSkipTask);
+
+        public bool Run(in IMaaContext context, in RunArgs args)
+        {
+            Utility.PrintError("咖啡厅邀请失败，邀请券冷却中");
+            TaskManager.Instance.CurrentTaskChainPrintFinishedLog = false;
+            return true;
+        }
+    }
+
+    public class InviteCancelNotify : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(InviteCancelNotify);
+
+        public bool Run(in IMaaContext context, in RunArgs args)
+        {
+            Utility.PrintLog("规则不符，邀请已取消");
+            TaskManager.Instance.CurrentTaskChainPrintFinishedLog = false;
+            return true;
+        }
+    }
+
+    public class DuplicatedLoginStopTask : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(DuplicatedLoginStopTask);
+
+        public bool Run(in IMaaContext context, in RunArgs args)
+        {
+            Utility.PrintLog("发现重复登录，任务即将停止");
+            TaskManager.Instance.Stop();
+            return true;
+        }
+    }
+
+    public class MaintenanceStopTask : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(MaintenanceStopTask);
+
+        public bool Run(in IMaaContext context, in RunArgs args)
+        {
+            //Utility.PrintLog("服务器维护，任务将延后半小时执行");
+            Utility.PrintLog("服务器维护，任务即将停止");
+            TaskManager.Instance.Stop();
+            return true;
+        }
+    }
+
+    public class ClientUpdateStopTask : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(ClientUpdateStopTask);
+
+        public bool Run(in IMaaContext context, in RunArgs args)
+        {
+            Utility.PrintError("游戏客户端需要更新，任务即将停止。请手动更新后再启动任务");
+            TaskManager.Instance.Stop();
+            return true;
+        }
+    }
+}
