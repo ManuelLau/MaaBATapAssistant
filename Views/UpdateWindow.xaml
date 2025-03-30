@@ -1,0 +1,54 @@
+﻿<Window x:Class="MaaBATapAssistant.Views.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:vm="clr-namespace:MaaBATapAssistant.ViewModels"
+        xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+        xmlns:local="clr-namespace:MaaBATapAssistant.Views"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:UpdateViewModel}"
+        Title="Updater" Height="240" Width="360" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="72"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="{Binding ProgramData.UpdateInfo}"
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="下载源" VerticalAlignment="Center"/>
+            <RadioButton Name="ApiOption0" GroupName="MyOptions" Content="gitee"
+                         Margin="8 0 0 0" VerticalAlignment="Center" Checked="ApiButtonChecked"
+                         IsEnabled="{c:Binding !ProgramData.IsDownloadingFiles}"/>
+            <RadioButton Name="ApiOption1" GroupName="MyOptions" Content="github"
+                         Margin="4 0 0 0" VerticalAlignment="Center" Checked="ApiButtonChecked"
+                         IsEnabled="{c:Binding !ProgramData.IsDownloadingFiles}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Grid.Row="2" Content="检查更新" Width="80" Height="36"
+                    Visibility="{c:Binding !ProgramData.IsDownloadingFiles and !ProgramData.HasNewVersion and !ProgramData.IsReadyForApplyUpdate}"
+                    IsEnabled="{c:Binding !ProgramData.IsCheckingNewVersion}"
+                    Command="{Binding CheckNewVersionCommand}"/>
+            <Button Grid.Row="2" Content="下载更新" Width="80" Height="36"
+                    Visibility="{c:Binding !ProgramData.IsDownloadingFiles and ProgramData.HasNewVersion and !ProgramData.IsReadyForApplyUpdate}"
+                    IsEnabled="{c:Binding ProgramData.HasNewVersion}"
+                    Command="{Binding DownloadUpdateButtonClickCommand}"/>
+            <Button Grid.Row="2" Content="重启并更新" Width="80" Height="36"
+                    Visibility="{c:Binding !ProgramData.IsDownloadingFiles and ProgramData.IsReadyForApplyUpdate}"
+                    Command="{Binding ApplyUpdateButtonClickCommand}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="0 8 0 0"
+                    Visibility="{c:Binding ProgramData.IsDownloadingFiles}">
+            <ProgressBar Grid.Row="0" Width="240" Height="20" 
+                         Value="{Binding ProgramData.DownloadProgress}"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 12 0 0"
+                       Text="{Binding ProgramData.DownloadedSizeInfo}"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -2,8 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using MaaBATapAssistant.Models;
 using MaaBATapAssistant.Utils;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 
 namespace MaaBATapAssistant.ViewModels;
@@ -26,8 +28,6 @@ public partial class SettingsViewModel : ObservableObject
 
     [ObservableProperty]
     public ProgramDataModel programData = ProgramDataModel.Instance;
-    [ObservableProperty]
-    public string projectUrl = MyConstant.ProjectUrl;
 
     public SettingsViewModel()
     {
@@ -122,9 +122,39 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public static async Task CheckUpdate()
+    public static void OpenScreenshotFolder()
     {
-        await UpdateTool.CheckUpdate(true);
+        if (!Directory.Exists(MyConstant.ScreenshotImagePath))
+        {
+            Directory.CreateDirectory(MyConstant.ScreenshotImagePath);
+        }
+        Process.Start(new ProcessStartInfo("explorer.exe", MyConstant.ScreenshotImagePath)
+        {
+            UseShellExecute = true
+        });
+    }
+
+    [RelayCommand]
+    public static void OpenUpdateWindow()
+    {
+        MainViewModel.Instance.OpenUpdateWindow();
+    }
+
+    [RelayCommand]
+    public void SelectEmulatorPath()
+    {
+        OpenFileDialog openFileDialog = new()
+        {
+            Filter = "Executable Files (*.exe)|*.exe",
+            Title = "选择模拟器路径"
+        };
+
+        // 显示对话框并检查用户是否选择了文件
+        if (openFileDialog.ShowDialog() == true)
+        {
+            ProgramData.SettingsData.EmulatorPath = openFileDialog.FileName;
+            UpdateConfigJsonFile();
+        }
     }
 
     [RelayCommand]

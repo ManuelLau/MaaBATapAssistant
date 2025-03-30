@@ -156,10 +156,14 @@
                                  Style="{StaticResource SettingComboBoxStyle}"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe2EnableApplyLayout}"/>
                 </StackPanel>
-                <CheckBox Content="学生好感等级提升自动截图" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          IsChecked="{Binding ProgramData.SettingsData.IsRelationshipRankUpAutoScreenShot}"
-                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
-                </CheckBox>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox Content="学生好感等级提升自动截图" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsChecked="{Binding ProgramData.SettingsData.IsRelationshipRankUpAutoScreenShot}"
+                              Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                    </CheckBox>
+                    <Button Content="打开截图目录" Margin="4 0 0 0"
+                            Command="{Binding OpenScreenshotFolderCommand}"/>
+                </StackPanel>
                 <CheckBox Content="发现重复登录后自动重连" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsReconnectAfterDuplicatedLogin}"
                           Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
@@ -169,28 +173,39 @@
                 <Grid Margin="0 0 0 0" HorizontalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="36"/>
-                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="36"/>
+                        <RowDefinition Height="36"/>
+                        <RowDefinition Height="36"/>
+                        <RowDefinition Height="36"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" Content="检查更新" Width="80" Height="36" Margin="0 0 0 0"
-                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Visibility="{c:Binding !ProgramData.IsDownloadingFiles}"
-                        Command="{Binding CheckUpdateCommand}"/>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Visibility="{c:Binding ProgramData.IsDownloadingFiles}">
-                        <hc:CircleProgressBar Grid.Row="0" ShowText="False" Width="24" Height="24" ArcThickness="6"
-                            Value="{Binding ProgramData.DownloadProgress}"/>
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10 0 0 0"
-                            Text="{Binding ProgramData.DownloadedSizeInfo}"/>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="模拟器路径" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button Content="选择" Width="56" Height="32" Margin="8 0 0 0"
+                                Command="{Binding SelectEmulatorPathCommand}"/>
                     </StackPanel>
+                    <TextBox Grid.Row="1" Text="{Binding ProgramData.SettingsData.EmulatorPath}" Width="400" Height="32"
+                             TextChanged="EmulatorPathTextBoxTextChanged"/>
                     
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 6 0 0">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="等待模拟器启动时间（秒）" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding ProgramData.SettingsData.AutoRunEmulatorWaittingTimeSpan}" Width="36" Height="32" Margin="4 0 0 0"
+                                 HorizontalContentAlignment="Center"
+                                 PreviewTextInput="AutoRunEmulatorWaittingTimeSpanTextBoxPreviewTextInput"
+                                 TextChanged="AutoRunEmulatorWaittingTimeSpanTextBoxTextChanged"
+                                 LostFocus="AutoRunEmulatorWaittingTimeSpanTextBoxLostFocus"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 0 0 0" HorizontalAlignment="Center">
                         <hc:Shield Subject="软件版本" Status="{x:Static utils:MyConstant.AppVersion}" HorizontalAlignment="Center"/>
                         <CheckBox Content="自动检查更新" Margin="16 0 0 0"
-                            IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
-                            Click="SettingsCheckBoxClick">
+                                  IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
+                                  Click="SettingsCheckBoxClick">
                         </CheckBox>
                     </StackPanel>
+                    
+                    <Button Grid.Row="4" Content="检查更新" Width="80" Height="36" Margin="0 0 0 0"
+                                 Command="{Binding OpenUpdateWindowCommand}"/>
                 </Grid>
 
                 <hc:Divider Content="关于" Margin="10 10 10 10"/>
@@ -198,15 +213,18 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <Button Grid.Row="0" Content="查看公告" Width="80" Height="36" Margin="0 0 0 10"
                             Command="{Binding OpenAnnouncementWindowCommand}"/>
                     <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="QQ群 (还没创)"/>
-                    <StackPanel Grid.Row="2" Margin="100 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="B站主页" Foreground="Blue" Cursor="Hand"
+                               MouseDown="BilibiliLinkMouseDown"/>
+                    <StackPanel Grid.Row="3" Margin="100 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
                         <hc:Shield Subject="GitHub" Status="MaaBATapAssistant" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                   Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectUrl}"/>
+                                   Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.GitHubProjectUrl}"/>
                         <TextBlock Margin="10 0 0 0" Text="←点个Star吧求求了" VerticalAlignment="Center" TextAlignment="Center"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>

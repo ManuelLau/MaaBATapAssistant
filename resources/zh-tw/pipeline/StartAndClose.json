@@ -11,16 +11,17 @@
 
 	"StartUp@Start": {
 		"interrupt": [
+			"StartUp@WaitLoading",
+			"StartUp@ClientUpdatePopUp",
 			"StartUp@UpdatePopUp",
 			"StartUp@NexonLoginPopUp",
 			"RefreshGame@MaintenancePopUp",
-			"StartUp@ClientUpdatePopUp",
-			"ClosePopup",
 			"StartUp@TitleScreen",
 			"StartUp@DailyCheckIn",
 			"StartUp@EventCheckIn",
+			"DisconnectPopup",
+			"ClosePopup",
 			"CloseReward",
-			"StartUp@WaitLoading",
 			"ClickHomeButton"
 		]
 	},
@@ -30,23 +31,24 @@
 			"Initialize",
 			"重置遊戲資料",
 			"正在更新",
-			"驗證"
+			"驗證下載",
+			"正在解壓"
 		]
 	},
 	"StartUp@TitleScreen": {
 		"next": "StartUp@NexonCheckAnnouncementCloseButtonEntry",
-		"doc": "国际服-覆写登录流程。从标题页面进入到主页，固定会弹公告，检测公告弹窗的关闭按钮，防止使用国服的判断方式因为网络问题出现异常"
+		"doc": "国际服-覆写登录流程。从标题页面进入到主页，固定会弹公告，检测公告弹窗的关闭按钮"
 	},
 	"StartUp@NexonCheckAnnouncementCloseButtonEntry": {
 		"next": "StartUp@NexonCheckAnnouncementCloseButton",
 		"interrupt": [
-			"StartUp@UpdatePopUp",
+			"StartUp@WaitLoading",
 			"StartUp@NexonLoginPopUp",
+			"StartUp@UpdatePopUp",
 			"RefreshGame@MaintenancePopUp",
 			"StartUp@DailyCheckIn",
 			"StartUp@EventCheckIn",
-			"StartUp@WaitLoading",
-			"StartUp@TitleScreen"
+			"StartUp@NexonTitleScreen"
 		],
 		"timeout": 120000
 	},
@@ -55,6 +57,16 @@
 		"template": "CloseButtonNexon.png",
 		"green_mask": true,
 		"action": "Click"
+	},
+	"StartUp@NexonTitleScreen": {
+		"recognition": "TemplateMatch",
+		"template": "MenuButton.png",
+		"roi": [16, 606, 106, 54],
+		"green_mask": true,
+		"pre_delay": 1000,
+		"action": "Click",
+		"target": [640, 360, 0, 0],
+		"post_delay": 1000
 	},
 	"StartUp@NexonLoginPopUp": {
 		"recognition": "OCR",
@@ -69,6 +81,6 @@
 		"text": ["下載必要內容", "需要下載遊戲"]
 	},
 	"StartUp@ClientUpdatePopUp": {
-		"text": "應用程式更新"
+		"text": "到有新版本"
 	}
 }

@@ -2,6 +2,9 @@
 	"CloseReward": {
 		"text": "獲得獎勵"
 	},
+	"DisconnectPopup": {
+		"text": "網路存取不順暢"
+	},
 	"RefreshGame@DisconnectedPopUp": {
 		"text": ["認證信息已超時", "日期已變更"]
 	},

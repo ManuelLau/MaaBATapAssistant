@@ -29,6 +29,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public bool isStoppingCurrentTask = false;
     private AnnouncementWindow? announcementWindow;
+    private UpdateWindow? updateWindow;
 
     [ObservableProperty]
     public string createTaskButtonText;
@@ -83,6 +84,31 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    public void OpenUpdateWindow()
+    {
+        if (updateWindow == null || !updateWindow.IsVisible)
+        {
+            updateWindow = new();
+            updateWindow.Closed += (s, args) => updateWindow = null;
+            updateWindow.Left = Application.Current.MainWindow.Left + 190;
+            updateWindow.Top = Application.Current.MainWindow.Top + 160;
+            updateWindow.Show();
+        }
+        else
+        {
+            updateWindow.Activate();
+            updateWindow.WindowState = WindowState.Normal;
+        }
+    }
+
+    public void SetUpdateWindowTopmost(bool isTopmost)
+    {
+        if (updateWindow != null)
+        {
+            updateWindow.Topmost = isTopmost;
+        }
+    }
+
     public void AppStart()
     {
         // 读取存储的任务列表
@@ -103,7 +129,7 @@ public partial class MainViewModel : ObservableObject
             Task.Run(async () =>
             {
                 await Task.Delay(1000); // 延迟1秒
-                await UpdateTool.CheckUpdate(false);
+                UpdateTool.CheckNewVersion(true);
             });
         }
     }

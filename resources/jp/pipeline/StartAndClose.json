@@ -11,17 +11,19 @@
 
 	"StartUp@Start": {
 		"interrupt": [
+			"StartUp@WaitLoading",
+			"StartUp@ClientUpdatePopUp",
 			"StartUp@UpdatePopUp",
 			"StartUp@JpBindingPage",
 			"StartUp@JpCloseRequestFail300300",
+			"StartUp@JpIPBlockedPopUp",
 			"RefreshGame@MaintenancePopUp",
-			"StartUp@ClientUpdatePopUp",
-			"ClosePopup",
 			"StartUp@TitleScreen",
 			"StartUp@DailyCheckIn",
 			"StartUp@EventCheckIn",
+			"DisconnectPopup",
+			"ClosePopup",
 			"CloseReward",
-			"StartUp@WaitLoading",
 			"ClickHomeButton"
 		]
 	},
@@ -34,7 +36,8 @@
 			"ゲーム開始に必要なリソースを確認中です",
 			"アップデート中です",
 			"確認しました"
-		]
+		],
+		"replace": [["―","ー"],["一","ー"]]
 	},
 	"StartUp@JpBindingPage": {
         "recognition": "TemplateMatch",
@@ -62,9 +65,19 @@
 		"text": "残り"
 	},
 	"StartUp@UpdatePopUp": {
-		"text": ["アップデートが必要です", "ダウンロード設定"]
+		"text": ["アップデートが必要です", "ダウンロード設定"],
+		"replace": [["―","ー"],["一","ー"]]
 	},
 	"StartUp@ClientUpdatePopUp": {
-		"text": "最新バ一ジョンのクライアント"
+		"text": "最新バージョンのクライアント",
+		"replace": [["―","ー"],["一","ー"]]
+	},
+	"StartUp@JpIPBlockedPopUp": {
+		"recognition": "TemplateMatch",
+		"template": "IPBlocked.png",
+		"roi": [310, 82, 660, 546],
+		"action": "Custom",
+		"custom_action": "IPBlockedStopTask",
+		"doc": "日服-识别锁ip导致无法登录"
 	}
 }

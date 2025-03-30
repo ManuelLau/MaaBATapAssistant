@@ -23,12 +23,11 @@ public static class CustomTask
                 bitmap.Freeze(); // 冻结图像以提高性能
                 var encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bitmap));
-                string directory = @".\images";
-                if (!Directory.Exists(directory))
+                if (!Directory.Exists(MyConstant.ScreenshotImagePath))
                 {
-                    Directory.CreateDirectory(directory);
+                    Directory.CreateDirectory(MyConstant.ScreenshotImagePath);
                 }
-                string filePath = Path.Combine(directory, $"RelationshipRankUp-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
+                string filePath = Path.Combine(MyConstant.ScreenshotImagePath, $"RelationshipRankUp-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
                 using FileStream fileStream = new(filePath, FileMode.Create);
                 encoder.Save(fileStream);
                 Utility.PrintLog("好感等级提升，已截图至images目录");
@@ -93,6 +92,19 @@ public static class CustomTask
         public bool Run(in IMaaContext context, in RunArgs args)
         {
             Utility.PrintError("游戏客户端需要更新，任务即将停止。请手动更新后再启动任务");
+            TaskManager.Instance.Stop();
+            return true;
+        }
+    }
+
+
+    public class IPBlockedStopTask : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(IPBlockedStopTask);
+
+        public bool Run(in IMaaContext context, in RunArgs args)
+        {
+            Utility.PrintError("登录游戏失败（ip受限）！请开启加速器后再尝试");
             TaskManager.Instance.Stop();
             return true;
         }

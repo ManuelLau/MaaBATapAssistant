@@ -1,5 +1,6 @@
 ﻿using MaaBATapAssistant.ViewModels;
 using HandyControl.Controls;
+using MaaBATapAssistant.Utils;
 
 namespace MaaBATapAssistant.Views;
 
@@ -30,6 +31,17 @@ public partial class MainWindow
         {
             if (button.DataContext is MaaBATapAssistant.Models.TaskChainModel item)
                 MainViewModel.Instance.WaitingTaskList.Remove(item);
+        }
+    }
+
+    private void TimeTextBoxLostFocus(object sender, System.Windows.RoutedEventArgs e)
+    {
+        System.Windows.Controls.TextBox? textBox = sender as System.Windows.Controls.TextBox;
+        string? text = textBox?.Text;
+        bool isSuccess = DateTime.TryParse(text, out DateTime parsedDate);
+        if (isSuccess)
+        {
+            TaskManager.Instance.RefreshWaitingTaskChainDateTime(parsedDate, true);
         }
     }
 

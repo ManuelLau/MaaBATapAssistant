@@ -48,6 +48,17 @@
 		"target": [640, 560, 0, 0],
 		"doc": "关闭获得奖励界面"
 	},
+	"DisconnectPopup": {
+		"recognition": "OCR",
+		"text": "网络连接不稳定",
+		"next": "ClickReconnectButton",
+		"doc": "网络断线弹窗"
+	},
+	"ClickReconnectButton": {
+		"recognition": "TemplateMatch",
+		"template": "ReconnectButton.png",
+		"action": "Click"
+	},
 
 	"RefreshGame@IdelClick": {
 		"action": "Click",
@@ -61,6 +72,7 @@
 			"RefreshGame@GoToStudentsPage"
 		],
 		"interrupt":[
+			"DisconnectPopup",
 			"ClosePopup"
 		],
 		"timeout": 2000,
@@ -74,15 +86,30 @@
 		"action": "Click",
 		"post_delay": 2000,
 		"next": [
-			"RefreshGame@DisconnectedPopUp",
-			"RefreshGame@DuplicatedLoginPopUp",
-			"RefreshGame@MaintenancePopUp",
+			"RefreshGame@RecognizeLabel",
 			"RefreshGame@BackToHomePage"
 		],
-		"interrupt": "WaitLoading",
+		"interrupt": [
+			"WaitLoading",
+			"DisconnectPopup"
+		]
+	},
+	"RefreshGame@RecognizeLabel":{
+		"recognition": "TemplateMatch",
+		"template": "HomePageLabel.png",
+		"roi": [1000, 0, 280, 66],
+		"next": [
+			"RefreshGame@DisconnectedPopUp",
+			"RefreshGame@DuplicatedLoginPopUp",
+			"RefreshGame@MaintenancePopUp"
+		],
+		"interrupt": [
+			"WaitLoading",
+			"DisconnectPopup"
+		],
 		"timeout": 2000,
 		"on_error": "Stop",
-		"doc": "回到主界面后循环检测2秒"
+		"doc": "回到主界面后循环检测2秒，检测是否有异常弹窗"
 	},
 	"RefreshGame@GoToStudentsPage": {
 		"recognition": "TemplateMatch",
@@ -97,6 +124,8 @@
 			"RefreshGame@BackToHomePage"
 		],
 		"interrupt":[
+			"WaitLoading",
+			"DisconnectPopup",
 			"ClosePopup",
 			"RefreshGame@ClickStudentsPageButton"
 		]

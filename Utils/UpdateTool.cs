@@ -7,119 +7,47 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.IO;
 using System.Reflection;
-using HandyControl.Controls;
 using SharpCompress.Archives;
 using SharpCompress.Common;
-using MaaBATapAssistant.Views;
 using MaaBATapAssistant.ViewModels;
+using MaaBATapAssistant.Models;
 
 namespace MaaBATapAssistant.Utils;
 
 public static class UpdateTool
 {
-    public static async Task CheckUpdate(bool needGrowl)
-    {
-        await Task.Run(() =>
-        {
-            if (CheckNewVersion(out string newVersionString, out string downloadUrl, needGrowl))
-            {
-                if (needGrowl)
-                {
-                    Utility.MyGrowlAsk($"发现新版本{newVersionString}，是否更新?", isConfirmed =>
-                    {
-                        if (isConfirmed)
-                        {
-                            Utility.MyDebugWriteLine("开始更新流程");
-                            Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
-                            UpdateApp(newVersionString, downloadUrl);
-                        }
-                        return true;
-                    });
-                }
-                else
-                {
-                    Utility.PrintLog($"发现新版本{newVersionString}，请前往设置页面手动更新");
-                }
-            }
-        });
-    }
-
-    public static async void UpdateApp(string latestVersionString, string downloadUrl)
-    {
-        Utility.MyDebugWriteLine($"开始执行更新 - 由v{MyConstant.AppVersion}更新至{latestVersionString}");
-
-        // 创建临时文件存放路径temp\
-        var tempFileDirectory = @".\temp";
-        if (!Directory.Exists(tempFileDirectory))
-        {
-            Directory.CreateDirectory(tempFileDirectory);
-        }
-        // 下载地址最后部分内容则为文件名，如果不符合规则，则使用默认文件名与格式TempFile.zip
-        string tempFileName = "TempFile.zip";
-        int lastIndex = downloadUrl.LastIndexOf('/');
-        if (lastIndex != -1 && lastIndex < downloadUrl.Length - 1)
-        {
-            tempFileName = downloadUrl.Substring(lastIndex + 1);
-        }
-        // 下载+解压文件到temp\
-        MainViewModel.Instance.ProgramData.IsDownloadingFiles = true;
-        Utility.MyGrowlInfo("正在下载 " + tempFileName);
-        if (!await DownloadAndExtractFile(downloadUrl, tempFileDirectory, tempFileName))
-        {
-            Utility.MyDebugWriteLine("文件下载失败!");
-            Utility.MyGrowlError("文件下载失败!");
-            MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
-            return;
-        }
-        MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
-        Utility.MyDebugWriteLine($"文件{tempFileName}下载完成");
-
-        // 询问是否应用更新
-        var result = HandyControl.Controls.MessageBox.Show("是否重启并更新软件?", "文件下载完成", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        switch (result)
-        {
-            case MessageBoxResult.Yes:
-                ApplyUpdate(tempFileName);
-                break;
-            case MessageBoxResult.None:
-            case MessageBoxResult.Cancel:
-            case MessageBoxResult.No:
-                Utility.MyDebugWriteLine("文件下载完成，用户不执行更新");
-                break;
-        }
-    }
-
-    public static bool CheckNewVersion(out string latestVersionString, out string downloadUrl, bool needGrowl)
+    public static bool CheckNewVersion(bool needPrintLog)
     {
         // 获取并检查Version是否非空
         Version? localVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        if (!GetLatestVersionAndDownloadUrl(MyConstant.GitHubApiUrl, MyConstant.PlatformTag, out latestVersionString, out downloadUrl))
+        if (localVersion is null)
         {
-            Utility.MyDebugWriteLine("检查版本号出错!");
-            if (needGrowl)
-                Utility.MyGrowlError("检查新版本时网络请求出错");
+            ProgramDataModel.Instance.UpdateInfo = "获取当前程序版本失败";
+            if (needPrintLog)
+                Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
+            Utility.MyDebugWriteLine("获取当前程序版本失败，LocalVersion为空");
             return false;
         }
-        if (localVersion is null || string.IsNullOrEmpty(latestVersionString) || string.IsNullOrEmpty(downloadUrl))
+        if (!GetLatestVersionAndDownloadUrl(ProgramDataModel.Instance.ProjectApiUrl, MyConstant.PlatformTag, out string latestVersionString, out string downloadUrl))
         {
-            Utility.MyDebugWriteLine("LocalVersion 或 LatestVersionString 或 DownloadUrl 为空");
-            Utility.MyDebugWriteLine($"{localVersion} 或 {latestVersionString} 或 {downloadUrl} 为空");
-            if (needGrowl)
-                Utility.MyGrowlError("检查新版本失败");
+            if (needPrintLog)
+                Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
+            Utility.MyDebugWriteLine("检查新版本时网络请求出错");
             return false;
         }
-
         // 比较版本号大小
         Version latestVersion = new(RemoveFirstLetterV(latestVersionString));
         Utility.MyDebugWriteLine($"LocalVersion:{localVersion} | LatestVersion:{latestVersion}");
         if (localVersion.CompareTo(latestVersion) >= 0)
         {
-            if (needGrowl)
-                Utility.MyGrowlInfo("当前已是最新版本");
-            else
-                Utility.PrintLog("当前已是最新版本");
+            ProgramDataModel.Instance.UpdateInfo = "当前已是最新版本";
+            if (needPrintLog)
+                Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
             return false;
         }
+        ProgramDataModel.Instance.UpdateInfo = $"发现新版本{latestVersionString}，是否更新？";
+        if (needPrintLog)
+            Utility.PrintLog($"发现新版本{latestVersionString}，请前往设置页面手动更新");
         Utility.MyDebugWriteLine($"发现新版本 {latestVersionString}");
         return true;
     }
@@ -134,6 +62,8 @@ public static class UpdateTool
     /// <returns>获取失败返回false</returns>
     private static bool GetLatestVersionAndDownloadUrl(string apiUrl, string platformTag, out string latestVersionString, out string downloadUrl)
     {
+        ProgramDataModel.Instance.IsCheckingNewVersion = true;
+        ProgramDataModel.Instance.UpdateInfo = "正在检查更新...";
         apiUrl += "/latest"; //获取最新版本，不论是否为pre-release
         latestVersionString = string.Empty;
         downloadUrl = string.Empty;
@@ -153,12 +83,14 @@ public static class UpdateTool
                 if (json == null)
                 {
                     Utility.MyDebugWriteLine("获取的Json为空");
+                    ProgramDataModel.Instance.IsCheckingNewVersion = false;
                     return false;
                 }
                 var tagNameToken = json["tag_name"];
                 if (tagNameToken == null)
                 {
                     Utility.MyDebugWriteLine("获取的tag_name为空");
+                    ProgramDataModel.Instance.IsCheckingNewVersion = false;
                     return false;
                 }
                 latestVersionString = tagNameToken.ToString();
@@ -180,6 +112,7 @@ public static class UpdateTool
                             }
                             else
                             {
+                                ProgramDataModel.Instance.UpdateInfo = "ERR:下载链接中找不到对应的PlatformTag";
                                 Utility.MyDebugWriteLine("下载链接中找不到对应的PlatformTag");
                             }
                         }
@@ -188,19 +121,24 @@ public static class UpdateTool
             }
             else
             {
+                ProgramDataModel.Instance.UpdateInfo = $"检查新版本时网络请求出错-{response.StatusCode}";
                 Utility.MyDebugWriteLine($"检查新版本时网络请求出错: {response.StatusCode} - {response.ReasonPhrase}");
+                ProgramDataModel.Instance.IsCheckingNewVersion = false;
                 return false;
             }
         }
         catch (Exception e)
         {
+            ProgramDataModel.Instance.UpdateInfo = "检查新版本时网络请求出错";
             Utility.MyDebugWriteLine($"检查新版本时网络请求出错: {e.Message}");
+            ProgramDataModel.Instance.IsCheckingNewVersion = false;
             return false;
         }
         finally
         {
             httpClient.Dispose();
         }
+        ProgramDataModel.Instance.IsCheckingNewVersion = false;
         return true;
     }
 
@@ -212,6 +150,53 @@ public static class UpdateTool
             return input.Substring(1);
         }
         return input;
+    }
+
+    public static async Task<string> UpdateApp()
+    {
+        if (!GetLatestVersionAndDownloadUrl(ProgramDataModel.Instance.ProjectApiUrl, MyConstant.PlatformTag, out string latestVersionString, out string downloadUrl))
+        {
+            ProgramDataModel.Instance.HasNewVersion = false;
+            Utility.MyDebugWriteLine("检查版本号出错! - UpdateApp()");
+            return string.Empty;
+        }
+        Utility.MyDebugWriteLine($"开始下载更新 - 由v{MyConstant.AppVersion}更新至{latestVersionString}");
+        Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
+        // 创建临时文件存放路径temp\
+        var tempFileDirectory = @".\temp";
+        if (!Directory.Exists(tempFileDirectory))
+        {
+            Directory.CreateDirectory(tempFileDirectory);
+        }
+        string tempFileName = GetFileNameFromUrl(downloadUrl);
+        // 下载+解压文件到temp\
+        MainViewModel.Instance.ProgramData.IsDownloadingFiles = true;
+        MainViewModel.Instance.ProgramData.UpdateInfo = $"正在下载{tempFileName}";
+        if (!await DownloadAndExtractFile(downloadUrl, tempFileDirectory, tempFileName))
+        {
+            MainViewModel.Instance.ProgramData.UpdateInfo = "文件下载失败！";
+            Utility.MyDebugWriteLine("文件下载失败");
+            MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
+            return string.Empty;
+        }
+        MainViewModel.Instance.ProgramData.UpdateInfo = $"文件下载完成，是否重启并更新软件";
+        Utility.MyDebugWriteLine($"{tempFileName}下载+解压完成");
+        MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
+        MainViewModel.Instance.ProgramData.IsReadyForApplyUpdate = true;
+        MainViewModel.Instance.SetUpdateWindowTopmost(true);
+        return tempFileName;
+    }
+
+    private static string GetFileNameFromUrl(string downloadUrl)
+    {
+        // 下载地址最后部分内容则为文件名，如果不符合规则，则使用默认文件名与格式TempFile.zip
+        string tempFileName = "TempFile.zip";
+        int lastIndex = downloadUrl.LastIndexOf('/');
+        if (lastIndex != -1 && lastIndex < downloadUrl.Length - 1)
+        {
+            tempFileName = downloadUrl.Substring(lastIndex + 1);
+        }
+        return tempFileName;
     }
 
     /// <summary>
@@ -310,8 +295,9 @@ public static class UpdateTool
     /// <summary>
     /// 应用更新。替换文件+重启软件
     /// </summary>
-    private static async void ApplyUpdate(string tempFileName)
+    public static async void ApplyUpdate(string tempFileName)
     {
+        Utility.MyDebugWriteLine("开始应用更新");
         if (!Directory.Exists(Path.Combine(@".\temp", Path.GetFileNameWithoutExtension(tempFileName))))
         {
             Utility.MyGrowlError("解压的文件不存在!");
@@ -320,28 +306,36 @@ public static class UpdateTool
         // 把不提醒公告的设置改为false
         MainViewModel.Instance.ProgramData.SettingsData.DoNotShowAnnouncementAgain = false;
         SettingsViewModel.UpdateConfigJsonFile();
-
+        
         var assembly = Assembly.GetEntryAssembly();
         if (assembly == null)
         {
             Utility.MyDebugWriteLine("GetEntryAssembly 失败");
             return;
         }
+        // 生成update.bat文件来实现复制文件+启动应用
         var currentExeFileName = assembly.GetName().Name + ".exe";
         var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
         var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
         var batFilePath = Path.Combine(utf8BaseDirectory, "temp", "update.bat");
+        var extractedPath = $"\"{utf8BaseDirectory}temp\\{Path.GetFileNameWithoutExtension(tempFileName)}\\*.*\"";
+        var targetPath = $"\"{utf8BaseDirectory}\"";
         await using (StreamWriter sw = new(batFilePath))
         {
             await sw.WriteLineAsync("@echo off");
             await sw.WriteLineAsync("chcp 65001");
             await sw.WriteLineAsync("ping 127.0.0.1 -n 3 > nul");
-            var extractedPath = $"\"{utf8BaseDirectory}temp\\{Path.GetFileNameWithoutExtension(tempFileName)}\\*.*\"";
-            var targetPath = $"\"{utf8BaseDirectory}\"";
-            await sw.WriteLineAsync($"xcopy /E /Y {extractedPath} {targetPath}");
+            await sw.WriteLineAsync($"cd /d {targetPath}");
+            await sw.WriteLineAsync("for /d %%D in (*) do (");
+            await sw.WriteLineAsync("    if /i not \"%%D\"==\"config\" if /i not \"%%D\"==\"debug\" if /i not \"%%D\"==\"images\" if /i not \"%%D\"==\"temp\" (");
+            await sw.WriteLineAsync("        rd /s /q \"%%D\"");
+            await sw.WriteLineAsync("    )");
+            await sw.WriteLineAsync(")");
+            await sw.WriteLineAsync("del /q \"*\"");
+            await sw.WriteLineAsync($"xcopy /e /y {extractedPath} {targetPath}");
             await sw.WriteLineAsync($"start /d \"{utf8BaseDirectory}\" {currentExeFileName}");
             await sw.WriteLineAsync("ping 127.0.0.1 -n 1 > nul");
-            await sw.WriteLineAsync($"rd /S /Q \"{utf8BaseDirectory}temp\"");
+            await sw.WriteLineAsync("rd /s /q \"temp\"");
         }
         var psi = new ProcessStartInfo(batFilePath)
         {
@@ -350,5 +344,6 @@ public static class UpdateTool
         };
         Process.Start(psi);
         Application.Current.Shutdown();
+        
     }
 }

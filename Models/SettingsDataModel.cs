@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MaaBATapAssistant.Utils;
 using Newtonsoft.Json;
 
 namespace MaaBATapAssistant.Models;
@@ -35,5 +36,9 @@ public partial class SettingsDataModel : ObservableObject
     public bool IsAutoCheckAppUpdate { get; set; } = true;
     //public bool IsAutoUpdateResource { get; set; } = false; // 未使用
     //public bool IsAutoUpdateApp { get; set; } = false; // 未使用
+    [ObservableProperty]
+    public string emulatorPath = string.Empty;
+    [ObservableProperty]
+    public int autoRunEmulatorWaittingTimeSpan = MyConstant.AutoRunEmulatorWaittingDefaultTimeSpan;
     public bool DoNotShowAnnouncementAgain { get; set; } = false;
 }

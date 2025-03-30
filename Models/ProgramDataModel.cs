@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MaaBATapAssistant.Utils;
 using System.ComponentModel;
 
 namespace MaaBATapAssistant.Models;
@@ -41,9 +42,18 @@ public partial class ProgramDataModel : ObservableObject
     /// <summary>当前任务是否正在执行</summary>
     [ObservableProperty]
     public bool isCurrentTaskExecuting;
-    /// <summary>是否正在下载更新文件</summary>
+    [ObservableProperty]
+    public string updateInfo = string.Empty;
+    [ObservableProperty]
+    public string projectApiUrl;
+    [ObservableProperty]
+    public bool isCheckingNewVersion;
+    [ObservableProperty]
+    public bool hasNewVersion;
     [ObservableProperty]
     public bool isDownloadingFiles;
+    [ObservableProperty]
+    public bool isReadyForApplyUpdate;
     [ObservableProperty]
     public double downloadProgress;
     [ObservableProperty]
@@ -55,7 +65,11 @@ public partial class ProgramDataModel : ObservableObject
     {
         IsAfkTaskRunning = false;
         IsCurrentTaskExecuting = false;
+        ProjectApiUrl = MyConstant.GiteeApiUrl;
+        IsCheckingNewVersion = false;
+        HasNewVersion = false;
         IsDownloadingFiles = false;
+        IsReadyForApplyUpdate = false;
 
         SettingsData = new();
     }

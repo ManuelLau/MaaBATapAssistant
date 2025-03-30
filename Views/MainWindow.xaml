@@ -26,13 +26,9 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" IsHitTestVisible="False"
                 HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Text="-" VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False" Margin="6 0 6 0"/>
                 <TextBlock Text="{Binding Source={x:Static utils:MyConstant.AppVersion}, StringFormat='v{0}'}"
-                    VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False" Margin="6 0 6 0" >
-                </TextBlock>
-                <TextBlock Text="-" VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False"/>
-                <TextBlock Text="{Binding Source={x:Static utils:MyConstant.ResourceVersion}, StringFormat='资源版本v{0}'}"
-                    VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False" Margin="6 0 6 0" >
-                </TextBlock>
+                           VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False"/>
             </StackPanel>
         </Grid>
     </hc:Window.NonClientAreaContent>
@@ -70,7 +66,8 @@
                                                 Text="{Binding Name}" VerticalAlignment="Center"/>
                                             <TextBox Text="{Binding ExecuteDateTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" Width="150"  Margin="0 0 0 0"
                                                 HorizontalContentAlignment="Center" HorizontalAlignment="Center"
-                                                FontSize="13" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                                FontSize="13" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                LostFocus="TimeTextBoxLostFocus"/>
                                             <Button Width="28" Height="28" Margin="0 0 0 0"
                                                 Style="{StaticResource ButtonIcon.Small}" Foreground="Red"
                                                 hc:IconElement.Geometry="{StaticResource CloseGeometry}"

@@ -2,6 +2,10 @@
 	"CloseReward": {
 		"text": "報酬獲得"
 	},
+	"DisconnectPopup": {
+		"text": "ネットワークアクセスに問題",
+		"replace": [["―","ー"],["一","ー"]]
+	},
 	"RefreshGame@DisconnectedPopUp": {
 		"text": ["有効期限を過ぎた認証情報", "日付が変わりました"]
 	},
