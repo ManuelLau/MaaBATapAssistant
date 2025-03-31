@@ -198,7 +198,7 @@
 
                     <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 0 0 0" HorizontalAlignment="Center">
                         <hc:Shield Subject="软件版本" Status="{x:Static utils:MyConstant.AppVersion}" HorizontalAlignment="Center"/>
-                        <CheckBox Content="自动检查更新" Margin="16 0 0 0"
+                        <CheckBox Content="启动软件时自动检查更新" Margin="16 0 0 0"
                                   IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
                                   Click="SettingsCheckBoxClick">
                         </CheckBox>

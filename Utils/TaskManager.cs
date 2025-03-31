@@ -134,7 +134,6 @@ public class TaskManager
     //自动连接模拟器和Maa资源，默认选择搜索到的第一个模拟器
     private async Task<bool> AutoConnect(CancellationToken token)
     {
-        MaaTaskerDispose();
         var devices = _maaToolkit.AdbDevice.Find();
         if (devices.IsEmpty)
         {
@@ -147,7 +146,9 @@ public class TaskManager
         }
 
         if (!LoadMaaSource(out MaaResource? maaResource) || maaResource == null)
+        {
             return false;
+        }
 
         Utility.PrintLog("正在连接模拟器...");
         try
@@ -204,7 +205,7 @@ public class TaskManager
                 // 等待模拟器启动时间X秒，最大等待搜索设备时间100秒
                 await Task.Delay(_settingsData.AutoRunEmulatorWaittingTimeSpan * 1000, token);
                 DateTime startTime = DateTime.Now;
-                while (isAutoRunningEmulator && token.IsCancellationRequested)
+                while (isAutoRunningEmulator && !token.IsCancellationRequested)
                 {
                     var devices = _maaToolkit.AdbDevice.Find();
                     if (!devices.IsEmpty)
@@ -296,23 +297,30 @@ public class TaskManager
                     ProgramDataModel.Instance.IsCurrentTaskExecuting = true;
                     firstTimeExecute = false;
                     CreateCurrentTaskQueue();
-                    ExecuteCurrentTask(token);
-                    Utility.MyDebugWriteLine($"已入列的任务执行完成或者已停止");
+                    await ExecuteCurrentTask(token);
+                    Utility.MyDebugWriteLine($"已入列的任务执行完成或任务停止");
                     ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
                     break;
                 }
             }
-            if(firstTimeExecute)
+            if (firstTimeExecute)
             {
                 Utility.PrintLog("暂无可执行任务，小助手待机中");
                 firstTimeExecute = false;
             }
-            await Task.Delay(1000, CancellationToken.None); // 每秒检查一次
+            try
+            {
+                await Task.Delay(1000, token); // 每秒检查一次
+            }
+            catch (TaskCanceledException)
+            {
+
+            }
         }
         StopCurrentTask();
     }
 
-    private async void ExecuteCurrentTask(CancellationToken token)
+    private async Task ExecuteCurrentTask(CancellationToken token)
     {
         DateTime startDateTime = DateTime.Now;
         while (_currentTaskChainList.Count > 0)
@@ -348,7 +356,7 @@ public class TaskManager
             var device = _maaTasker.Toolkit.AdbDevice.Find();
             if (device.IsEmpty || device.IsInvalid)
             {
-                Utility.MyDebugWriteLine($"device is empty!");
+                Utility.MyDebugWriteLine($"device is empty or invalid!");
                 Utility.PrintLog("模拟器失去连接，正在重新打开...");
                 if (!await AutoConnect(token))
                 {
@@ -375,17 +383,17 @@ public class TaskManager
                     anyTaskFailed = true;
                     Utility.MyDebugWriteLine($"[单个任务] - 失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
 
-                    // 检测是否因为用户停止任务导致释放了maaTasker，如果不break会导致闪退
+                    // 检测是否因为停止任务导致释放了maaTasker，如果不break会导致闪退
                     if (token.IsCancellationRequested)
                     {
                         CurrentTaskChainPrintFinishedLog = false;
-                        Utility.MyDebugWriteLine("手动停止任务 - 跳出当前任务链");
+                        Utility.MyDebugWriteLine("停止任务 - 跳出当前任务链");
                         break;
                     }
-                    // 不是手动停止的话,有Pipeline失败后会继续执行后面的Pipeline
+                    // 不是手动或系统停止的话,有Pipeline失败后会继续执行后面的Pipeline
                 }
             }
-            
+
             if (anyTaskFailed)
             {
                 if (CurrentTaskChainPrintFinishedLog && currentTaskChain.NeedPrintLog)
@@ -426,12 +434,13 @@ public class TaskManager
         ProgramDataModel.Instance.IsAfkTaskRunning = false;
         ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
         MainViewModel.Instance.IsStoppingCurrentTask = false;
+        _cancellationTokenSource.Dispose();
         Utility.PrintLog("已停止");
     }
 
     // 刷新后续任务时间
     // 规则：只刷新摸头类型任务时间，邀请、应用家具任务不刷新
-    public void RefreshWaitingTaskChainDateTime(DateTime dateTime,bool isManualRefresh)
+    public void RefreshWaitingTaskChainDateTime(DateTime dateTime, bool isManualRefresh)
     {
         int index = isManualRefresh ? 1 : 0;
         DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(dateTime);
@@ -490,7 +499,7 @@ public class TaskManager
         return new(nextRefreshDateOnly.Year, nextRefreshDateOnly.Month, nextRefreshDateOnly.Day,
             nextRefreshTimeOnly.Hour, nextRefreshTimeOnly.Minute, nextRefreshTimeOnly.Second);
     }
-    
+
     // 获取下一个咖啡厅刷新的日期时间
     private DateTime GetNextCafeRefreshDateTime(DateTime dateTime)
     {
@@ -511,20 +520,20 @@ public class TaskManager
 
     // 生成一个任务片段，该片段中的任务链共用一个执行时间。邀请和应用家具预设的任务链在每个时间段只会生成一次
     private void CreateTaskFragment(DateTime executeDateTime, ref bool _hasCreatedCafe1InviteTask, ref bool _hasCreatedCafe2InviteTask,
-        ref bool _hasCreatedCafe1AMApplyLayoutTask, ref bool _hasCreatedCafe1PMApplyLayoutTask, 
+        ref bool _hasCreatedCafe1AMApplyLayoutTask, ref bool _hasCreatedCafe1PMApplyLayoutTask,
         ref bool _hasCreatedCafe2AMApplyLayoutTask, ref bool _hasCreatedCafe2PMApplyLayoutTask)
     {
         DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(executeDateTime); //04:00 or 03:00
         DateTime pmRefreshDateTime = nextServerRefreshDateTime.AddHours(-12); //16:00
         Queue<TaskModel> tempQueue = new();
-        
+
         //生成摸头任务
         tempQueue.Enqueue(new("进入1号咖啡厅", "MoveToCafe1", string.Empty, ETaskType.Normal));
         tempQueue.Enqueue(new("(1号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
         tempQueue.Enqueue(new("进入2号咖啡厅", "MoveToCafe2", string.Empty, ETaskType.Normal));
         tempQueue.Enqueue(new("(2号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
         AddToWaitingTaskList(new("咖啡厅摸头", executeDateTime, ETaskChainType.Tap, true, true, string.Empty, tempQueue));
-        
+
         //生成2号咖啡厅邀请任务
         if (!_hasCreatedCafe2InviteTask && _settingsData.Cafe2InviteTimeSettingIndex != (int)ECafeInviteTimeSettingOptions.DoNotUse)
         {
@@ -538,7 +547,7 @@ public class TaskManager
                 _hasCreatedCafe2InviteTask = true;
             }
         }
-        
+
         //生成2号咖啡厅应用家具预设任务
         if (_settingsData.IsCafe2EnableApplyLayout)
         {
@@ -559,7 +568,7 @@ public class TaskManager
                 _hasCreatedCafe2PMApplyLayoutTask = true;
             }
         }
-        
+
         //生成1号咖啡厅邀请任务
         if (!_hasCreatedCafe1InviteTask && _settingsData.Cafe1InviteTimeSettingIndex != (int)ECafeInviteTimeSettingOptions.DoNotUse)
         {
@@ -574,7 +583,7 @@ public class TaskManager
                 _hasCreatedCafe1InviteTask = true;
             }
         }
-        
+
         //生成1号咖啡厅应用家具预设任务
         if (_settingsData.IsCafe1EnableApplyLayout)
         {

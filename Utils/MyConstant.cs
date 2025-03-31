@@ -25,7 +25,7 @@ public static class MyConstant
     public static readonly TimeOnly RefreshTimeOnlyCN = new(4, 0, 0);
     public static readonly TimeOnly RefreshTimeOnlyNexon = new(3, 0, 0);
 
-    public const int AutoRunEmulatorWaittingDefaultTimeSpan = 30; // 默认等待模拟器启动时间(秒)
+    public const int AutoRunEmulatorWaittingDefaultTimeSpan = 20; // 默认等待模拟器启动时间(秒)
     public const int AutoRunEmulatorWaittingMinTimeSpan = 10; // 最小等待模拟器启动时间(秒)
     public const int AutoRunEmulatorWaittingMaxTimeSpan = 600; // 最大等待模拟器启动时间(秒)
     public const int AutoSearchEmulatorWaittingTimeSpan = 100; // 最大等待搜索设备时间(秒)
