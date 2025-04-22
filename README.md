@@ -78,7 +78,7 @@ MaaBA摸头小助手是一个简单易用、专注于实现自动化摸头的小
 
 ## 意见反馈
 
-- [B站](https://www.bilibili.com/read/41406034)
+- [B站](https://www.bilibili.com/opus/1058736840406728723)
 
 ## 致谢
 

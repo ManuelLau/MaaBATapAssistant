@@ -9,7 +9,7 @@ public static class MyConstant
     public const string GitHubApiUrl = "https://api.github.com/repos/ManuelLau/MaaBATapAssistant/releases";
     public const string GiteeApiUrl = "https://gitee.com/api/v5/repos/manuel33/MaaBATapAssistant/releases";
     public const string BilibiliLink = "https://space.bilibili.com/3493267989596771";
-    public const string BilibiliReadmeLink = "https://www.bilibili.com/read/41406034";
+    public const string BilibiliReadmeLink = "https://www.bilibili.com/opus/1058736840406728723";
 
     public static readonly string ConfigJsonDirectory = GetPath(@"config");
     public static readonly string ConfigJsonFilePath = GetPath(@"config\config.json");
