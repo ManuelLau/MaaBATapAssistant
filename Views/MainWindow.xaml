@@ -100,7 +100,7 @@
                             </StackPanel>
                         </Grid>
 
-                        <hc:ScrollViewer Grid.Column="1" Margin="10 10 10 10" VerticalAlignment="Top" VerticalContentAlignment="Top"
+                        <hc:ScrollViewer Grid.Column="1" Margin="4 10 8 10" VerticalAlignment="Top" VerticalContentAlignment="Top"
                             HorizontalScrollBarVisibility="Disabled" IsInertiaEnabled="True"
                             hc:ScrollViewerAttach.AutoHide="False" utils:AutoScrollToBottom.AlwaysScrollToBottom="True">
                             <ItemsControl ItemsSource="{Binding LogDataList}">

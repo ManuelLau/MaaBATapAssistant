@@ -63,5 +63,9 @@
 		"post_delay": 1000,
 		"next": "Cafe@RecognizeTopLeftText",
 		"interrupt": "WaitLoading"
+	},
+	"Cafe@RecognizeEarningsButton":{
+		"roi": [1234, 660, 6, 6],
+		"doc": "识别咖啡厅收益按钮处的色值，4.0fes后的UI，按钮位置变了"
 	}
 }

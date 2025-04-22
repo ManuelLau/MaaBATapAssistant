@@ -56,6 +56,7 @@ public partial class MainViewModel : ObservableObject
     public static void StopTaskButton()
     {
         TaskManager.Instance.Stop();
+        Utility.MyDebugWriteLine("手动点击停止任务按钮");
     }
 
     [RelayCommand]
@@ -64,6 +65,7 @@ public partial class MainViewModel : ObservableObject
         // 用户手动点击，先清空当前任务列表
         Instance.WaitingTaskList.Clear();
         DateTime nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(DateTime.Now);
+        nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(nextCafeRefreshDateTime);
         TaskManager.Instance.CreateTask(nextCafeRefreshDateTime);
     }
 

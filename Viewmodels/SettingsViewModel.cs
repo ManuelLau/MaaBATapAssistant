@@ -124,11 +124,11 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public static void OpenScreenshotFolder()
     {
-        if (!Directory.Exists(MyConstant.ScreenshotImagePath))
+        if (!Directory.Exists(MyConstant.ScreenshotImageDirectory))
         {
-            Directory.CreateDirectory(MyConstant.ScreenshotImagePath);
+            Directory.CreateDirectory(MyConstant.ScreenshotImageDirectory);
         }
-        Process.Start(new ProcessStartInfo("explorer.exe", MyConstant.ScreenshotImagePath)
+        Process.Start(new ProcessStartInfo("explorer.exe", MyConstant.ScreenshotImageDirectory)
         {
             UseShellExecute = true
         });

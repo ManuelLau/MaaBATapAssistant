@@ -98,7 +98,7 @@
 	},
 	"CafeTap@CloseRelationshipRankUp": {
 		"recognition": "Custom",
-		"custom_recognition": "RelationshipRankUpScreenShot",
+		"custom_recognition": "RelationshipRankUpScreenshot",
 		"action": "Click",
 		"target": [640, 360, 0, 0],
 		"doc": "检测到好感等级提升，截图保存"

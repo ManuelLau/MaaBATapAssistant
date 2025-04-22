@@ -47,7 +47,7 @@
 		"recognition": "TemplateMatch",
 		"template": "SortHighToLow.png",
 		"roi": [820, 134, 34, 36],
-		"next": "CafeInvite@Invite",
+		"next": "CafeInvite@InviteScreenshot",
 		"doc": "*更改排序顺序。根据用户选择重载这里的template字段"
 	},
 	"CafeInvite@InverseSortOrder": {
@@ -56,6 +56,12 @@
 		"roi": [820, 134, 34, 36],
 		"action": "Click",
 		"doc": "反转排序顺序"
+	},
+	"CafeInvite@InviteScreenshot": {
+		"recognition": "Custom",
+		"custom_recognition": "InviteScreenshot",
+		"next": "CafeInvite@Invite",
+		"doc": "执行邀请前截图"
 	},
 	"CafeInvite@Invite": {
 		"recognition": "TemplateMatch",

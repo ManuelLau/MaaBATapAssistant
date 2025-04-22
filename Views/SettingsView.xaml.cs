@@ -36,6 +36,29 @@ public partial class SettingsView
         SettingsViewModel.UpdateConfigJsonFile();
     }
 
+    private void AvoidingStartTimeTextBoxTextChanged(object sender, TextChangedEventArgs e)
+    {
+        System.Windows.Controls.TextBox? textBox = sender as System.Windows.Controls.TextBox;
+        string? text = textBox?.Text;
+        bool isSuccess = TimeOnly.TryParse(text, out TimeOnly parsedTime);
+        if (isSuccess)
+        {
+            ProgramDataModel.Instance.SettingsData.AvoidingStartTime = parsedTime;
+        }
+        SettingsViewModel.UpdateConfigJsonFile();
+    }
+    private void AvoidingEndTimeTextBoxTextChanged(object sender, TextChangedEventArgs e)
+    {
+        System.Windows.Controls.TextBox? textBox = sender as System.Windows.Controls.TextBox;
+        string? text = textBox?.Text;
+        bool isSuccess = TimeOnly.TryParse(text, out TimeOnly parsedTime);
+        if (isSuccess)
+        {
+            ProgramDataModel.Instance.SettingsData.AvoidingEndTime = parsedTime;
+        }
+        SettingsViewModel.UpdateConfigJsonFile();
+    }
+
     private void EmulatorPathTextBoxTextChanged(object sender, TextChangedEventArgs e)
     {
         TextBox tb = (TextBox)sender;
@@ -93,7 +116,16 @@ public partial class SettingsView
         Process.Start(new ProcessStartInfo
         {
             FileName = MyConstant.BilibiliLink,
-            UseShellExecute = true // 使用默认浏览器打开
+            UseShellExecute = true
+        });
+    }
+
+    private void BilibiliReadmeLinkMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = MyConstant.BilibiliReadmeLink,
+            UseShellExecute = true
         });
     }
 }

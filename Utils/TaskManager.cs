@@ -104,6 +104,17 @@ public class TaskManager
     //生成从给定时间到下一次咖啡厅刷新时间前的任务
     public DateTime CreateTask(DateTime taskDateTime)
     {
+        // 处理规避时间段。如果end time小于start time则需要额外生成一个end time
+        DateTime AvoidingStartDateTime = new(taskDateTime.Year, taskDateTime.Month, taskDateTime.Day,
+                _settingsData.AvoidingStartTime.Hour, _settingsData.AvoidingStartTime.Minute, _settingsData.AvoidingStartTime.Second);
+        DateTime AvoidingEndDateTime = new(taskDateTime.Year, taskDateTime.Month, taskDateTime.Day,
+                _settingsData.AvoidingEndTime.Hour, _settingsData.AvoidingEndTime.Minute, _settingsData.AvoidingEndTime.Second);
+        DateTime AvoidingEndDateTimeNextDay = DateTime.MinValue;
+        if (_settingsData.AvoidingStartTime > _settingsData.AvoidingEndTime)
+        {
+            AvoidingEndDateTimeNextDay = AvoidingEndDateTime.AddDays(1);
+        }
+
         DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(taskDateTime); //04:00 or 03:00
         DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(taskDateTime);
         bool hasCreatedCafe1InviteTask = false;
@@ -113,12 +124,37 @@ public class TaskManager
         bool hasCreatedCafe2AMApplyLayoutTask = false;
         bool hasCreatedCafe2PMApplyLayoutTask = false;
         //循环生成第一轮任务(直到下一次咖啡厅刷新时间)
-        while (taskDateTime < nextCafeRefreshDateTime)
+        do
         {
+            if (_settingsData.IsCreateTaskAvoidSpecifiedTime)
+            {
+                if (_settingsData.AvoidingStartTime > _settingsData.AvoidingEndTime)
+                {
+                    if (taskDateTime < AvoidingEndDateTime)
+                    {
+                        taskDateTime = AvoidingEndDateTime;
+                    }
+                    else if (taskDateTime >= AvoidingStartDateTime && taskDateTime < AvoidingEndDateTimeNextDay)
+                    {
+                        taskDateTime = AvoidingEndDateTimeNextDay;
+                    }
+                }
+                else
+                {
+                    if (taskDateTime >= AvoidingStartDateTime && taskDateTime < AvoidingEndDateTime)
+                    {
+                        taskDateTime = AvoidingEndDateTime;
+                    }
+                }
+                if (taskDateTime >= nextCafeRefreshDateTime)
+                {
+                    break;
+                }
+            }
             CreateTaskFragment(taskDateTime, ref hasCreatedCafe1InviteTask, ref hasCreatedCafe2InviteTask, ref hasCreatedCafe1AMApplyLayoutTask,
-                ref hasCreatedCafe1PMApplyLayoutTask, ref hasCreatedCafe2AMApplyLayoutTask, ref hasCreatedCafe2PMApplyLayoutTask);
+            ref hasCreatedCafe1PMApplyLayoutTask, ref hasCreatedCafe2AMApplyLayoutTask, ref hasCreatedCafe2PMApplyLayoutTask);
             taskDateTime = taskDateTime.AddHours(3);
-        }
+        } while (taskDateTime < nextCafeRefreshDateTime);
         taskDateTime = nextCafeRefreshDateTime;
         //如果时间到达服务器刷新时间，就添加一个重启任务
         if (taskDateTime == nextServerRefreshDateTime)
@@ -161,8 +197,9 @@ public class TaskManager
                 DisposeOptions = DisposeOptions.All,
             };
             // 注册自定义识别、动作
-            _maaTasker.Resource.Register(new RelationshipRankUpScreenShot());
+            _maaTasker.Resource.Register(new RelationshipRankUpScreenshot());
             _maaTasker.Resource.Register(new InviteUnavailableSkipTask());
+            _maaTasker.Resource.Register(new InviteScreenshot());
             _maaTasker.Resource.Register(new InviteCancelNotify());
             _maaTasker.Resource.Register(new DuplicatedLoginStopTask());
             _maaTasker.Resource.Register(new MaintenanceStopTask());
@@ -185,7 +222,6 @@ public class TaskManager
 
     private async Task<MaaFramework.Binding.Buffers.IMaaListBuffer<AdbDeviceInfo>?> AutoRunEmulator(CancellationToken token)
     {
-        bool isAutoRunningEmulator;
         if (string.IsNullOrEmpty(_settingsData.EmulatorPath))
         {
             Utility.PrintError("未设置模拟器路径，请先设置模拟器路径或手动打开模拟器");
@@ -196,7 +232,6 @@ public class TaskManager
             {
                 Utility.MyDebugWriteLine("找不到模拟器，将自动打开模拟器：" + _settingsData.EmulatorPath);
                 Utility.PrintLog("正在打开模拟器...");
-                isAutoRunningEmulator = true;
                 Process.Start(new ProcessStartInfo(_settingsData.EmulatorPath)
                 {
                     UseShellExecute = true
@@ -205,7 +240,7 @@ public class TaskManager
                 // 等待模拟器启动时间X秒，最大等待搜索设备时间100秒
                 await Task.Delay(_settingsData.AutoRunEmulatorWaittingTimeSpan * 1000, token);
                 DateTime startTime = DateTime.Now;
-                while (isAutoRunningEmulator && !token.IsCancellationRequested)
+                while (!token.IsCancellationRequested)
                 {
                     var devices = _maaToolkit.AdbDevice.Find();
                     if (!devices.IsEmpty)
@@ -240,11 +275,11 @@ public class TaskManager
         //根据配置里的客户端类型选项改变读取的文件路径
         string[] maaSourcePaths = ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
         {
-            (int)EClientTypeSettingOptions.Zh_CN => [MyConstant.MaaSourcePath],
-            (int)EClientTypeSettingOptions.Zh_CN_Bilibili => [MyConstant.MaaSourcePath, MyConstant.MaaSourcePathBiliBiliOverride],
-            (int)EClientTypeSettingOptions.Zh_TW => [MyConstant.MaaSourcePath, MyConstant.MaaSourcePathZhtwOverride],
-            (int)EClientTypeSettingOptions.Jp => [MyConstant.MaaSourcePath, MyConstant.MaaSourcePathJpOverride],
-            _ => [MyConstant.MaaSourcePath],
+            (int)EClientTypeSettingOptions.Zh_CN => [MyConstant.MaaSourceDirectory],
+            (int)EClientTypeSettingOptions.Zh_CN_Bilibili => [MyConstant.MaaSourceDirectory, MyConstant.MaaSourcePathBiliBiliOverride],
+            (int)EClientTypeSettingOptions.Zh_TW => [MyConstant.MaaSourceDirectory, MyConstant.MaaSourcePathZhtwOverride],
+            (int)EClientTypeSettingOptions.Jp => [MyConstant.MaaSourceDirectory, MyConstant.MaaSourcePathJpOverride],
+            _ => [MyConstant.MaaSourceDirectory],
         };
         try
         {
@@ -263,7 +298,6 @@ public class TaskManager
     {
         bool firstTimeExecute = true;
         DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(DateTime.Now);
-        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(DateTime.Now);
 
         // 容错：先清除上一个时间段或更早的旧任务
         DateTime previousCafeRefreshDateTime = nextCafeRefreshDateTime.AddHours(-12);
@@ -283,8 +317,8 @@ public class TaskManager
         {
             if (DateTime.Now >= nextCafeRefreshDateTime)
             {
-                // 到达咖啡厅刷新时间，自动生成12小时后的任务队列
-                CreateTask(GetNextCafeRefreshDateTime(nextCafeRefreshDateTime));
+                // 到达咖啡厅刷新时间，自动生成24小时后的任务队列
+                CreateTask(nextCafeRefreshDateTime.AddHours(24));
                 nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(DateTime.Now);
             }
 
@@ -425,6 +459,57 @@ public class TaskManager
         }
 
         RefreshWaitingTaskChainDateTime(DateTime.Now, false);
+
+        bool isExitEmulatorSucceed = false;
+        if (_settingsData.IsExitEmulatorAfterTaskFinished)
+        {
+            if (string.IsNullOrEmpty(_settingsData.EmulatorPath))
+            {
+                Utility.PrintError("自动退出模拟器失败，请先填写模拟器路径");
+            }
+            else
+            {
+                try
+                {
+                    string fileName = System.IO.Path.GetFileName(_settingsData.EmulatorPath);
+                    Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(fileName));
+                    foreach (Process process in processes)
+                    {
+                        if (process.MainModule != null &&
+                            process.MainModule.FileName.Equals(_settingsData.EmulatorPath, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            process.Kill();
+                            process.WaitForExit();
+                            isExitEmulatorSucceed = true;
+                            Utility.PrintLog("已自动退出模拟器");
+                        }
+                        else
+                        {
+                            Utility.PrintError("自动退出模拟器失败，请确认是否已正确填写模拟器路径");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Utility.MyDebugWriteLine($"自动退出模拟器时出现错误: {ex.Message}");
+                }
+            }
+        }
+        if (!isExitEmulatorSucceed && _settingsData.IsExitGameAfterTaskFinished)
+        {
+            if (_maaTasker != null)
+            {
+                var status = _maaTasker.AppendTask("CloseGame").Wait();
+                if (status.IsSucceeded())
+                {
+                    Utility.PrintLog("已自动退出游戏");
+                }
+                else
+                {
+                    Utility.PrintLog("自动退出游戏失败!");
+                }
+            }
+        }
         Utility.PrintLog("当前任务已完成，小助手待机中");
     }
 
@@ -661,9 +746,9 @@ public class TaskManager
             }
         }
 
-        Queue<TaskModel> tempQueue1 = new();
-        tempQueue1.Enqueue(new("返回主界面", "RefreshGame@BackToHomePage", string.Empty, ETaskType.Normal));
-        _currentTaskChainList.Add(new("返回主界面", DateTime.Now, ETaskChainType.System, false, false, string.Empty, tempQueue1));
+        Queue<TaskModel> tempQueue = new();
+        tempQueue.Enqueue(new("返回主界面", "RefreshGame@BackToHomePage", string.Empty, ETaskType.Normal));
+        _currentTaskChainList.Add(new("返回主界面", DateTime.Now, ETaskChainType.System, false, false, string.Empty, tempQueue));
         foreach (var item in _currentTaskChainList)
         {
             Utility.MyDebugWriteLine($"{item.ExecuteDateTime} - {item.Name}");

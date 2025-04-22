@@ -8,9 +8,9 @@ namespace MaaBATapAssistant.Utils;
 
 public static class CustomTask
 {
-    public class RelationshipRankUpScreenShot : IMaaCustomRecognition
+    public class RelationshipRankUpScreenshot : IMaaCustomRecognition
     {
-        public string Name { get; set; } = nameof(RelationshipRankUpScreenShot);
+        public string Name { get; set; } = nameof(RelationshipRankUpScreenshot);
 
         public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
         {
@@ -23,14 +23,14 @@ public static class CustomTask
                 bitmap.Freeze(); // 冻结图像以提高性能
                 var encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bitmap));
-                if (!Directory.Exists(MyConstant.ScreenshotImagePath))
+                if (!Directory.Exists(MyConstant.ScreenshotImageDirectory))
                 {
-                    Directory.CreateDirectory(MyConstant.ScreenshotImagePath);
+                    Directory.CreateDirectory(MyConstant.ScreenshotImageDirectory);
                 }
-                string filePath = Path.Combine(MyConstant.ScreenshotImagePath, $"RelationshipRankUp-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
+                string filePath = Path.Combine(MyConstant.ScreenshotImageDirectory, $"RelationshipRankUp-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
                 using FileStream fileStream = new(filePath, FileMode.Create);
                 encoder.Save(fileStream);
-                Utility.PrintLog("好感等级提升，已截图至images目录");
+                Utility.PrintLog("好感等级提升，已自动截图");
             }
             return true;
         }
@@ -44,6 +44,44 @@ public static class CustomTask
         {
             Utility.PrintError("咖啡厅邀请失败，邀请券冷却中");
             TaskManager.Instance.CurrentTaskChainPrintFinishedLog = false;
+            return true;
+        }
+    }
+
+    public class InviteScreenshot : IMaaCustomRecognition
+    {
+        public string Name { get; set; } = nameof(InviteScreenshot);
+
+        public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
+        {
+            if (ProgramDataModel.Instance.SettingsData.IsRelationshipRankUpAutoScreenShot)
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = args.Image.EncodedDataStream;
+                bitmap.EndInit();
+                bitmap.Freeze(); // 冻结图像以提高性能
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                if (!Directory.Exists(MyConstant.ScreenshotImageDirectory))
+                {
+                    Directory.CreateDirectory(MyConstant.ScreenshotImageDirectory);
+                }
+                string filePath = Path.Combine(MyConstant.ScreenshotImageDirectory, $"Invite-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
+                using FileStream fileStream = new(filePath, FileMode.Create);
+                encoder.Save(fileStream);
+
+                // 获取所有截图，并按创建日期排序。同一分钟创建的文件，会根据文件名再排序，时间早的在前面
+                var files = Directory.GetFiles(MyConstant.ScreenshotImageDirectory, "Invite-*.png")
+                                     .Select(file => new FileInfo(file)).OrderBy(file => file.CreationTime).ToList();
+                // 最多保存10个截图
+                const short maxScreenshotCount = 10;
+                while (files.Count > maxScreenshotCount)
+                {
+                    File.Delete(files.First().FullName);
+                    files.RemoveAt(0);
+                }
+            }
             return true;
         }
     }
@@ -96,7 +134,6 @@ public static class CustomTask
             return true;
         }
     }
-
 
     public class IPBlockedStopTask : IMaaCustomAction
     {

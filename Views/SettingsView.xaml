@@ -80,7 +80,7 @@
                 </CheckBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="{Binding Cafe1ApplyLayoutAMText}" Style="{StaticResource SettingTextBlockStyle}"/>
-                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
+                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}" Width="80"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1AMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
@@ -88,7 +88,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="{Binding Cafe1ApplyLayoutPMText}" Style="{StaticResource SettingTextBlockStyle}"/>
-                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
+                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}" Width="80"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1PMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
@@ -142,7 +142,7 @@
                 </CheckBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="{Binding Cafe2ApplyLayoutAMText}" Style="{StaticResource SettingTextBlockStyle}"/>
-                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
+                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}" Width="80"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2AMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
@@ -150,14 +150,32 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="{Binding Cafe2ApplyLayoutPMText}" Style="{StaticResource SettingTextBlockStyle}"/>
-                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}"
+                    <hc:ComboBox ItemsSource="{Binding CafeApplyLayoutSettingOptionsText}" Width="80"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2PMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe2EnableApplyLayout}"/>
                 </StackPanel>
+                <CheckBox Content="自动生成任务避开以下时间段" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding ProgramData.SettingsData.IsCreateTaskAvoidSpecifiedTime}"
+                          Click="SettingsCheckBoxClick" 
+                          IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                </CheckBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <CheckBox Content="学生好感等级提升自动截图" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    <TextBox Text="{Binding ProgramData.SettingsData.AvoidingStartTime, StringFormat={}{0:HH:mm:ss}}" Width="80"  Margin="0 0 0 0"
+                             HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                             FontSize="13" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                             TextChanged="AvoidingStartTimeTextBoxTextChanged"
+                             IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCreateTaskAvoidSpecifiedTime}"/>
+                    <TextBlock Text="~" VerticalAlignment="Center" Margin="6 0 6 0"/>
+                    <TextBox Text="{Binding ProgramData.SettingsData.AvoidingEndTime, StringFormat={}{0:HH:mm:ss}}" Width="80"  Margin="0 0 0 0"
+                             HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                             FontSize="13" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                             TextChanged="AvoidingEndTimeTextBoxTextChanged"
+                             IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCreateTaskAvoidSpecifiedTime}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox Content="学生好感等级提升时自动截图" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                               IsChecked="{Binding ProgramData.SettingsData.IsRelationshipRankUpAutoScreenShot}"
                               Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                     </CheckBox>
@@ -166,6 +184,14 @@
                 </StackPanel>
                 <CheckBox Content="发现重复登录后自动重连" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsReconnectAfterDuplicatedLogin}"
+                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                </CheckBox>
+                <CheckBox Content="完成当前任务后退出游戏" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding ProgramData.SettingsData.IsExitGameAfterTaskFinished}"
+                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                </CheckBox>
+                <CheckBox Content="完成当前任务后退出模拟器" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding ProgramData.SettingsData.IsExitEmulatorAfterTaskFinished}"
                           Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                 </CheckBox>
 
@@ -214,6 +240,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -222,7 +249,9 @@
                     <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="QQ群 (还没创)"/>
                     <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="B站主页" Foreground="Blue" Cursor="Hand"
                                MouseDown="BilibiliLinkMouseDown"/>
-                    <StackPanel Grid.Row="3" Margin="100 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="意见反馈页" Foreground="Blue" Cursor="Hand"
+                               MouseDown="BilibiliReadmeLinkMouseDown"/>
+                    <StackPanel Grid.Row="4" Margin="100 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
                         <hc:Shield Subject="GitHub" Status="MaaBATapAssistant" VerticalAlignment="Center" VerticalContentAlignment="Center"
                                    Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.GitHubProjectUrl}"/>
                         <TextBlock Margin="10 0 0 0" Text="←点个Star吧求求了" VerticalAlignment="Center" TextAlignment="Center"

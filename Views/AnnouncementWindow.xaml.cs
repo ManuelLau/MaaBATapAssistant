@@ -1,6 +1,7 @@
 ﻿using MaaBATapAssistant.Models;
 using MaaBATapAssistant.Utils;
 using MaaBATapAssistant.ViewModels;
+using System.Diagnostics;
 using System.Windows;
 
 namespace MaaBATapAssistant.Views;
@@ -24,5 +25,14 @@ public partial class AnnouncementWindow : Window
     private void CheckBoxOnClick(object sender, RoutedEventArgs e)
     {
         SettingsViewModel.UpdateConfigJsonFile();
+    }
+
+    private void BilibiliReadmeLinkMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = MyConstant.BilibiliReadmeLink,
+            UseShellExecute = true
+        });
     }
 }

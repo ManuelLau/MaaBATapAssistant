@@ -3,12 +3,13 @@
 public static class AnnouncementContent
 {
     public const string MainTitle = "公告";
-    public const string Title0 = $"v0.3.0 更新内容";
-    public const string Content0 = 
-        "新功能：网络掉线时自动重连" +
-        "\n新功能：自动打开指定路径的模拟器" +
-        "\n优化：程序更新功能" +
-        "\n优化了一些其他功能";
+    public const string Title0 = $"v{MyConstant.AppVersion} 更新内容";
+    public const string Content0 =
+        "新功能：执行邀请前自动截图弹窗内容，以便查看邀请历史记录，截图存放在images文件夹中，最多保存10个\n" +
+        "新功能：增加避开时间段设置项，小助手不会自动生成该时间段内的任务\n" +
+        "新功能：完成当前任务后自动退出游戏或模拟器\n" +
+        "增加任务列表中下下个时间段任务的预览，方便提前规划\n" +
+        "修复日服进入咖啡厅时体力满了导致检测出错的bug";
     public const string Title1 = "使用须知";
     public const string Content1 = "使用前请务必先查看使用说明文档！(README.md文件)";
     //public const string Title2 = "";

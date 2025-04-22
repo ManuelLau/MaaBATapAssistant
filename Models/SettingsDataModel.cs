@@ -30,15 +30,21 @@ public partial class SettingsDataModel : ObservableObject
     public bool isCafe2EnableApplyLayout = false;
     public int Cafe2AMApplyLayoutIndex { get; set; } = 1;
     public int Cafe2PMApplyLayoutIndex { get; set; } = 0;
+    [ObservableProperty][JsonIgnore]
+    public bool isCreateTaskAvoidSpecifiedTime = false;
+    public TimeOnly AvoidingStartTime { get; set; } = new(0, 0, 0);
+    public TimeOnly AvoidingEndTime { get; set; } = new(0, 0, 0);
     public bool IsRelationshipRankUpAutoScreenShot { get; set; } = true;
     public bool IsReconnectAfterDuplicatedLogin { get; set; } = true;
+    public bool IsExitGameAfterTaskFinished { get; set; } = false;
+    public bool IsExitEmulatorAfterTaskFinished { get; set; } = false;
     //public bool IsAutoCheckResourceUpdate { get; set; } = false; // 未使用
     public bool IsAutoCheckAppUpdate { get; set; } = true;
     //public bool IsAutoUpdateResource { get; set; } = false; // 未使用
     //public bool IsAutoUpdateApp { get; set; } = false; // 未使用
-    [ObservableProperty]
+    [ObservableProperty][JsonIgnore]
     public string emulatorPath = string.Empty;
-    [ObservableProperty]
+    [ObservableProperty][JsonIgnore]
     public int autoRunEmulatorWaittingTimeSpan = MyConstant.AutoRunEmulatorWaittingDefaultTimeSpan;
     public bool DoNotShowAnnouncementAgain { get; set; } = false;
 }

@@ -21,6 +21,12 @@
                 <hc:Divider Margin="10 10 20 10"/>
                 <TextBlock x:Name="Title1" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
                 <TextBlock x:Name="Content1" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="或者" FontSize="16" Margin="10 4 0 4"/>
+                    <TextBlock FontSize="16" Text="点这里" Margin="0 4 0 4"
+                               Foreground="Blue" Cursor="Hand" MouseDown="BilibiliReadmeLinkMouseDown"/>
+                    <TextBlock Text="前往B站查看" FontSize="16" Margin="0 4 10 4"/>
+                </StackPanel>
                 <!--<hc:Divider Margin="10 10 20 10"/>
                 <TextBlock x:Name="Title2" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
                 <TextBlock x:Name="Content2" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>-->
