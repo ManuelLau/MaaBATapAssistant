@@ -62,7 +62,8 @@
 		"next": "ClickConfirmButton"
 	},
 	"StartUp@EventCheckIn": {
-		"text": "残り"
+		"text": ["残り", "特別", "サインする", "ログイン", "ロクイコ", "ボーナス"],
+		"replace": [["―","ー"],["一","ー"]]
 	},
 	"StartUp@UpdatePopUp": {
 		"text": ["アップデートが必要です", "ダウンロード設定"],

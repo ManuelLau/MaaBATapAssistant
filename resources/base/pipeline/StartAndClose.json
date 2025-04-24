@@ -13,7 +13,7 @@
 	"RestartGame": {
 		"action": "StopApp",
 		"package": "com.RoamingStar.BlueArchive",
-		"post_delay": 3000,
+		"post_delay": 5000,
 		"next": "StartGame"
 	},
 	
@@ -142,15 +142,15 @@
 	"StartUp@DailyCheckIn": {
 		"recognition": "TemplateMatch",
 		"template": ["DailyCheckIn.png", "EventCheckIn.png"],
-		"roi": [430, 0, 850, 200],
+		"roi": [430, 0, 850, 360],
 		"action": "Click",
 		"target": [640, 360, 0, 0],
 		"doc": "识别每日签到+活动签到界面"
 	},
 	"StartUp@EventCheckIn": {
 		"recognition": "OCR",
-		"text": "剩余时间",
-		"roi": [430, 0, 850, 200],
+		"text": ["剩余时间", "特别", "签到", "登录", "奖励"],
+		"roi": [430, 0, 850, 360],
 		"action": "Click",
 		"target": [640, 360, 0, 0],
 		"doc": "文字识别活动签到界面，以免素材不通用"

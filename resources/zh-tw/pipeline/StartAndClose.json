@@ -75,7 +75,7 @@
 		"doc": "国际服-关闭活动提示弹窗"
 	},
 	"StartUp@EventCheckIn": {
-		"text": "剩餘時間"
+		"text": ["剩餘時間", "特別", "簽到", "登錄", "獎勵"]
 	},
 	"StartUp@UpdatePopUp": {
 		"text": ["下載必要內容", "需要下載遊戲"]
