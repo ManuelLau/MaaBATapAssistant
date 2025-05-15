@@ -2,10 +2,11 @@
 
 public static class MyConstant
 {
-    public const string AppVersion = "0.3.2";
+    public const string AppVersion = "0.3.3";
     //public const string ResourceVersion = "0.0.0";
     public const string PlatformTag = "win-x";
     public const string GitHubProjectUrl = "https://github.com/ManuelLau/MaaBATapAssistant";
+    public const string GiteeProjectUrl = "https://gitee.com/manuel33/MaaBATapAssistant";
     public const string GitHubApiUrl = "https://api.github.com/repos/ManuelLau/MaaBATapAssistant/releases";
     public const string GiteeApiUrl = "https://gitee.com/api/v5/repos/manuel33/MaaBATapAssistant/releases";
     public const string BilibiliLink = "https://space.bilibili.com/3493267989596771";

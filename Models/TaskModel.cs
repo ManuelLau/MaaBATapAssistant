@@ -12,6 +12,7 @@ public enum ETaskType
     Cafe1PMApplyLayout,
     Cafe2AMApplyLayout,
     Cafe2PMApplyLayout,
+    SweepHardLevel,
 }
 
 //单个Pipeline任务

@@ -34,6 +34,9 @@ public partial class SettingsDataModel : ObservableObject
     public bool isCreateTaskAvoidSpecifiedTime = false;
     public TimeOnly AvoidingStartTime { get; set; } = new(0, 0, 0);
     public TimeOnly AvoidingEndTime { get; set; } = new(0, 0, 0);
+    [ObservableProperty][JsonIgnore]
+    public bool isCreateSweepHardLevelTask = false;
+    public string HardLevel { get; set; } = "22-3";
     public bool IsRelationshipRankUpAutoScreenShot { get; set; } = true;
     public bool IsReconnectAfterDuplicatedLogin { get; set; } = true;
     public bool IsExitGameAfterTaskFinished { get; set; } = false;

@@ -1,0 +1,13 @@
+{
+	"Mission@RecognizeMissionLevel": {
+		"replace": [["T","1"],["t","1"],["I","1"]]
+	},
+	"Mission@ClickSweepButton": {
+		"template": "MissionSweepButton.png",
+		"threshold": 0.9
+	},
+	"Mission@RecognizeSweepPopup": {
+		"template": "MissionSweepPopup.png",
+		"threshold": 0.9
+	}
+}

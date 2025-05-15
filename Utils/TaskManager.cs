@@ -8,6 +8,7 @@ using System.Windows;
 using System.Threading;
 using static MaaBATapAssistant.Utils.CustomTask;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace MaaBATapAssistant.Utils;
 
@@ -42,7 +43,7 @@ public class TaskManager
             Utility.PrintError("暂无任务，请先生成任务");
             return;
         }
-        // 如果者下一个时间段没有除了重启之外的任务，则提醒用户手动刷新
+        // 如果下一个时间段没有除了重启之外的任务，则提醒用户手动刷新
         DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(DateTime.Now);
         DateTime previousCafeRefreshDateTime = nextCafeRefreshDateTime.AddHours(-12);
         DateTime nextNextCafeRefreshDateTime = nextCafeRefreshDateTime.AddHours(12);
@@ -77,28 +78,49 @@ public class TaskManager
         _cancellationTokenSource = new();
         await Task.Run(async () =>
         {
-            if (!await AutoConnect(_cancellationTokenSource.Token))
+            // 如果填写了模拟器路径，则开始任务时候不检测模拟器是否连接
+            if (string.IsNullOrEmpty(_settingsData.EmulatorPath))
             {
-                ProgramDataModel.Instance.IsAfkTaskRunning = false;
-                ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
-                return;
+                if (!await AutoConnect(_cancellationTokenSource.Token))
+                {
+                    Stop(false);
+                    return;
+                }
             }
             PreventSleepTool.PreventSleep();
             await StartAfkTask(_cancellationTokenSource.Token);
         });
     }
 
-    public async void Stop()
+    /// <summary>
+    /// 点击停止任务按钮，可能任务在执行中
+    /// </summary>
+    /// <param name="isOutOfAfkTask">是否正在执行当前任务</param>
+    public async void Stop(bool isExecutingCurrentTask)
     {
-        Utility.PrintLog("正在停止任务...");
+        if (isExecutingCurrentTask)
+        {
+            Utility.PrintLog("正在停止任务...");
+        }
         MainViewModel.Instance.IsStoppingCurrentTask = true;
         foreach (var taskChainTtem in _waitingTaskChainList)
         {
             taskChainTtem.Status = ETaskChainStatus.Waiting;
         }
         PreventSleepTool.RestoreSleep();
-        _cancellationTokenSource.Cancel();
+        try
+        {
+            _cancellationTokenSource.Cancel();
+        }
+        catch (Exception ex)
+        {
+            Utility.MyDebugWriteLine("Stop() - _cancellationTokenSource.Cancel() failed! - " + ex);
+        }
         await Task.Run(MaaTaskerDispose);
+        if (!isExecutingCurrentTask)
+        {
+            StopCurrentTask();
+        }
     }
 
     //生成从给定时间到下一次咖啡厅刷新时间前的任务
@@ -123,6 +145,7 @@ public class TaskManager
         bool hasCreatedCafe1PMApplyLayoutTask = false;
         bool hasCreatedCafe2AMApplyLayoutTask = false;
         bool hasCreatedCafe2PMApplyLayoutTask = false;
+        bool hasCreatedSweepHardLevelTask = false;
         //循环生成第一轮任务(直到下一次咖啡厅刷新时间)
         do
         {
@@ -152,7 +175,7 @@ public class TaskManager
                 }
             }
             CreateTaskFragment(taskDateTime, ref hasCreatedCafe1InviteTask, ref hasCreatedCafe2InviteTask, ref hasCreatedCafe1AMApplyLayoutTask,
-            ref hasCreatedCafe1PMApplyLayoutTask, ref hasCreatedCafe2AMApplyLayoutTask, ref hasCreatedCafe2PMApplyLayoutTask);
+            ref hasCreatedCafe1PMApplyLayoutTask, ref hasCreatedCafe2AMApplyLayoutTask, ref hasCreatedCafe2PMApplyLayoutTask, ref hasCreatedSweepHardLevelTask);
             taskDateTime = taskDateTime.AddHours(3);
         } while (taskDateTime < nextCafeRefreshDateTime);
         taskDateTime = nextCafeRefreshDateTime;
@@ -205,6 +228,9 @@ public class TaskManager
             _maaTasker.Resource.Register(new MaintenanceStopTask());
             _maaTasker.Resource.Register(new ClientUpdateStopTask());
             _maaTasker.Resource.Register(new IPBlockedStopTask());
+            _maaTasker.Resource.Register(new PrintSweepError());
+            _maaTasker.Resource.Register(new PrintFindeLevelError());
+            _maaTasker.Resource.Register(new SweepDropScreenshot());
         }
         catch (Exception)
         {
@@ -371,20 +397,20 @@ public class TaskManager
             {
                 Utility.PrintLog(currentTaskChain.StartLogMessage);
             }
-            if (_maaTasker == null)
+            if (_maaTasker == null || _maaTasker.IsInvalid)
             {
-                Utility.MyDebugWriteLine($"maaTasker is null!");
-                Utility.PrintLog("模拟器失去连接，正在重新打开...");
+                Utility.MyDebugWriteLine($"maaTasker is null or invalid!");
+                Utility.PrintLog("模拟器未连接");
                 if (!await AutoConnect(token))
                 {
-                    Stop();
+                    Stop(true);
                     return;
                 }
             }
             if (_maaTasker == null)
             {
                 Utility.MyDebugWriteLine($"maaTasker依然是null，直接停止任务");
-                Stop();
+                Stop(true);
                 return;
             }
             var device = _maaTasker.Toolkit.AdbDevice.Find();
@@ -394,15 +420,26 @@ public class TaskManager
                 Utility.PrintLog("模拟器失去连接，正在重新打开...");
                 if (!await AutoConnect(token))
                 {
-                    Stop();
+                    Stop(true);
                     return;
                 }
             }
-
+            
             bool anyTaskFailed = false;
             CurrentTaskChainPrintFinishedLog = true; // 是否打印任务结束的信息(成功、失败、异常)
             foreach (var taskItem in currentTaskChain.TaskQueue)
             {
+                // 如果是扫荡困难关卡任务，执行前检测关卡设置是否符合规则
+                if (currentTaskChain.TaskChainType == ETaskChainType.SweepHardLevel)
+                {
+                    var regex = new Regex(@"^(99|[1-9][0-9]?)-[1-3]$");
+                    if (!regex.IsMatch(_settingsData.HardLevel))
+                    {
+                        Utility.PrintError($"关卡设置错误：H{_settingsData.HardLevel}！");
+                        CurrentTaskChainPrintFinishedLog = false;
+                        break;
+                    }
+                }
                 Utility.MyDebugWriteLine($"[单个任务] - 执行 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
                 Utility.MyDebugWriteLine($"PipelineOverride - {taskItem.PipelineOverride}");
                 var status = string.IsNullOrEmpty(taskItem.PipelineOverride) ?
@@ -520,38 +557,27 @@ public class TaskManager
         ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
         MainViewModel.Instance.IsStoppingCurrentTask = false;
         _cancellationTokenSource.Dispose();
-        Utility.PrintLog("已停止");
+        Utility.PrintLog("任务已停止");
     }
 
     // 刷新后续任务时间
     // 规则：只刷新摸头类型任务时间，邀请、应用家具任务不刷新
     public void RefreshWaitingTaskChainDateTime(DateTime dateTime, bool isManualRefresh)
     {
-        int index = isManualRefresh ? 1 : 0;
         DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(dateTime);
-        DateTime lastTapTaskChainDateTime = dateTime;
-        if (isManualRefresh)
-        {
-            for (int i = 0; i < _waitingTaskChainList.Count; i++)
-            {
-                if (_waitingTaskChainList[i].TaskChainType == ETaskChainType.Tap)
-                {
-                    lastTapTaskChainDateTime = _waitingTaskChainList[i].ExecuteDateTime;
-                    break;
-                }
-            }
-        }
-        for (int i = index; i < _waitingTaskChainList.Count - 1; i++) //最后一个任务固定是重启游戏，因此是Count-1
+        DateTime lastTapTaskChainDateTime = isManualRefresh ? DateTime.MinValue : dateTime;
+        // 手动修改任务时间使用另外的处理方法，确保每个摸头任务时间间隔至少为3小时。只处理摸头任务
+        for (int i = 0; i < _waitingTaskChainList.Count; i++)
         {
             // 只处理当前时间段的
             if (_waitingTaskChainList[i].ExecuteDateTime < nextCafeRefreshDateTime)
             {
+                // 只处理摸头类型任务
                 if (_waitingTaskChainList[i].TaskChainType == ETaskChainType.Tap)
                 {
                     if (_waitingTaskChainList[i].ExecuteDateTime < lastTapTaskChainDateTime.AddHours(3))
                     {
                         _waitingTaskChainList[i].ExecuteDateTime = lastTapTaskChainDateTime.AddHours(3);
-                        lastTapTaskChainDateTime = _waitingTaskChainList[i].ExecuteDateTime;
                         // 排除延迟后跨时间段的任务
                         if (_waitingTaskChainList[i].ExecuteDateTime >= nextCafeRefreshDateTime)
                         {
@@ -562,6 +588,7 @@ public class TaskManager
                             i--;
                         }
                     }
+                    lastTapTaskChainDateTime = _waitingTaskChainList[i].ExecuteDateTime;
                 }
             }
         }
@@ -606,7 +633,8 @@ public class TaskManager
     // 生成一个任务片段，该片段中的任务链共用一个执行时间。邀请和应用家具预设的任务链在每个时间段只会生成一次
     private void CreateTaskFragment(DateTime executeDateTime, ref bool _hasCreatedCafe1InviteTask, ref bool _hasCreatedCafe2InviteTask,
         ref bool _hasCreatedCafe1AMApplyLayoutTask, ref bool _hasCreatedCafe1PMApplyLayoutTask,
-        ref bool _hasCreatedCafe2AMApplyLayoutTask, ref bool _hasCreatedCafe2PMApplyLayoutTask)
+        ref bool _hasCreatedCafe2AMApplyLayoutTask, ref bool _hasCreatedCafe2PMApplyLayoutTask,
+        ref bool _hasCreatedSweepHardLevelTask)
     {
         DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(executeDateTime); //04:00 or 03:00
         DateTime pmRefreshDateTime = nextServerRefreshDateTime.AddHours(-12); //16:00
@@ -689,6 +717,19 @@ public class TaskManager
                 _hasCreatedCafe1PMApplyLayoutTask = true;
             }
         }
+
+        //生成扫荡困难关卡任务，只在上午时间段生成
+        if (_settingsData.IsCreateSweepHardLevelTask)
+        {
+            if (_hasCreatedSweepHardLevelTask == false && executeDateTime < pmRefreshDateTime)
+            {
+                tempQueue = new();
+                tempQueue.Enqueue(new($"扫荡关卡H{_settingsData.HardLevel}", "SweepHardLevel", string.Empty, ETaskType.SweepHardLevel));
+                AddToWaitingTaskList(new($"扫荡困难关卡", 
+                    executeDateTime, ETaskChainType.SweepHardLevel, true, true, string.Empty, tempQueue));
+                _hasCreatedSweepHardLevelTask = true;
+            }
+        }
     }
 
     /// <summary>获取邀请任务的时间</summary>
@@ -741,6 +782,11 @@ public class TaskManager
                 foreach (var taskItem in taskChainItem.TaskQueue)
                 {
                     taskItem.PipelineOverride = GetOverrideJsonWithReadConfig(taskItem.Type);
+                }
+                // 扫荡困难关卡的任务，开始的Log特别处理，显示关卡
+                if (taskChainItem.TaskChainType == ETaskChainType.SweepHardLevel)
+                {
+                    taskChainItem.OverrideStartLogMessage = $"开始任务：扫荡关卡H{_settingsData.HardLevel}";
                 }
                 _currentTaskChainList.Add(taskChainItem);
             }
@@ -905,6 +951,9 @@ public class TaskManager
                 return "{\"CafeLayout@ApplyLayout\":{\"index\":" + _settingsData.Cafe2AMApplyLayoutIndex + "}}";
             case ETaskType.Cafe2PMApplyLayout:
                 return "{\"CafeLayout@ApplyLayout\":{\"index\":" + _settingsData.Cafe2PMApplyLayoutIndex + "}}";
+            //扫荡困难关卡
+            case ETaskType.SweepHardLevel:
+                return "{\"Mission@RecognizeMissionLevel\":{\"text\":\"" + _settingsData.HardLevel + "\"}}";
             default:
                 return "";
         }

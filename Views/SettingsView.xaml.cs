@@ -59,6 +59,22 @@ public partial class SettingsView
         SettingsViewModel.UpdateConfigJsonFile();
     }
 
+    private void HardLevelTextBoxLostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is System.Windows.Controls.TextBox textBox)
+        {
+            var regex = new Regex(@"^(99|[1-9][0-9]?)-[1-3]$");
+            if (!regex.IsMatch(textBox.Text))
+            {
+                HandyControl.Controls.MessageBox.Error("请输入正确的困难关卡");
+                Utility.MyDebugWriteLine($"输入了错误的关卡 H{textBox.Text}");
+                textBox.Clear();
+            }
+            ProgramDataModel.Instance.SettingsData.HardLevel = textBox.Text;
+            SettingsViewModel.UpdateConfigJsonFile();
+        }
+    }
+
     private void EmulatorPathTextBoxTextChanged(object sender, TextChangedEventArgs e)
     {
         TextBox tb = (TextBox)sender;

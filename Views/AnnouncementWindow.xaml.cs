@@ -18,9 +18,6 @@ public partial class AnnouncementWindow : Window
         LatestUpdateContent.Text = AnnouncementContent.LatestUpdateContent;
         NotesTitle.Text = AnnouncementContent.NotesTitle;
         NotesContent.Text = AnnouncementContent.NotesContent;
-        UpdateHistory.Text = AnnouncementContent.UpdateHistory;
-        UpdateHistoryTitle0.Text = AnnouncementContent.UpdateHistoryTitle0;
-        UpdateHistoryContent0.Text = AnnouncementContent.UpdateHistoryContent0;
     }
 
     private void CheckBoxOnClick(object sender, RoutedEventArgs e)

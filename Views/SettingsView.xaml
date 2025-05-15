@@ -158,8 +158,7 @@
                 </StackPanel>
                 <CheckBox Content="自动生成任务避开以下时间段" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsCreateTaskAvoidSpecifiedTime}"
-                          Click="SettingsCheckBoxClick" 
-                          IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                 </CheckBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBox Text="{Binding ProgramData.SettingsData.AvoidingStartTime, StringFormat={}{0:HH:mm:ss}}" Width="80"  Margin="0 0 0 0"
@@ -173,6 +172,16 @@
                              FontSize="13" VerticalAlignment="Center" VerticalContentAlignment="Center"
                              TextChanged="AvoidingEndTimeTextBoxTextChanged"
                              IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCreateTaskAvoidSpecifiedTime}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 6 0 6">
+                    <CheckBox Content="自动扫荡困难关卡" Margin="8"
+                              IsChecked="{Binding ProgramData.SettingsData.IsCreateSweepHardLevelTask}"
+                              Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                    </CheckBox>
+                    <TextBox Text="{Binding ProgramData.SettingsData.HardLevel}" Width="52" FontSize="12" 
+                             HorizontalContentAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                             LostFocus="HardLevelTextBoxLostFocus"
+                             IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCreateSweepHardLevelTask}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <CheckBox Content="学生好感等级提升时自动截图" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -240,23 +249,25 @@
                         <RowDefinition/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition />
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Button Grid.Row="0" Content="查看公告" Width="80" Height="36" Margin="0 0 0 10"
                             Command="{Binding OpenAnnouncementWindowCommand}"/>
-                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="QQ群 (还没创)"/>
-                    <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="B站主页" Foreground="Blue" Cursor="Hand"
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="B站主页" Foreground="Blue" Cursor="Hand"
                                MouseDown="BilibiliLinkMouseDown"/>
-                    <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="意见反馈页" Foreground="Blue" Cursor="Hand"
+                    <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="意见反馈页" Foreground="Blue" Cursor="Hand"
                                MouseDown="BilibiliReadmeLinkMouseDown"/>
-                    <StackPanel Grid.Row="4" Margin="100 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Grid.Row="3" Margin="120 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
                         <hc:Shield Subject="GitHub" Status="MaaBATapAssistant" VerticalAlignment="Center" VerticalContentAlignment="Center"
                                    Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.GitHubProjectUrl}"/>
                         <TextBlock Margin="10 0 0 0" Text="←点个Star吧求求了" VerticalAlignment="Center" TextAlignment="Center"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
+                    <hc:Shield Grid.Row="4" Subject="Gitee" Status="MaaBATapAssistant" 
+                               VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"
+                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.GiteeProjectUrl}"/>
                 </Grid>
             </StackPanel>
         </hc:ScrollViewer>

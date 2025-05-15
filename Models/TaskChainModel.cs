@@ -14,6 +14,7 @@ public enum ETaskChainType
     Tap,
     Invite,
     ApplyLayout,
+    SweepHardLevel,
     System, //系统自动添加的任务，比如启动游戏、重启游戏
 }
 

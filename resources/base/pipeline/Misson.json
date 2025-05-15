@@ -1,0 +1,159 @@
+{
+	"SweepHardLevel": {
+		"next": "Mission@EnterCampaign",
+		"interrupt": [
+			"WaitLoading",
+			"DisconnectPopup",
+			"ClosePopup",
+			"CloseReward",
+			"ClickHomeButton"
+		]
+	},
+	"Mission@EnterCampaign": {
+		"recognition": "TemplateMatch",
+		"template": "CampaignButton.png",
+		"roi": [1000, 460, 280, 260],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": "Mission@EnterMisson",
+		"interrupt": [
+			"WaitLoading",
+			"DisconnectPopup"
+		]
+	},
+	"Mission@EnterMisson": {
+		"recognition": "TemplateMatch",
+		"template": "Mission.png",
+		"roi": [640, 100, 350, 260],
+		"action": "Click",
+		"next": "Mission@SelectHardMission",
+		"interrupt": [
+			"WaitLoading",
+			"DisconnectPopup"
+		]
+	},
+	"Mission@SelectHardMission": {
+		"recognition": "TemplateMatch",
+		"template": ["MissionHard0.png", "MissionHard1.png"],
+		"roi": [960, 100, 210, 110],
+		"action": "Click",
+		"next": [
+			"Mission@RecognizeMissionLevel",
+			"Mission@GoToRightmost"
+		],
+		"interrupt": [
+			"WaitLoading",
+			"DisconnectPopup"
+		],
+		"timeout": 1000,
+		"on_error": "Mission@GoToLeftAndFindLevel"
+	},
+	"Mission@GoToRightmost": {
+		"recognition": "TemplateMatch",
+		"template": "MissionRightButton.png",
+		"roi": [1200, 270, 80, 180],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": [
+			"Mission@RecognizeMissionLevel",
+			"Mission@GoToRightmost"
+		],
+		"interrupt": [
+			"WaitLoading",
+			"DisconnectPopup"
+		],
+		"timeout": 1000,
+		"on_error": "Mission@GoToLeftAndFindLevel"
+	},
+	"Mission@GoToLeftAndFindLevel": {
+		"next": "Mission@RecognizeMissionLevel",
+		"interrupt": [
+			"Mission@GoToLeft",
+			"WaitLoading",
+			"DisconnectPopup"
+		],
+		"timeout": 5000,
+		"on_error": "Mission@PrintFindeLevelError"
+	},
+	"Mission@RecognizeMissionLevel": {
+		"recognition": "OCR",
+		"text": "22-3",
+		"roi": [676, 196, 86, 338],
+		"action": "Click",
+		"target_offset": [400, 10, 0, 0],
+		"next": "Mission@ClickMaxButton",
+		"timeout": 5000,
+		"on_error": "Mission@PrintFindeLevelError",
+		"doc": "根据用户选择重载此处的任务关卡"
+	},
+	"Mission@GoToLeft": {
+		"recognition": "TemplateMatch",
+		"template": "MissionLeftButton.png",
+		"roi": [0, 270, 80, 180],
+		"action": "Click",
+		"post_delay": 1000
+	},
+	"Mission@ClickMaxButton": {
+		"recognition": "TemplateMatch",
+		"template": ["MissionMaxButton0.png", "MissionMaxButton1.png"],
+		"roi": [1000, 238, 160, 124],
+		"action": "Click",
+		"next": "Mission@ClickSweepButton"
+	},
+	"Mission@ClickSweepButton": {
+		"recognition": "TemplateMatch",
+		"template": ["MissionSweepButton0.png", "MissionSweepButton1.png"],
+		"roi": [750, 336, 370, 126],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"Mission@RecognizeOtherPopup",
+			"Mission@RecognizeSweepPopup"
+		],
+		"timeout": 5000,
+		"on_error": "Mission@PrintFindeLevelError",
+		"doc": "体力足够的话按钮是蓝色的确认按钮，体力不足则是黄色的确认按钮"
+	},
+	"Mission@RecognizeOtherPopup": {
+		"recognition": "TemplateMatch",
+		"template": ["MissionPurchaseAP.png", "MissionRecover.png"],
+		"roi": [312, 128, 658, 468],
+		"threshold": 0.9,
+		"next": "Mission@PrintSweepError",
+		"doc": "识别异常情况：体力不足或者次数不足"
+	},
+	"Mission@RecognizeSweepPopup": {
+		"recognition": "TemplateMatch",
+		"template": ["MissionSweepPopup0.png", "MissionSweepPopup1.png"],
+		"roi": [312, 128, 658, 468],
+		"next": "Mission@ClickConfirmButton"
+	},
+	"Mission@ClickConfirmButton": {
+		"recognition": "TemplateMatch",
+		"template": "ConfirmButton.png",
+		"roi": [310, 82, 660, 546],
+		"action": "Click",
+		"next": "Mission@RecognizeRewardPopup"
+	},
+	"Mission@RecognizeRewardPopup": {
+		"recognition": "TemplateMatch",
+		"template": "MissionFinalReward.png",
+		"roi": [138, 352, 506, 328],
+		"next": "Mission@SweepDropScreenshot"
+	},
+	"Mission@SweepDropScreenshot": {
+		"recognition": "Custom",
+		"custom_recognition": "SweepDropScreenshot",
+		"doc": "截图掉落，最多保存10个截图"
+	},
+	"Mission@PrintSweepError": {
+		"action": "Custom",
+		"custom_action": "PrintSweepError",
+		"next": "ClosePopup"
+	},
+	"Mission@PrintFindeLevelError": {
+		"action": "Custom",
+		"custom_action": "PrintFindeLevelError",
+		"next": "Stop"
+	}
+}

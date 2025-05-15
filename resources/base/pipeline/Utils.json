@@ -92,7 +92,8 @@
 		"interrupt": [
 			"WaitLoading",
 			"DisconnectPopup"
-		]
+		],
+		"timeout": 10000
 	},
 	"RefreshGame@RecognizeLabel":{
 		"recognition": "TemplateMatch",

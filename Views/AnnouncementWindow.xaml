@@ -27,10 +27,6 @@
                                Foreground="Blue" Cursor="Hand" MouseDown="BilibiliReadmeLinkMouseDown"/>
                     <TextBlock Text="前往B站查看" FontSize="16" Margin="0 4 10 4"/>
                 </StackPanel>
-                <hc:Divider Margin="10 10 20 10"/>
-                <TextBlock x:Name="UpdateHistory" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBlock x:Name="UpdateHistoryTitle0" FontSize="18" Margin="10 4 0 4" FontWeight="Bold"/>
-                <TextBlock x:Name="UpdateHistoryContent0" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
             </StackPanel>
         </hc:ScrollViewer>
         <CheckBox Grid.Row="1" Content="下次更新前不再提示" HorizontalAlignment="Center"

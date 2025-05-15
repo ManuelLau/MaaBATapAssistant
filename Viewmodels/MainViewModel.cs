@@ -55,7 +55,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public static void StopTaskButton()
     {
-        TaskManager.Instance.Stop();
+        TaskManager.Instance.Stop(true);
         Utility.MyDebugWriteLine("手动点击停止任务按钮");
     }
 
