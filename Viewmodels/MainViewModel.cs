@@ -50,6 +50,7 @@ public partial class MainViewModel : ObservableObject
     public static void StartTaskButton()
     {
         TaskManager.Instance.Start();
+        Utility.MyDebugWriteLine("手动点击开始任务按钮");
     }
 
     [RelayCommand]
@@ -67,6 +68,7 @@ public partial class MainViewModel : ObservableObject
         DateTime nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(DateTime.Now);
         nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(nextCafeRefreshDateTime);
         TaskManager.Instance.CreateTask(nextCafeRefreshDateTime);
+        Utility.MyDebugWriteLine("手动点击生成/刷新任务按钮");
     }
 
     public void OpenAnnouncementWindow()
@@ -143,6 +145,7 @@ public partial class MainViewModel : ObservableObject
         File.WriteAllText(MyConstant.CacheFilePath, json);
         // 释放连接模拟器的资源
         TaskManager.Instance.MaaTaskerDispose();
+        Utility.MyDebugWriteLine("关闭程序");
     }
 
     [Obsolete]

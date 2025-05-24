@@ -155,7 +155,6 @@
 		"lower": [35, 60, 89],
 		"upper": [55, 80, 109],
 		"count": 32,
-		"next": "Stop",
 		"doc": "识别咖啡厅收益按钮处的色值判断是否关闭了所有弹窗"
 	},
 	"Cafe@RecognizeFirstTimePopup": {

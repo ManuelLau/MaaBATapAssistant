@@ -50,4 +50,5 @@ public partial class SettingsDataModel : ObservableObject
     [ObservableProperty][JsonIgnore]
     public int autoRunEmulatorWaittingTimeSpan = MyConstant.AutoRunEmulatorWaittingDefaultTimeSpan;
     public bool DoNotShowAnnouncementAgain { get; set; } = false;
+    public int ExitEmulatorIndex { get; set; } = 0; //调用命令行关闭模拟器时的索引，默认关闭索引为0的模拟器
 }

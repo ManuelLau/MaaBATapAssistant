@@ -174,7 +174,7 @@
                              IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCreateTaskAvoidSpecifiedTime}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 6 0 6">
-                    <CheckBox Content="自动扫荡困难关卡" Margin="8"
+                    <CheckBox Content="自动生成扫荡困难关卡任务" Margin="8"
                               IsChecked="{Binding ProgramData.SettingsData.IsCreateSweepHardLevelTask}"
                               Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                     </CheckBox>

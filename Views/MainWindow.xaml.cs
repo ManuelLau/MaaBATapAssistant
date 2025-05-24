@@ -12,6 +12,7 @@ public partial class MainWindow
         DataContext = MainViewModel.Instance;
         MainViewModel.Instance.AppStart();
         Closing += MainViewModel.Instance.AppClosing;
+        Utility.MyDebugWriteLine("启动程序");
 #if DEBUG
         CheckVersionIsSame();
 #endif

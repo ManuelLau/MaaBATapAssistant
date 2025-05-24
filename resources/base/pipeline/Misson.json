@@ -126,6 +126,7 @@
 		"recognition": "TemplateMatch",
 		"template": ["MissionSweepPopup0.png", "MissionSweepPopup1.png"],
 		"roi": [312, 128, 658, 468],
+		"threshold": 0.9,
 		"next": "Mission@ClickConfirmButton"
 	},
 	"Mission@ClickConfirmButton": {

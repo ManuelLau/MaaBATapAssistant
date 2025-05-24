@@ -15,7 +15,11 @@ public static class CustomTask
     {
         var bitmap = new BitmapImage();
         bitmap.BeginInit();
-        bitmap.StreamSource = args.Image.EncodedDataStream;
+        if (!args.Image.TryGetEncodedData(out Stream? buffer))
+        {
+            Utility.MyDebugWriteLine("截图失败！");
+        }
+        bitmap.StreamSource = buffer;
         bitmap.EndInit();
         bitmap.Freeze(); // 冻结图像以提高性能
         var encoder = new PngBitmapEncoder();
@@ -48,7 +52,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(InviteUnavailableSkipTask);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Utility.PrintError("咖啡厅邀请失败，邀请券冷却中");
             TaskManager.Instance.CurrentTaskChainPrintFinishedLog = false;
@@ -82,7 +86,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(InviteCancelNotify);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Utility.PrintLog("规则不符，邀请已取消");
             TaskManager.Instance.CurrentTaskChainPrintFinishedLog = false;
@@ -94,7 +98,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(DuplicatedLoginStopTask);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Utility.PrintLog("发现重复登录，任务即将停止");
             TaskManager.Instance.Stop(true);
@@ -106,7 +110,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(MaintenanceStopTask);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             //Utility.PrintLog("服务器维护，任务将延后半小时执行");
             Utility.PrintLog("服务器维护，任务即将停止");
@@ -119,7 +123,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(ClientUpdateStopTask);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Utility.PrintError("游戏客户端需要更新，任务即将停止。请手动更新后再启动任务");
             TaskManager.Instance.Stop(true);
@@ -131,7 +135,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(IPBlockedStopTask);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Utility.PrintError("登录游戏失败（ip受限）！请开启加速器后再尝试");
             TaskManager.Instance.Stop(true);
@@ -143,7 +147,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(PrintSweepError);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Utility.PrintError($"扫荡关卡H{ProgramDataModel.Instance.SettingsData.HardLevel}失败，体力不足或次数不足");
             TaskManager.Instance.CurrentTaskChainPrintFinishedLog = false;
@@ -155,7 +159,7 @@ public static class CustomTask
     {
         public string Name { get; set; } = nameof(PrintFindeLevelError);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Utility.PrintError($"寻找关卡H{ProgramDataModel.Instance.SettingsData.HardLevel}失败，请确认关卡填写正确或关卡已解锁");
             TaskManager.Instance.CurrentTaskChainPrintFinishedLog = false;

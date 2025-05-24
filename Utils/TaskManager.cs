@@ -112,9 +112,10 @@ public class TaskManager
         {
             _cancellationTokenSource.Cancel();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Utility.MyDebugWriteLine("Stop() - _cancellationTokenSource.Cancel() failed! - " + ex);
+            Utility.MyDebugWriteLine("Stop()-_cancellationTokenSource.Cancel() failed!");
+            Utility.MyDebugWriteLine($"Error: {e.Message}");
         }
         await Task.Run(MaaTaskerDispose);
         if (!isExecutingCurrentTask)
@@ -232,12 +233,13 @@ public class TaskManager
             _maaTasker.Resource.Register(new PrintFindeLevelError());
             _maaTasker.Resource.Register(new SweepDropScreenshot());
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Utility.PrintLog("模拟器初始化失败，可能是ADB连接出现问题，请尝试重启模拟器、ADB或者重启系统");
+            Utility.MyDebugWriteLine($"Error: {e.Message}");
             return false;
         }
-        if (_maaTasker == null || !_maaTasker.Initialized)
+        if (_maaTasker == null || !_maaTasker.IsInitialized)
         {
             Utility.PrintLog("模拟器初始化失败，可能是ADB连接出现问题，请尝试重启模拟器、ADB或者重启系统");
             return false;
@@ -251,6 +253,11 @@ public class TaskManager
         if (string.IsNullOrEmpty(_settingsData.EmulatorPath))
         {
             Utility.PrintError("未设置模拟器路径，请先设置模拟器路径或手动打开模拟器");
+        }
+        else if (!System.IO.Path.Exists(_settingsData.EmulatorPath))
+        {
+            Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
+            Utility.MyDebugWriteLine(_settingsData.EmulatorPath);
         }
         else
         {
@@ -283,12 +290,12 @@ public class TaskManager
             }
             catch (TaskCanceledException)
             {
-                Utility.MyDebugWriteLine($"手动停止自动打开模拟器");
-                StopCurrentTask();
+                Utility.MyDebugWriteLine("手动停止自动打开模拟器");
+                //StopCurrentTask();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Utility.MyDebugWriteLine($"无法打开模拟器: {ex.Message}");
+                Utility.MyDebugWriteLine($"无法打开模拟器: {e.Message}");
                 Utility.PrintError("打开模拟器失败！请检查路径是否正确");
             }
         }
@@ -311,9 +318,10 @@ public class TaskManager
         {
             resource = new(maaSourcePaths);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Utility.PrintLog("加载资源文件失败");
+            Utility.MyDebugWriteLine($"Error: {e.Message}");
             return false;
         }
         return true;
@@ -392,25 +400,26 @@ public class TaskManager
             var currentTaskChain = _currentTaskChainList[0];
             currentTaskChain.Status = ETaskChainStatus.Running;
 
-            Utility.MyDebugWriteLine($"[任务链]   - 执行 - {currentTaskChain.Name}");
-            if (currentTaskChain.NeedPrintLog)
-            {
-                Utility.PrintLog(currentTaskChain.StartLogMessage);
-            }
             if (_maaTasker == null || _maaTasker.IsInvalid)
             {
                 Utility.MyDebugWriteLine($"maaTasker is null or invalid!");
                 Utility.PrintLog("模拟器未连接");
                 if (!await AutoConnect(token))
                 {
-                    Stop(true);
+                    if (!_cancellationTokenSource.IsCancellationRequested)
+                    {
+                        Stop(true);
+                    }
                     return;
                 }
             }
             if (_maaTasker == null)
             {
-                Utility.MyDebugWriteLine($"maaTasker依然是null，直接停止任务");
-                Stop(true);
+                Utility.MyDebugWriteLine("maaTasker依然是null，直接停止任务");
+                if (!_cancellationTokenSource.IsCancellationRequested)
+                {
+                    Stop(true);
+                }
                 return;
             }
             var device = _maaTasker.Toolkit.AdbDevice.Find();
@@ -420,11 +429,23 @@ public class TaskManager
                 Utility.PrintLog("模拟器失去连接，正在重新打开...");
                 if (!await AutoConnect(token))
                 {
-                    Stop(true);
+                    if (!_cancellationTokenSource.IsCancellationRequested)
+                    {
+                        Stop(true);
+                    }
                     return;
                 }
             }
-            
+
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+            Utility.MyDebugWriteLine($"[任务链]   - 执行 - {currentTaskChain.Name}");
+            if (currentTaskChain.NeedPrintLog)
+            {
+                Utility.PrintLog(currentTaskChain.StartLogMessage);
+            }
             bool anyTaskFailed = false;
             CurrentTaskChainPrintFinishedLog = true; // 是否打印任务结束的信息(成功、失败、异常)
             foreach (var taskItem in currentTaskChain.TaskQueue)
@@ -504,31 +525,28 @@ public class TaskManager
             {
                 Utility.PrintError("自动退出模拟器失败，请先填写模拟器路径");
             }
+            else if (!System.IO.Path.Exists(_settingsData.EmulatorPath))
+            {
+                Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
+            }
             else
             {
                 try
                 {
-                    string fileName = System.IO.Path.GetFileName(_settingsData.EmulatorPath);
-                    Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(fileName));
-                    foreach (Process process in processes)
+                    if (ExitEmulator())
                     {
-                        if (process.MainModule != null &&
-                            process.MainModule.FileName.Equals(_settingsData.EmulatorPath, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            process.Kill();
-                            process.WaitForExit();
-                            isExitEmulatorSucceed = true;
-                            Utility.PrintLog("已自动退出模拟器");
-                        }
-                        else
-                        {
-                            Utility.PrintError("自动退出模拟器失败，请确认是否已正确填写模拟器路径");
-                        }
+                        isExitEmulatorSucceed = true;
+                        Utility.PrintLog("已自动退出模拟器");
+                    }
+                    else
+                    {
+                        Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
                     }
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    Utility.MyDebugWriteLine($"自动退出模拟器时出现错误: {ex.Message}");
+                    Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
+                    Utility.MyDebugWriteLine($"自动退出模拟器时出现错误: {e.Message}");
                 }
             }
         }
@@ -963,9 +981,89 @@ public class TaskManager
     {
         if (_maaTasker != null)
         {
-            _maaTasker.Abort().Wait();
+            _maaTasker.Stop().Wait();
             _maaTasker.Dispose();
         }
+    }
+
+    /// <summary>
+    /// 退出模拟器，针对MuMu模拟器、雷电模拟器做特殊处理，调用命令行来关闭
+    /// MuMu模拟器如果直接关闭进程，虚拟机并不会顺带关闭，导致资源占用
+    /// </summary>
+    private bool ExitEmulator()
+    {
+        string mumu = "MuMuPlayer";
+        string leidian = "dnplayer";
+        if (_settingsData.EmulatorPath.IndexOf(mumu, StringComparison.OrdinalIgnoreCase) >= 0
+            || _settingsData.EmulatorPath.IndexOf(leidian, StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            // 调用MuMu的控制台方法关闭模拟器
+            string? directory = System.IO.Path.GetDirectoryName(_settingsData.EmulatorPath);
+            if (string.IsNullOrEmpty(directory))
+            { 
+                return false;
+            }
+            string programPath = string.Empty;
+            string argument = string.Empty;
+            // MuMu模拟器
+            if (_settingsData.EmulatorPath.IndexOf(mumu, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                programPath = System.IO.Path.Combine(directory, "MuMuManager.exe");
+                argument = $"control -v {_settingsData.ExitEmulatorIndex} shutdown";
+            }
+            // 雷电模拟器
+            else if (_settingsData.EmulatorPath.IndexOf(leidian, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                programPath = System.IO.Path.Combine(directory, "ldconsole.exe");
+                argument = $"quit --index {_settingsData.ExitEmulatorIndex}";
+            }
+
+            // 执行命令行任务
+            Utility.MyDebugWriteLine($"执行命令行 - ProgramPath:{programPath} - Argument:{argument}");
+            ProcessStartInfo processStartInfo = new()
+            {
+                FileName = programPath,
+                Arguments = argument,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using Process process = new();
+            process.StartInfo = processStartInfo;
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            string errorOutput = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+
+            // 检查是否有错误输出
+            if (!string.IsNullOrEmpty(errorOutput))
+            {
+                Utility.MyDebugWriteLine("执行命令行遇到错误！运行结果：" + output);
+                Utility.MyDebugWriteLine("错误：" + errorOutput);
+                return false;
+            }
+            return true;
+        }
+        // 通用的退出方法，直接关闭同名进程
+        else
+        {
+            string fileName = System.IO.Path.GetFileName(_settingsData.EmulatorPath);
+            Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(fileName));
+            foreach (Process process in processes)
+            {
+                if (process.MainModule != null &&
+                    process.MainModule.FileName.Equals(_settingsData.EmulatorPath, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    process.Kill();
+                    process.WaitForExit();
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     // 从json里读取配置并使用配置初始化
