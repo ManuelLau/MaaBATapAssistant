@@ -1,8 +1,4 @@
 {
-	"CafeInvite@RecognizeTicketAvailable": {
-		"roi": [838, 580, 104, 44],
-		"doc": "适配新版UI"
-	},
 	"CafeInvite@ClickSortTypeButton": {
 		"text": ["羈絆等級", "精選", "學園", "名字"]
 	},

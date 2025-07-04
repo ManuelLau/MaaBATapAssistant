@@ -36,11 +36,11 @@
 		]
 	},
 	"StartUp@TitleScreen": {
-		"next": "StartUp@NexonCheckAnnouncementCloseButtonEntry",
+		"next": "StartUp@NexonCheckHomePageLabelEntry",
 		"doc": "国际服-覆写登录流程。从标题页面进入到主页，固定会弹公告，检测公告弹窗的关闭按钮"
 	},
-	"StartUp@NexonCheckAnnouncementCloseButtonEntry": {
-		"next": "StartUp@NexonCheckAnnouncementCloseButton",
+	"StartUp@NexonCheckHomePageLabelEntry": {
+		"next": "StartUp@NexonCheckHomePageLabel",
 		"interrupt": [
 			"StartUp@WaitLoading",
 			"StartUp@NexonLoginPopUp",
@@ -50,7 +50,13 @@
 			"StartUp@EventCheckIn",
 			"StartUp@NexonTitleScreen"
 		],
-		"timeout": 120000
+		"timeout": 120000,
+		"doc": "先检测是否进入到主界面，再检测弹出的广告页面。*如果广告页面弹出过快，可能会有问题"
+	},
+	"StartUp@NexonCheckHomePageLabel": {
+		"recognition": "TemplateMatch",
+		"template": "HomePageLabel.png",
+		"next": "StartUp@NexonCheckAnnouncementCloseButton"
 	},
 	"StartUp@NexonCheckAnnouncementCloseButton": {
 		"recognition": "TemplateMatch",
@@ -70,7 +76,7 @@
 	},
 	"StartUp@NexonLoginPopUp": {
 		"recognition": "OCR",
-		"text": "今日不再顯示",
+		"text": "今日不再",
 		"action": "Click",
 		"doc": "国际服-关闭活动提示弹窗"
 	},

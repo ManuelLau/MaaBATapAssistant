@@ -12,7 +12,7 @@
 			"ClickHomeButton",
 			"IdelTapScreen"
 		],
-		"doc": "可以在任何地方进入到1号咖啡厅。适配日服，4.0fes后UI更新了"
+		"doc": "可以在任何地方进入到1号咖啡厅。适配日服4.0fes后的新版UI"
 	},
 	"MoveToCafe1New@InCafe1":{
 		"recognition": "TemplateMatch",
@@ -31,7 +31,6 @@
 		"next": "Cafe@RecognizeTopLeftText",
 		"interrupt": "WaitLoading"
 	},
-
 
 	"MoveToCafe2": {
 		"next": [

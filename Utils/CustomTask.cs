@@ -68,9 +68,9 @@ public static class CustomTask
         {
             ScreenShot(args, "Invite");
 
-            // 获取所有截图，并按创建日期排序。同一分钟创建的文件，会根据文件名再排序，时间早的在前面
+            // 获取所有截图，并按文件名中的日期排序
             var files = Directory.GetFiles(MyConstant.ScreenshotImageDirectory, "Invite-*.png")
-                                 .Select(file => new FileInfo(file)).OrderBy(file => file.CreationTime).ToList();
+                                 .Select(file => new FileInfo(file)).OrderBy(file => file.Name).ToList();
             // 最多保存10个截图
             const short maxScreenshotCount = 10;
             while (files.Count > maxScreenshotCount)
@@ -175,9 +175,9 @@ public static class CustomTask
         {
             ScreenShot(args, "Drop");
 
-            // 获取所有截图，并按创建日期排序。同一分钟创建的文件，会根据文件名再排序，时间早的在前面
+            // 获取所有截图，并按文件名中的日期排序
             var files = Directory.GetFiles(MyConstant.ScreenshotImageDirectory, "Drop-*.png")
-                                 .Select(file => new FileInfo(file)).OrderBy(file => file.CreationTime).ToList();
+                                 .Select(file => new FileInfo(file)).OrderBy(file => file.Name).ToList();
             // 最多保存10个截图
             const short maxScreenshotCount = 10;
             while (files.Count > maxScreenshotCount)

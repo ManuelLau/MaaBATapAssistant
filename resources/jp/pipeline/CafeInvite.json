@@ -1,8 +1,4 @@
 {
-	"CafeInvite@RecognizeTicketAvailable": {
-		"roi": [838, 580, 104, 44],
-		"doc": "4.0fes后UI改了"
-	},
 	"CafeInvite@ClickSortTypeButton": {
 		"text": ["絆ランク", "お気に入", "名前", "学校"]
 	},
