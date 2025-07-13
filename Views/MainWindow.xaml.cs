@@ -56,9 +56,11 @@ public partial class MainWindow
         }
         else
         {
-            if (!version.Equals(new Version(Utils.MyConstant.AppVersion + ".0")))
+            Version myConstantVersion = new(Utils.MyConstant.AppVersion + ".0");
+            if (version.Major == myConstantVersion.Major && version.Minor == myConstantVersion.Minor && version.Build == myConstantVersion.Build
+                == false)
             {
-                throw new Exception("版本号不一致！");
+                throw new Exception("软件版本号前3位不一致！");
             }
         }
     }

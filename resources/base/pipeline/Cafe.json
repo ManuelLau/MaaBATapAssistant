@@ -35,7 +35,8 @@
 	},
 	"MoveToCafe1@MoveToCafe1": {
 		"recognition": "OCR",
-		"text": ["1号店","'1'号店"],
+		"text": "1号店",
+		"replace": ["'", ""],
 		"roi": [5, 55, 385, 125],
 		"action": "Click",
 		"post_delay": 1000,
@@ -77,7 +78,8 @@
 	},
 	"MoveToCafe2@MoveToCafe2": {
 		"recognition": "OCR",
-		"text": ["2号店","'2'号店"],
+		"text": "2号店",
+		"replace": ["'", ""],
 		"roi": [5, 55, 385, 125],
 		"action": "Click",
 		"post_delay": 1000,

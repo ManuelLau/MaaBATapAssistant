@@ -9,8 +9,8 @@ public partial class UpdateViewModel : ObservableObject
 {
     [ObservableProperty]
     public ProgramDataModel programData = ProgramDataModel.Instance;
-    [ObservableProperty]
-    public string text = string.Empty;
+    private bool appCanUpdate = false;
+    private bool resourcesCanUpdate = false;
     private string tempFileName = string.Empty;
 
     public UpdateViewModel()
@@ -26,7 +26,8 @@ public partial class UpdateViewModel : ObservableObject
     {
         await Task.Run(() =>
         {
-            if (UpdateTool.CheckNewVersion(false))
+            UpdateTool.CheckBothNewVersion(false, out appCanUpdate, out resourcesCanUpdate);
+            if (appCanUpdate || resourcesCanUpdate)
             {
                 ProgramData.HasNewVersion = true;
             }
@@ -40,7 +41,14 @@ public partial class UpdateViewModel : ObservableObject
     [RelayCommand]
     public async Task DownloadUpdateButtonClick()
     {
-        tempFileName = await UpdateTool.UpdateApp();
+        if (appCanUpdate)
+        {
+            tempFileName = await UpdateTool.UpdateApp();
+        }
+        else if (resourcesCanUpdate)
+        {
+            await UpdateTool.UpdateResource(false);
+        }
     }
 
     [RelayCommand]

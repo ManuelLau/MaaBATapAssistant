@@ -1,5 +1,4 @@
 ﻿using MaaBATapAssistant.Models;
-using MaaBATapAssistant.Utils;
 using MaaBATapAssistant.ViewModels;
 
 namespace MaaBATapAssistant.Views;
@@ -14,7 +13,7 @@ public partial class UpdateWindow
         _viewModel = new UpdateViewModel();
         DataContext = _viewModel;
 
-        if (string.Equals(ProgramDataModel.Instance.ProjectApiUrl,MyConstant.GiteeApiUrl))
+        if (ProgramDataModel.Instance.DownloadSource == EDownloadSource.Gitee)
         {
             ApiOption0.IsChecked = true;
             ApiOption1.IsChecked = false;
@@ -30,11 +29,11 @@ public partial class UpdateWindow
     {
         if (ApiOption0.IsChecked == true)
         {
-            ProgramDataModel.Instance.ProjectApiUrl = MyConstant.GiteeApiUrl;
+            ProgramDataModel.Instance.DownloadSource = EDownloadSource.Gitee;
         }
         else if (ApiOption1.IsChecked == true)
         {
-            ProgramDataModel.Instance.ProjectApiUrl = MyConstant.GitHubApiUrl;
+            ProgramDataModel.Instance.DownloadSource = EDownloadSource.GitHub;
         }
     }
 }

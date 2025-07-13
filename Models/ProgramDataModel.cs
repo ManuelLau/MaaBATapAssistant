@@ -26,6 +26,11 @@ public enum ECafeInviteSortTypeSettingOptions
     [Description("好感由低到高")] BondLvFromLowToHigh,
     [Description("精选排序")] Pinned,
 };
+public enum EDownloadSource
+{
+    Gitee,
+    GitHub
+}
 #endregion
 
 public partial class ProgramDataModel : ObservableObject
@@ -45,7 +50,7 @@ public partial class ProgramDataModel : ObservableObject
     [ObservableProperty]
     public string updateInfo = string.Empty;
     [ObservableProperty]
-    public string projectApiUrl;
+    public EDownloadSource downloadSource;
     [ObservableProperty]
     public bool isCheckingNewVersion;
     [ObservableProperty]
@@ -58,6 +63,8 @@ public partial class ProgramDataModel : ObservableObject
     public double downloadProgress;
     [ObservableProperty]
     public string downloadedSizeInfo = string.Empty;
+    [ObservableProperty]
+    public string resourcesVersion = "0.0.0.0";
 
     public SettingsDataModel SettingsData { get; set; }
 
@@ -65,16 +72,13 @@ public partial class ProgramDataModel : ObservableObject
     {
         IsAfkTaskRunning = false;
         IsCurrentTaskExecuting = false;
-        ProjectApiUrl = MyConstant.GiteeApiUrl;
+        DownloadSource = EDownloadSource.Gitee;
         IsCheckingNewVersion = false;
         HasNewVersion = false;
         IsDownloadingFiles = false;
         IsReadyForApplyUpdate = false;
+        ResourcesVersion = ResourcesVersionInfo.GetResourcesVersion();
 
         SettingsData = new();
-    }
-    static ProgramDataModel()
-    {
-
     }
 }

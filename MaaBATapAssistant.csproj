@@ -9,7 +9,7 @@
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>resources\AppIcon_256x256.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>0.3.5.0</Version>
+    <Version>0.3.6.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,7 +35,7 @@
     </PackageReference>
     <PackageReference Include="HandyControl" Version="3.5.1" />
     <PackageReference Include="Maa.Framework.Native" Version="4.2.0" />
-    <PackageReference Include="Maa.Framework.Runtime.win-x64" Version="4.2.3" />
+    <PackageReference Include="Maa.Framework.Runtime.win-x64" Version="4.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="SharpCompress" Version="0.39.0" />

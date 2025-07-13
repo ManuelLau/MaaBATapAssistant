@@ -210,7 +210,7 @@
                         <RowDefinition Height="36"/>
                         <RowDefinition Height="36"/>
                         <RowDefinition Height="36"/>
-                        <RowDefinition Height="36"/>
+                        <RowDefinition Height="64"/>
                         <RowDefinition Height="36"/>
                     </Grid.RowDefinitions>
 
@@ -232,13 +232,20 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 0 0 0" HorizontalAlignment="Center">
-                        <hc:Shield Subject="软件版本" Status="{x:Static utils:MyConstant.AppVersion}" HorizontalAlignment="Center"/>
-                        <CheckBox Content="启动软件时自动检查更新" Margin="16 0 0 0"
-                                  IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
-                                  Click="SettingsCheckBoxClick">
-                        </CheckBox>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <hc:Shield Subject="软件版本" Margin="0 4 0 4" Status="{x:Static utils:MyConstant.AppVersion}" HorizontalAlignment="Center"/>
+                            <hc:Shield Subject="资源版本" Margin="0 4 0 4" Status="{Binding ProgramData.ResourcesVersion}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <CheckBox Content="启动软件时自动检查更新" Margin="16 4 0 6"
+                                IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
+                                Click="SettingsCheckBoxClick"/>
+                            <CheckBox Content="自动更新资源文件" Margin="16 6 0 4"
+                                IsChecked="{Binding ProgramData.SettingsData.IsAutoUpdateResources}"
+                                Click="SettingsCheckBoxClick"/>
+                        </StackPanel>
                     </StackPanel>
-                    
+
                     <Button Grid.Row="4" Content="检查更新" Width="80" Height="36" Margin="0 0 0 0"
                                  Command="{Binding OpenUpdateWindowCommand}"/>
                 </Grid>
@@ -261,13 +268,13 @@
                                MouseDown="BilibiliReadmeLinkMouseDown"/>
                     <StackPanel Grid.Row="3" Margin="120 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
                         <hc:Shield Subject="GitHub" Status="MaaBATapAssistant" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                   Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.GitHubProjectUrl}"/>
+                                   Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectGitHubUrl}"/>
                         <TextBlock Margin="10 0 0 0" Text="←点个Star吧求求了" VerticalAlignment="Center" TextAlignment="Center"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                     <hc:Shield Grid.Row="4" Subject="Gitee" Status="MaaBATapAssistant" 
                                VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"
-                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.GiteeProjectUrl}"/>
+                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectGiteeUrl}"/>
                 </Grid>
             </StackPanel>
         </hc:ScrollViewer>

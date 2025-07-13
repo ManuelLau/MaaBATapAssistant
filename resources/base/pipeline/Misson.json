@@ -24,6 +24,7 @@
 	"Mission@EnterMisson": {
 		"recognition": "TemplateMatch",
 		"template": "Mission.png",
+		"pre_delay": 1000,
 		"roi": [640, 100, 350, 260],
 		"action": "Click",
 		"next": "Mission@SelectHardMission",
@@ -37,6 +38,7 @@
 		"template": ["MissionHard0.png", "MissionHard1.png"],
 		"roi": [960, 100, 210, 110],
 		"action": "Click",
+		"post_delay": 1000,
 		"next": [
 			"Mission@RecognizeMissionLevel",
 			"Mission@GoToRightmost"
@@ -78,7 +80,8 @@
 	"Mission@RecognizeMissionLevel": {
 		"recognition": "OCR",
 		"text": "22-3",
-		"roi": [676, 196, 86, 338],
+		"replace": ["'", ""],
+		"roi": [626, 146, 186, 438],
 		"action": "Click",
 		"target_offset": [400, 10, 0, 0],
 		"next": "Mission@ClickMaxButton",

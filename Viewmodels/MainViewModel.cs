@@ -133,7 +133,16 @@ public partial class MainViewModel : ObservableObject
             Task.Run(async () =>
             {
                 await Task.Delay(1000); // 延迟1秒
-                UpdateTool.CheckNewVersion(true);
+                UpdateTool.CheckBothNewVersion(true, out _, out _);
+            });
+        }
+        else if (ProgramData.SettingsData.IsAutoUpdateResources)
+        {
+            // 默认自动检查资源文件更新
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000); // 延迟1秒
+                UpdateTool.CheckNewVersion(false, true, out _, out _, true);
             });
         }
     }
@@ -146,24 +155,5 @@ public partial class MainViewModel : ObservableObject
         // 释放连接模拟器的资源
         TaskManager.Instance.MaaTaskerDispose();
         Utility.MyDebugWriteLine("关闭程序");
-    }
-
-    [Obsolete]
-    private async void AutoDetectDevice()
-    {
-        MaaToolkit _maaToolkit = new(true);//init: true
-        var devices = await _maaToolkit.AdbDevice.FindAsync();
-        if (devices.IsEmpty)
-        {
-            Utility.MyDebugWriteLine("找不到任何设备");
-        }
-        else
-        {
-            Utility.MyDebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
-            foreach (var e in devices)
-            {
-                Utility.MyDebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
-            }
-        }
     }
 }

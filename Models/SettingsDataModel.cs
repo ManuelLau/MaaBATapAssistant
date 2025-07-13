@@ -41,10 +41,8 @@ public partial class SettingsDataModel : ObservableObject
     public bool IsReconnectAfterDuplicatedLogin { get; set; } = true;
     public bool IsExitGameAfterTaskFinished { get; set; } = false;
     public bool IsExitEmulatorAfterTaskFinished { get; set; } = false;
-    //public bool IsAutoCheckResourceUpdate { get; set; } = false; // 未使用
     public bool IsAutoCheckAppUpdate { get; set; } = true;
-    //public bool IsAutoUpdateResource { get; set; } = false; // 未使用
-    //public bool IsAutoUpdateApp { get; set; } = false; // 未使用
+    public bool IsAutoUpdateResources { get; set; } = true;
     [ObservableProperty][JsonIgnore]
     public string emulatorPath = string.Empty;
     [ObservableProperty][JsonIgnore]

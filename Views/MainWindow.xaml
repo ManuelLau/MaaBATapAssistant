@@ -29,6 +29,9 @@
                 <TextBlock Text="-" VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False" Margin="6 0 6 0"/>
                 <TextBlock Text="{Binding Source={x:Static utils:MyConstant.AppVersion}, StringFormat='v{0}'}"
                            VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False"/>
+                <TextBlock Text="- 资源版本" VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False" Margin="6 0 6 0"/>
+                <TextBlock Text="{Binding ProgramData.ResourcesVersion, StringFormat='v{0}'}"
+                           VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False"/>
             </StackPanel>
         </Grid>
     </hc:Window.NonClientAreaContent>
@@ -85,7 +88,7 @@
                                     Foreground="{DynamicResource BlackColor}"
                                     Visibility="{c:Binding !ProgramData.IsAfkTaskRunning}"
                                     VerticalContentAlignment="Center" Command="{Binding StartTaskButtonCommand}"
-                                    IsEnabled="True"/>
+                                    IsEnabled="{c:Binding !ProgramData.IsCheckingNewVersion and !ProgramData.IsDownloadingFiles}"/>
 
                                 <Button Content="停止任务" Width="90" Height="40" Margin="10 0 10 0"
                                     Foreground="{DynamicResource BlackColor}"

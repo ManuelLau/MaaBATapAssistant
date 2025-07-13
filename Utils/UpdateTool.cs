@@ -14,42 +14,166 @@ using MaaBATapAssistant.Models;
 
 namespace MaaBATapAssistant.Utils;
 
+/* 更新策略：
+ * 先检测软件版本，如果有更新则进行全文件更新
+ * 如果软件版本已是最新，则检测资源文件版本，如果有更新则只更新资源文件
+ * 启动软件时会自动进行一次资源文件更新的检测，如果有更新则提示用户
+ * 执行每日凌晨3点/4点重启游戏时会自动检测+更新资源文件
+ * 注：更新资源文件时不包括ocr模型文件
+ */
 public static class UpdateTool
 {
-    public static bool CheckNewVersion(bool needPrintLog)
+    /// <summary>
+    /// 先检查软件新版本，再检查资源文件新版本
+    /// 如果软件有新版本则不检查资源文件。因为更新软件会同时更新资源文件
+    /// </summary>
+    /// <param name="needPrintLog">是否需要打印Log到主界面</param>
+    /// <returns>是否发现新版本</returns>
+    public static void CheckBothNewVersion(bool needPrintLog, out bool _appCanUpdate, out bool _resourcesCanUpdate)
     {
-        // 获取并检查Version是否非空
-        Version? localVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        if (localVersion is null)
+        _appCanUpdate = false;
+        _resourcesCanUpdate = false;
+        CheckNewVersion(true, needPrintLog, out bool appIsUpToDate, out bool appCanUpdate, true);
+        if (appIsUpToDate)
         {
-            ProgramDataModel.Instance.UpdateInfo = "获取当前程序版本失败";
-            if (needPrintLog)
-                Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
-            Utility.MyDebugWriteLine("获取当前程序版本失败，LocalVersion为空");
-            return false;
+            CheckNewVersion(false, needPrintLog, out bool resourcesIsUpToDate, out bool resourcesCanUpdate, true);
+            if (appIsUpToDate && resourcesIsUpToDate)
+            {
+                ProgramDataModel.Instance.UpdateInfo = "当前已是最新版本";
+                if (needPrintLog)
+                    Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
+            }
+            else if (resourcesCanUpdate)
+            {
+                _resourcesCanUpdate = true;
+            }
         }
-        if (!GetLatestVersionAndDownloadUrl(ProgramDataModel.Instance.ProjectApiUrl, MyConstant.PlatformTag, out string latestVersionString, out string downloadUrl))
+        else
         {
-            if (needPrintLog)
-                Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
-            Utility.MyDebugWriteLine("检查新版本时网络请求出错");
-            return false;
+            if (appCanUpdate)
+                _appCanUpdate = true;
+        }
+    }
+
+    /// <param name="checkApp">true为检查软件更新，false为检查资源文件更新</param>
+    public static void CheckNewVersion(bool checkApp, bool needPrintLog, out bool isUpToDate, out bool canUpdate, bool asyncUpdateResources)
+    {
+        isUpToDate = false;
+        canUpdate = false;
+        // 获取并检查Version是否非空
+        Version? localAppVersion = null;
+        Version? localResourceVersion = null;
+        if (checkApp)
+        {
+            localAppVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            if (localAppVersion is null)
+            {
+                ProgramDataModel.Instance.UpdateInfo = "获取当前软件版本失败";
+                if (needPrintLog)
+                    Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
+                Utility.MyDebugWriteLine("获取当前软件版本失败，LocalVersion为空");
+                return;
+            }
+        }
+        else
+        {
+            localResourceVersion = new(ProgramDataModel.Instance.ResourcesVersion);
+            if (localResourceVersion is null)
+            {
+                ProgramDataModel.Instance.UpdateInfo = "获取当前资源文件版本失败";
+                if (needPrintLog)
+                    Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
+                Utility.MyDebugWriteLine("获取当前资源文件版本失败，LocalResourceVersion为空");
+                return;
+            }
+        }
+        // 获取版本号
+        string apiUrl;
+        if (checkApp)
+        {
+            apiUrl = ProgramDataModel.Instance.DownloadSource == EDownloadSource.Gitee ? MyConstant.AppGiteeApiUrl : MyConstant.AppGitHubApiUrl;
+        }
+        else
+        {
+            apiUrl = ProgramDataModel.Instance.DownloadSource == EDownloadSource.Gitee ? MyConstant.ResourcesGiteeApiUrl : MyConstant.ResourcesGitHubApiUrl;
+        }
+        if (!GetLatestVersionAndDownloadUrl(apiUrl, MyConstant.PlatformTag, out string latestVersionString, out _))
+        {
+            if (checkApp)
+            {
+                if (needPrintLog)
+                    Utility.PrintLog("检查软件新版本时网络请求出错");
+                Utility.MyDebugWriteLine("检查软件新版本时网络请求出错");
+            }
+            else
+            {
+                if (needPrintLog)
+                    Utility.PrintLog("检查资源文件新版本时网络请求出错");
+                Utility.MyDebugWriteLine("检查资源文件新版本时网络请求出错");
+            }
+            return;
         }
         // 比较版本号大小
         Version latestVersion = new(RemoveFirstLetterV(latestVersionString));
-        Utility.MyDebugWriteLine($"LocalVersion:{localVersion} | LatestVersion:{latestVersion}");
-        if (localVersion.CompareTo(latestVersion) >= 0)
+        if (checkApp)
         {
-            ProgramDataModel.Instance.UpdateInfo = "当前已是最新版本";
-            if (needPrintLog)
-                Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
-            return false;
+            Utility.MyDebugWriteLine($"App - LocalVersion:{localAppVersion} | LatestVersion:{latestVersion}");
+            if (localAppVersion != null && localAppVersion.CompareTo(latestVersion) >= 0)
+            {
+                isUpToDate = true;
+            }
+            else
+            {
+                canUpdate = true;
+                ProgramDataModel.Instance.UpdateInfo = $"发现软件新版本{latestVersionString}，是否更新？";
+                if (needPrintLog)
+                    Utility.PrintLog($"发现软件新版本{latestVersionString}，请前往设置页面手动更新");
+                Utility.MyDebugWriteLine($"发现软件新版本 {latestVersionString}");
+            }
         }
-        ProgramDataModel.Instance.UpdateInfo = $"发现新版本{latestVersionString}，是否更新？";
-        if (needPrintLog)
-            Utility.PrintLog($"发现新版本{latestVersionString}，请前往设置页面手动更新");
-        Utility.MyDebugWriteLine($"发现新版本 {latestVersionString}");
-        return true;
+        else
+        {
+            Utility.MyDebugWriteLine($"Resource - LocalVersion:{localResourceVersion} | LatestVersion:{latestVersion}");
+            if (localResourceVersion != null && localResourceVersion.CompareTo(latestVersion) >= 0)
+            {
+                isUpToDate = true;
+                if (needPrintLog)
+                    Utility.PrintLog("当前资源文件已是最新版本");
+            }
+            else
+            {
+                canUpdate = true;
+                ProgramDataModel.Instance.UpdateInfo = $"发现资源文件新版本{latestVersionString}，是否更新？";
+                if (needPrintLog)
+                {
+                    // 需要打印Log则表示是在主界面调用，则触发自动更新资源文件
+                    if (ProgramDataModel.Instance.SettingsData.IsAutoUpdateResources)
+                    {
+                        Utility.PrintLog($"发现资源文件新版本{latestVersionString}");
+                        if (asyncUpdateResources)
+                        {
+                            Task.Run(async () =>
+                            {
+                                await UpdateResource(true);
+                            });
+                        }
+                        else
+                        {
+                            UpdateResource(true).GetAwaiter().GetResult();
+                        }
+                    }
+                    else
+                    {
+                        Utility.PrintLog($"发现资源文件新版本{latestVersionString}，请前往设置页面手动更新");
+                    }
+                }
+                else
+                {
+                    Utility.MyDebugWriteLine($"发现资源文件新版本{latestVersionString}");
+                }
+                
+            }
+        }
     }
 
     /// <summary>
@@ -64,6 +188,7 @@ public static class UpdateTool
     {
         ProgramDataModel.Instance.IsCheckingNewVersion = true;
         ProgramDataModel.Instance.UpdateInfo = "正在检查更新...";
+        Utility.MyDebugWriteLine($"正在检查更新,apiUrl = {apiUrl}");
         apiUrl += "/latest"; //获取最新版本，不论是否为pre-release
         latestVersionString = string.Empty;
         downloadUrl = string.Empty;
@@ -154,17 +279,23 @@ public static class UpdateTool
 
     public static async Task<string> UpdateApp()
     {
-        if (!GetLatestVersionAndDownloadUrl(ProgramDataModel.Instance.ProjectApiUrl, MyConstant.PlatformTag, out string latestVersionString, out string downloadUrl))
+        string apiUrl = ProgramDataModel.Instance.DownloadSource == EDownloadSource.Gitee ? MyConstant.AppGiteeApiUrl : MyConstant.AppGitHubApiUrl;
+        if (!GetLatestVersionAndDownloadUrl(apiUrl, MyConstant.PlatformTag, out string latestVersionString, out string downloadUrl))
         {
             ProgramDataModel.Instance.HasNewVersion = false;
-            Utility.MyDebugWriteLine("检查版本号出错! - UpdateApp()");
+            Utility.MyDebugWriteLine("检查软件新版本号出错! - UpdateApp()");
             return string.Empty;
         }
         Utility.MyDebugWriteLine($"开始下载更新 - 由v{MyConstant.AppVersion}更新至{latestVersionString}");
         Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
         // 创建临时文件存放路径temp\
         var tempFileDirectory = @".\temp";
-        if (!Directory.Exists(tempFileDirectory))
+        if (Directory.Exists(tempFileDirectory))
+        {
+            Directory.Delete(tempFileDirectory, true);
+            Directory.CreateDirectory(tempFileDirectory);
+        }
+        else
         {
             Directory.CreateDirectory(tempFileDirectory);
         }
@@ -185,6 +316,91 @@ public static class UpdateTool
         MainViewModel.Instance.ProgramData.IsReadyForApplyUpdate = true;
         MainViewModel.Instance.SetUpdateWindowTopmost(true);
         return tempFileName;
+    }
+
+    // 资源文件更新，下载+解压+覆盖文件
+    public static async Task UpdateResource(bool needPrintLog)
+    {
+        string apiUrl = ProgramDataModel.Instance.DownloadSource == EDownloadSource.Gitee ? MyConstant.ResourcesGiteeApiUrl : MyConstant.ResourcesGitHubApiUrl;
+        if (!GetLatestVersionAndDownloadUrl(apiUrl, MyConstant.PlatformTag, out string latestVersionString, out string downloadUrl))
+        {
+            ProgramDataModel.Instance.HasNewVersion = false;
+            if (needPrintLog)
+                Utility.PrintLog("检查资源文件新版本号出错");
+            Utility.MyDebugWriteLine("检查资源文件新版本号出错! - UpdateResource()");
+            return;
+        }
+        Utility.MyDebugWriteLine($"开始下载资源文件更新 - 由v{ProgramDataModel.Instance.ResourcesVersion}更新至{latestVersionString}");
+        Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
+        // 创建临时文件存放路径temp\
+        var tempFileDirectory = @".\temp";
+        if (Directory.Exists(tempFileDirectory))
+        {
+            Directory.Delete(tempFileDirectory, true);
+            Directory.CreateDirectory(tempFileDirectory);
+        }
+        else
+        {
+            Directory.CreateDirectory(tempFileDirectory);
+        }
+        string tempFileName = GetFileNameFromUrl(downloadUrl);
+        // 下载+解压文件到temp\
+        MainViewModel.Instance.ProgramData.IsDownloadingFiles = true;
+        if (needPrintLog)
+            Utility.PrintLog($"正在下载并自动更新资源文件{latestVersionString}...");
+        MainViewModel.Instance.ProgramData.UpdateInfo = $"正在下载并自动更新资源文件{latestVersionString}...";
+        if (!await DownloadAndExtractFile(downloadUrl, tempFileDirectory, tempFileName))
+        {
+            if (needPrintLog)
+                Utility.PrintLog($"资源文件文件下载失败");
+            MainViewModel.Instance.ProgramData.UpdateInfo = "资源文件文件下载失败！";
+            Utility.MyDebugWriteLine("资源文件文件下载失败");
+            MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
+            return;
+        }
+        MainViewModel.Instance.ProgramData.UpdateInfo = $"资源文件下载完成，正在自动更新...";
+        Utility.MyDebugWriteLine($"{tempFileName}下载+解压完成，自动更新资源文件");
+
+        // 生成update.bat文件执行文件删除+复制。不处理model文件夹
+        var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
+        var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
+        var batFilePath = Path.Combine(utf8BaseDirectory, "temp", "update.bat");
+        var extractedPath = $"\"{utf8BaseDirectory}temp\\{Path.GetFileNameWithoutExtension(tempFileName)}\\*.*\"";
+        var targetPath = $"\"{utf8BaseDirectory}resources\"";
+        await using (StreamWriter sw = new(batFilePath))
+        {
+            await sw.WriteLineAsync("@echo off");
+            await sw.WriteLineAsync($"cd /d {targetPath}");
+            await sw.WriteLineAsync("for /d %%D in (*) do (");
+            await sw.WriteLineAsync("    if exist \"%%D\\model\" (");
+            await sw.WriteLineAsync("        for /d %%F in (\"%%D\\*\") do (");
+            await sw.WriteLineAsync("            if /i not \"%%~nxF\" == \"model\" (");
+            await sw.WriteLineAsync("                rmdir /s /q \"%%F\"");
+            await sw.WriteLineAsync("            )");
+            await sw.WriteLineAsync("        )");
+            await sw.WriteLineAsync("        for %%G in (\"%%D\\*.*\") do ( ");
+            await sw.WriteLineAsync("            del /q \"%%G\"");
+            await sw.WriteLineAsync("        )");
+            await sw.WriteLineAsync("    ) else (");
+            await sw.WriteLineAsync("        rmdir /s /q \"%%D\"");
+            await sw.WriteLineAsync("    )");
+            await sw.WriteLineAsync(")");
+            await sw.WriteLineAsync($"xcopy /e /y {extractedPath} {targetPath}");
+            await sw.WriteLineAsync("rd /s /q \"..\\temp\"");
+        }
+        var psi = new ProcessStartInfo(batFilePath)
+        {
+            CreateNoWindow = true,
+            WindowStyle = ProcessWindowStyle.Hidden
+        };
+        Process.Start(psi);
+        if (needPrintLog)
+            Utility.PrintLog($"资源文件更新完成");
+        MainViewModel.Instance.ProgramData.UpdateInfo = "资源文件更新完成";
+        Utility.MyDebugWriteLine($"资源文件更新完成");
+        MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
+        MainViewModel.Instance.ProgramData.HasNewVersion = false;
+        ProgramDataModel.Instance.ResourcesVersion = RemoveFirstLetterV(latestVersionString);
     }
 
     private static string GetFileNameFromUrl(string downloadUrl)
@@ -344,6 +560,5 @@ public static class UpdateTool
         };
         Process.Start(psi);
         Application.Current.Shutdown();
-        
     }
 }

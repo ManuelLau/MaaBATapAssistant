@@ -256,7 +256,7 @@ public class TaskManager
         }
         else if (!System.IO.Path.Exists(_settingsData.EmulatorPath))
         {
-            Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
+            Utility.PrintError("自动连接模拟器失败，请检查路径是否正确");
             Utility.MyDebugWriteLine(_settingsData.EmulatorPath);
         }
         else
@@ -783,7 +783,38 @@ public class TaskManager
     private void CreateCurrentTaskQueue()
     {
         // 如果第一个是重启游戏任务，那么就不用再添加启动游戏任务了
-        if (_waitingTaskChainList[0].TaskQueue.Peek().Type != ETaskType.RestartGame)
+        if (_waitingTaskChainList[0].TaskQueue.Peek().Type == ETaskType.RestartGame)
+        {
+            if (ProgramDataModel.Instance.SettingsData.IsAutoUpdateResources)
+            {
+                UpdateTool.CheckNewVersion(false, true, out _, out _, false);
+                // 等待2秒，用于覆盖更新资源文件
+                Task.Delay(2000).Wait();
+                if (!LoadMaaSource(out MaaResource? maaResource) || maaResource == null)
+                {
+                    Utility.MyDebugWriteLine("更新资源文件后，重新加载失败！");
+                }
+                else
+                {
+                    if (_maaTasker != null && !_maaTasker.IsInvalid)
+                    {
+                        _maaTasker = new()
+                        {
+
+                            Controller = _maaTasker.Controller,
+                            Resource = maaResource,
+                            DisposeOptions = DisposeOptions.All,
+                        };
+                    }
+                    else
+                    {
+                        Utility.MyDebugWriteLine("_maaTasker is null!");
+                    }
+                }
+                
+            }
+        }
+        else
         {
             Queue<TaskModel> tempQueue0 = new();
             tempQueue0.Enqueue(new("启动游戏", "StartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
@@ -979,10 +1010,17 @@ public class TaskManager
 
     public void MaaTaskerDispose()
     {
-        if (_maaTasker != null)
+        try
         {
-            _maaTasker.Stop().Wait();
-            _maaTasker.Dispose();
+            if (_maaTasker != null)
+            {
+                _maaTasker.Stop().Wait();
+                _maaTasker.Dispose();
+            }
+        }
+        catch (Exception ex)
+        {
+            Utility.MyDebugWriteLine(ex.Message);
         }
     }
 
@@ -1079,5 +1117,24 @@ public class TaskManager
 
         MaaAdbController controller = new(adbPath, adbSerial, adbScreencapMethods, inputMethods, config);
         return controller;
+    }
+
+    [Obsolete]
+    private async void AutoDetectDevice()
+    {
+        MaaToolkit _maaToolkit = new(true);//init: true
+        var devices = await _maaToolkit.AdbDevice.FindAsync();
+        if (devices.IsEmpty)
+        {
+            Utility.MyDebugWriteLine("找不到任何设备");
+        }
+        else
+        {
+            Utility.MyDebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
+            foreach (var e in devices)
+            {
+                Utility.MyDebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
+            }
+        }
     }
 }
