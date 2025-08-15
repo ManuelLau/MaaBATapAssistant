@@ -4,5 +4,15 @@
 		"package": "com.RoamingStar.BlueArchive.bilibili/com.yostar.supersdk.activity.YoStarSplashActivity",
 		"post_delay": 2000,
 		"next": "RefreshGame@IdelClick"
-    }
+    },
+	"CloseGame": {
+		"action": "StopApp",
+		"package": "com.RoamingStar.BlueArchive.bilibili"
+	},
+	"RestartGame": {
+		"action": "StopApp",
+		"package": "com.RoamingStar.BlueArchive.bilibili",
+		"post_delay": 5000,
+		"next": "StartGame"
+	}
 }

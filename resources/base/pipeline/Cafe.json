@@ -1,7 +1,8 @@
 {
 	"MoveToCafe1": {
 		"next": [
-			"MoveToCafe1@RecognizeNumberText",
+			"MoveToCafe1@InCafe1",
+			"MoveToCafe1@InCafe2",
 			"Cafe@EnterCafe"
 		],
 		"interrupt": [
@@ -15,29 +16,18 @@
 		],
 		"doc": "可以在任何地方进入到1号咖啡厅"
 	},
-	"MoveToCafe1@RecognizeNumberText": {
-		"recognition": "OCR",
-		"text": "号店",
-		"roi": [5, 55, 385, 125],
-		"next": [
-			"MoveToCafe1@InCafe1",
-			"MoveToCafe1@MoveToCafe1"
-		]
-	},
 	"MoveToCafe1@InCafe1":{
-		"recognition": "ColorMatch",
-		"roi": [72, 160, 6, 6],
-		"lower": [34, 59, 89],
-		"upper": [54, 79, 109],
-		"count": 30,
-		"next": "Cafe@CloseMoveCafeButtonThenDoJob",
-		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
+		"recognition": "TemplateMatch",
+		"template": "MoveToCafe2Button.png",
+		"roi": [ 38, 76, 192, 54 ],
+		"threshold": 0.97,
+		"next": "Stop"
 	},
-	"MoveToCafe1@MoveToCafe1": {
-		"recognition": "OCR",
-		"text": "1号店",
-		"replace": ["'", ""],
-		"roi": [5, 55, 385, 125],
+	"MoveToCafe1@InCafe2": {
+		"recognition": "TemplateMatch",
+		"template": "MoveToCafe1Button.png",
+		"roi": [ 38, 76, 192, 54 ],
+		"threshold": 0.97,
 		"action": "Click",
 		"post_delay": 1000,
 		"next": "Cafe@RecognizeTopLeftText",
@@ -46,8 +36,8 @@
 
 	"MoveToCafe2": {
 		"next": [
-			"MoveToCafe2@RecognizeNumberText",
-			"MoveToCafe2@EnterCafeThenMoveToCafe2"
+			"MoveToCafe2@InCafe2",
+			"MoveToCafe2@InCafe1"
 		],
 		"interrupt": [
 			"WaitLoading",
@@ -55,51 +45,26 @@
 			"CloseReward",
 			"Cafe@ClickMoveCafeButton",
 			"ClickHomeButton",
-			"IdelTapScreen"
-		]
-	},
-	"MoveToCafe2@RecognizeNumberText": {
-		"recognition": "OCR",
-		"text": "号店",
-		"roi": [5, 55, 385, 125],
-		"next": [
-			"MoveToCafe2@InCafe2",
-			"MoveToCafe2@MoveToCafe2"
+			"IdelTapScreen",
+			"Cafe@EnterCafe"
 		]
 	},
 	"MoveToCafe2@InCafe2":{
-		"recognition": "ColorMatch",
-		"roi": [214, 160, 6, 6],
-		"lower": [34, 59, 89],
-		"upper": [54, 79, 109],
-		"count": 30,
-		"next": "Cafe@CloseMoveCafeButtonThenDoJob",
-		"doc": "检测色值，哪个是深蓝色就表明是哪个咖啡厅"
+		"recognition": "TemplateMatch",
+		"template": "MoveToCafe1Button.png",
+		"roi": [ 38, 76, 192, 54 ],
+		"threshold": 0.97,
+		"next": "Stop"
 	},
-	"MoveToCafe2@MoveToCafe2": {
-		"recognition": "OCR",
-		"text": "2号店",
-		"replace": ["'", ""],
-		"roi": [5, 55, 385, 125],
+	"MoveToCafe2@InCafe1": {
+		"recognition": "TemplateMatch",
+		"template": "MoveToCafe2Button.png",
+		"roi": [ 38, 76, 192, 54 ],
+		"threshold": 0.97,
 		"action": "Click",
 		"post_delay": 1000,
 		"next": "Cafe@RecognizeTopLeftText",
 		"interrupt": "WaitLoading"
-	},
-	"MoveToCafe2@EnterCafeThenMoveToCafe2": {
-		"recognition": "TemplateMatch",
-		"template": "CafeButton.png",
-		"roi": [0, 600, 150, 120],
-		"action": "Click",
-		"post_delay": 1000,
-		"next": "MoveToCafe2@RecognizeNumberText",
-		"interrupt": [
-			"WaitLoading",
-			"Cafe@ClickCafeButton",
-			"Cafe@ClickMoveCafeButton",
-			"ClosePopup"
-		],
-		"doc": "从主界面进入咖啡厅，然后切换到2号咖啡厅"
 	},
 
 	"Cafe@ClickMoveCafeButton": {
@@ -153,7 +118,7 @@
 	},
 	"Cafe@RecognizeEarningsButton":{
 		"recognition": "ColorMatch",
-		"roi": [1210, 660, 6, 6],
+		"roi": [1234, 660, 6, 6],
 		"lower": [35, 60, 89],
 		"upper": [55, 80, 109],
 		"count": 32,

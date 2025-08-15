@@ -41,6 +41,7 @@
 			"StartUp@UpdatePopUp",
 			"RefreshGame@MaintenancePopUp",
 			"StartUp@TitleScreen",
+			"StartUp@EventCheckInPopUp",
 			"StartUp@DailyCheckIn",
 			"StartUp@EventCheckIn",
 			"DisconnectPopup",
@@ -150,11 +151,17 @@
 	},
 	"StartUp@EventCheckIn": {
 		"recognition": "OCR",
-		"text": ["剩余时间", "特别", "签到", "登录", "奖励"],
-		"roi": [430, 0, 850, 360],
+		"text": ["剩余时间", "特别", "签到", "登录", "奖励", "还剩", "ANNIVERSARY"],
 		"action": "Click",
 		"target": [640, 360, 0, 0],
 		"doc": "文字识别活动签到界面，以免素材不通用"
+	},
+	"StartUp@EventCheckInPopUp": {
+		"recognition": "OCR",
+		"text": "签到奖励",
+		"roi": [310, 82, 660, 546],
+		"next": "ClosePopup",
+		"doc": "关闭登录活动点击后出现的弹窗。例如沙勒2周年倒计时的登录活动"
 	},
 	"StartUp@UpdatePopUp": {
 		"recognition": "OCR",

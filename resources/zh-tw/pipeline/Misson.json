@@ -3,10 +3,6 @@
 		"template": "MissionSweepButton.png",
 		"threshold": 0.9
 	},
-	"Mission@RecognizeOtherPopup": {
-		"template": "MissionSweepPopup.png",
-		"threshold": 0.9
-	},
 	"Mission@RecognizeSweepPopup": {
 		"template": "MissionSweepPopup.png",
 		"threshold": 0.9
