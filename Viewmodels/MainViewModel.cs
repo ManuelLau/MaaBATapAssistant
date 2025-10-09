@@ -2,8 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using MaaBATapAssistant.Utils;
 using MaaBATapAssistant.Models;
-using MaaFramework.Binding;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using MaaBATapAssistant.Views;

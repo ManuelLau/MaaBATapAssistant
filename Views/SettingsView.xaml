@@ -255,7 +255,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
@@ -264,15 +263,10 @@
                             Command="{Binding OpenAnnouncementWindowCommand}"/>
                     <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="B站主页" Foreground="Blue" Cursor="Hand"
                                MouseDown="BilibiliLinkMouseDown"/>
-                    <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="意见反馈页" Foreground="Blue" Cursor="Hand"
-                               MouseDown="BilibiliReadmeLinkMouseDown"/>
-                    <StackPanel Grid.Row="3" Margin="120 0 0 10" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <hc:Shield Subject="GitHub" Status="MaaBATapAssistant" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                   Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectGitHubUrl}"/>
-                        <TextBlock Margin="10 0 0 0" Text="←点个Star吧求求了" VerticalAlignment="Center" TextAlignment="Center"
-                                   HorizontalAlignment="Center"/>
-                    </StackPanel>
-                    <hc:Shield Grid.Row="4" Subject="Gitee" Status="MaaBATapAssistant" 
+                    <hc:Shield Grid.Row="2" Subject="GitHub" Status="MaaBATapAssistant" Margin="0 0 0 10"
+                               VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"
+                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectGitHubUrl}"/>
+                    <hc:Shield Grid.Row="3" Subject="Gitee" Status="MaaBATapAssistant" 
                                VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"
                                Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectGiteeUrl}"/>
                 </Grid>

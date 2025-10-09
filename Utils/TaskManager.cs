@@ -1,11 +1,8 @@
 ﻿using MaaBATapAssistant.ViewModels;
 using MaaBATapAssistant.Models;
 using MaaFramework.Binding;
-using System;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Threading;
 using static MaaBATapAssistant.Utils.CustomTask;
 using System.Diagnostics;
 using System.Text.RegularExpressions;

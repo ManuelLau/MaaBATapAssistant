@@ -11,7 +11,7 @@ namespace MaaBATapAssistant.Utils;
 /// </summary>
 public static class CustomTask
 {
-    public static void ScreenShot(AnalyzeArgs args, string filePrefix)
+    private static void ScreenShot(AnalyzeArgs args, string filePrefix)
     {
         var bitmap = new BitmapImage();
         bitmap.BeginInit();
