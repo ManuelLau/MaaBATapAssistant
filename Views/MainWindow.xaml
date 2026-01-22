@@ -64,17 +64,17 @@
                                         <StackPanel Orientation="Horizontal" Height="36"
                                             IsEnabled="{c:Binding 'Status == models:ETaskChainStatus.Waiting'}">
                                             <Ellipse Width="10" Height="10"
-                                                Fill="{Binding Status, Converter={StaticResource TaskStatusToColorConverter}}"/>
+                                                     Fill="{Binding Status, Converter={StaticResource TaskStatusToColorConverter}}"/>
                                             <hc:SimpleText Width="148" Margin="6 0 0 0" TextWrapping="Wrap"
-                                                Text="{Binding Name}" VerticalAlignment="Center"/>
+                                                           Text="{Binding Name}" VerticalAlignment="Center"/>
                                             <TextBox Text="{Binding ExecuteDateTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" Width="150"  Margin="0 0 0 0"
-                                                HorizontalContentAlignment="Center" HorizontalAlignment="Center"
-                                                FontSize="13" VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                                LostFocus="TimeTextBoxLostFocus"/>
+                                                     HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                                                     FontSize="13" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                                     PreviewKeyDown="TimeTextBoxPreviewKeyDown" LostFocus="TimeTextBoxLostFocus"/>
                                             <Button Width="28" Height="28" Margin="0 0 0 0"
-                                                Style="{StaticResource ButtonIcon.Small}" Foreground="Red"
-                                                hc:IconElement.Geometry="{StaticResource CloseGeometry}"
-                                                Click="DeleteTaskChain"/>
+                                                    Style="{StaticResource ButtonIcon.Small}" Foreground="Red"
+                                                    hc:IconElement.Geometry="{StaticResource CloseGeometry}"
+                                                    Click="DeleteTaskChain"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>

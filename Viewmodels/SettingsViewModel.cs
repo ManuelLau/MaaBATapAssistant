@@ -82,6 +82,8 @@ public partial class SettingsViewModel : ObservableObject
         {
             throw new Exception("无法读取config.json");
         }
+        settingsData.IsAutoCheckAppUpdate = false;
+        settingsData.IsAutoUpdateResources = false;
         ProgramDataModel.Instance.SettingsData = settingsData;
     }
 

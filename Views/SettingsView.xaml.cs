@@ -25,6 +25,15 @@ public partial class SettingsView
         SettingsViewModel.UpdateConfigJsonFile();
     }
 
+    private void ComboBoxPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        // 未展开时禁用鼠标滚动，以免误操作
+        if (sender is ComboBox comboBox && !comboBox.IsDropDownOpen)
+        {
+            e.Handled = true;
+        }
+    }
+
     private void SettingsClientTypeSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         SettingsViewModel.UpdateConfigJsonFile();

@@ -28,6 +28,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.ClientTypeSettingIndex}"
                                  SelectionChanged="SettingsClientTypeSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                     </hc:ComboBox>
                 </StackPanel>
@@ -37,6 +38,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1InviteTimeSettingIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                     </hc:ComboBox>
                 </StackPanel>
@@ -46,6 +48,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1InviteSortTypeSettingIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe1InviteTimeSettingIndex != 3'}">
                     </hc:ComboBox>
                 </StackPanel>
@@ -54,7 +57,8 @@
                     <hc:ComboBox ItemsSource="{Binding CafeInviteIndexSettingOptionsText}"
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1InviteIndexSettingIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
-                                 Style="{StaticResource SettingComboBoxStyle}" 
+                                 Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe1InviteTimeSettingIndex != 3'}">
                     </hc:ComboBox>
                 </StackPanel>
@@ -84,6 +88,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1AMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe1EnableApplyLayout}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -92,6 +97,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe1PMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe1EnableApplyLayout}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -100,6 +106,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2InviteTimeSettingIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -108,6 +115,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2InviteSortTypeSettingIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe2InviteTimeSettingIndex != 3'}">
                     </hc:ComboBox>   
                 </StackPanel>
@@ -117,6 +125,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2InviteIndexSettingIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding '!ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.Cafe2InviteTimeSettingIndex != 3'}">
                     </hc:ComboBox>
                 </StackPanel>
@@ -146,6 +155,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2AMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe2EnableApplyLayout}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -154,6 +164,7 @@
                                  SelectedIndex="{Binding ProgramData.SettingsData.Cafe2PMApplyLayoutIndex}"
                                  SelectionChanged="SettingsComboBoxSelectionChanged"
                                  Style="{StaticResource SettingComboBoxStyle}"
+                                 PreviewMouseWheel="ComboBoxPreviewMouseWheel"
                                  IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting and ProgramData.SettingsData.IsCafe2EnableApplyLayout}"/>
                 </StackPanel>
                 <CheckBox Content="自动生成任务避开以下时间段" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -191,6 +202,10 @@
                     <Button Content="打开截图目录" Margin="4 0 0 0"
                             Command="{Binding OpenScreenshotFolderCommand}"/>
                 </StackPanel>
+                <CheckBox Content="屏蔽所有截图功能" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding ProgramData.SettingsData.NoScreenShot}"
+                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
+                </CheckBox>
                 <CheckBox Content="发现重复登录后自动重连" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding ProgramData.SettingsData.IsReconnectAfterDuplicatedLogin}"
                           Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
@@ -238,16 +253,17 @@
                         </StackPanel>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <CheckBox Content="启动软件时自动检查更新" Margin="16 4 0 6"
-                                IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
-                                Click="SettingsCheckBoxClick"/>
+                                      IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
+                                      IsEnabled="False" Click="SettingsCheckBoxClick"/>
                             <CheckBox Content="自动更新资源文件" Margin="16 6 0 4"
-                                IsChecked="{Binding ProgramData.SettingsData.IsAutoUpdateResources}"
-                                Click="SettingsCheckBoxClick"/>
+                                      IsChecked="{Binding ProgramData.SettingsData.IsAutoUpdateResources}"
+                                      IsEnabled="False" Click="SettingsCheckBoxClick"/>
                         </StackPanel>
                     </StackPanel>
 
                     <Button Grid.Row="4" Content="检查更新" Width="80" Height="36" Margin="0 0 0 0"
-                                 Command="{Binding OpenUpdateWindowCommand}"/>
+                            IsEnabled="False"
+                            Command="{Binding OpenUpdateWindowCommand}"/>
                 </Grid>
 
                 <hc:Divider Content="关于" Margin="10 10 10 10"/>

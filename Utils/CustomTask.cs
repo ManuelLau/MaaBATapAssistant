@@ -39,7 +39,7 @@ public static class CustomTask
 
         public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
         {
-            if (ProgramDataModel.Instance.SettingsData.IsRelationshipRankUpAutoScreenShot)
+            if (!ProgramDataModel.Instance.SettingsData.NoScreenShot && ProgramDataModel.Instance.SettingsData.IsRelationshipRankUpAutoScreenShot)
             {
                 ScreenShot(args, "RelationshipRankUp");
                 Utility.PrintLog("好感等级提升，已自动截图");
@@ -66,17 +66,20 @@ public static class CustomTask
 
         public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
         {
-            ScreenShot(args, "Invite");
-
-            // 获取所有截图，并按文件名中的日期排序
-            var files = Directory.GetFiles(MyConstant.ScreenshotImageDirectory, "Invite-*.png")
-                                 .Select(file => new FileInfo(file)).OrderBy(file => file.Name).ToList();
-            // 最多保存10个截图
-            const short maxScreenshotCount = 10;
-            while (files.Count > maxScreenshotCount)
+            if (!ProgramDataModel.Instance.SettingsData.NoScreenShot)
             {
-                File.Delete(files.First().FullName);
-                files.RemoveAt(0);
+                ScreenShot(args, "Invite");
+
+                // 获取所有截图，并按文件名中的日期排序
+                var files = Directory.GetFiles(MyConstant.ScreenshotImageDirectory, "Invite-*.png")
+                                     .Select(file => new FileInfo(file)).OrderBy(file => file.Name).ToList();
+                // 最多保存10个截图
+                const short maxScreenshotCount = 10;
+                while (files.Count > maxScreenshotCount)
+                {
+                    File.Delete(files.First().FullName);
+                    files.RemoveAt(0);
+                }
             }
             return true;
         }
@@ -173,17 +176,20 @@ public static class CustomTask
 
         public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
         {
-            ScreenShot(args, "Drop");
-
-            // 获取所有截图，并按文件名中的日期排序
-            var files = Directory.GetFiles(MyConstant.ScreenshotImageDirectory, "Drop-*.png")
-                                 .Select(file => new FileInfo(file)).OrderBy(file => file.Name).ToList();
-            // 最多保存10个截图
-            const short maxScreenshotCount = 10;
-            while (files.Count > maxScreenshotCount)
+            if (!ProgramDataModel.Instance.SettingsData.NoScreenShot)
             {
-                File.Delete(files.First().FullName);
-                files.RemoveAt(0);
+                ScreenShot(args, "Drop");
+
+                // 获取所有截图，并按文件名中的日期排序
+                var files = Directory.GetFiles(MyConstant.ScreenshotImageDirectory, "Drop-*.png")
+                                     .Select(file => new FileInfo(file)).OrderBy(file => file.Name).ToList();
+                // 最多保存10个截图
+                const short maxScreenshotCount = 10;
+                while (files.Count > maxScreenshotCount)
+                {
+                    File.Delete(files.First().FullName);
+                    files.RemoveAt(0);
+                }
             }
             return true;
         }

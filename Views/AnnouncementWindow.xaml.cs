@@ -14,13 +14,10 @@ public partial class AnnouncementWindow : Window
         DataContext = ProgramDataModel.Instance;
 
         MainTitle.Text = AnnouncementContent.MainTitle;
-        LatestUpdateTitle.Text = AnnouncementContent.LatestUpdateTitle;
+        //LatestUpdateTitle.Text = AnnouncementContent.LatestUpdateTitle;
         LatestUpdateContent.Text = AnnouncementContent.LatestUpdateContent;
         NotesTitle.Text = AnnouncementContent.NotesTitle;
         NotesContent.Text = AnnouncementContent.NotesContent;
-        UpdateHistoryMainTitle.Text = AnnouncementContent.UpdateHistoryMainTitle;
-        UpdateHistoryTitle0.Text = AnnouncementContent.UpdateHistoryTitle0;
-        UpdateHistoryContent0.Text = AnnouncementContent.UpdateHistoryContent0;
     }
 
     private void CheckBoxOnClick(object sender, RoutedEventArgs e)

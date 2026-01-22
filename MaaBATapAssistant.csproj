@@ -9,7 +9,7 @@
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>resources\AppIcon_256x256.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>0.3.7.0</Version>
+    <Version>0.3.8.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

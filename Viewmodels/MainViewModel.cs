@@ -47,26 +47,26 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public static void StartTaskButton()
     {
-        TaskManager.Instance.Start();
         Utility.MyDebugWriteLine("手动点击开始任务按钮");
+        TaskManager.Instance.Start();
     }
 
     [RelayCommand]
     public static void StopTaskButton()
     {
-        TaskManager.Instance.Stop(true);
         Utility.MyDebugWriteLine("手动点击停止任务按钮");
+        TaskManager.Instance.Stop(true);
     }
 
     [RelayCommand]
     public static void CreateButton()
     {
+        Utility.MyDebugWriteLine("手动点击生成/刷新任务按钮");
         // 用户手动点击，先清空当前任务列表
         Instance.WaitingTaskList.Clear();
         DateTime nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(DateTime.Now);
         nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(nextCafeRefreshDateTime);
         TaskManager.Instance.CreateTask(nextCafeRefreshDateTime);
-        Utility.MyDebugWriteLine("手动点击生成/刷新任务按钮");
     }
 
     public void OpenAnnouncementWindow()

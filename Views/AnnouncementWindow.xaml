@@ -16,8 +16,8 @@
         <hc:ScrollViewer Grid.Row="0" Margin="20 10 20 0">
             <StackPanel Grid.Row="0">
                 <TextBlock x:Name="MainTitle" FontSize="32" Margin="0" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <TextBlock x:Name="LatestUpdateTitle" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBlock x:Name="LatestUpdateContent" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
+                <!--<TextBlock x:Name="LatestUpdateTitle" FontSize="20" Margin="0 10 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>-->
+                <TextBlock x:Name="LatestUpdateContent" FontSize="20" Margin="10 16 10 4" TextWrapping="Wrap" FontWeight="Bold"/>
                 <hc:Divider Margin="10 8 20 8"/>
                 <TextBlock x:Name="NotesTitle" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
                 <TextBlock x:Name="NotesContent" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
@@ -27,10 +27,6 @@
                                Foreground="Blue" Cursor="Hand" MouseDown="BilibiliReadmeLinkMouseDown"/>
                     <TextBlock Text="前往B站查看" FontSize="16" Margin="0 0 10 4"/>
                 </StackPanel>
-                <hc:Divider Margin="10 8 20 8"/>
-                <TextBlock x:Name="UpdateHistoryMainTitle" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBlock x:Name="UpdateHistoryTitle0" FontSize="18" Margin="10 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBlock x:Name="UpdateHistoryContent0" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>
             </StackPanel>
         </hc:ScrollViewer>
         <CheckBox Grid.Row="1" Content="下次更新前不再提示" HorizontalAlignment="Center"

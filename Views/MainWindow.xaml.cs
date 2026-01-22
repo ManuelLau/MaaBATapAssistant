@@ -1,6 +1,7 @@
-﻿using MaaBATapAssistant.ViewModels;
-using HandyControl.Controls;
+﻿using HandyControl.Controls;
 using MaaBATapAssistant.Utils;
+using MaaBATapAssistant.ViewModels;
+using System.Windows.Input;
 
 namespace MaaBATapAssistant.Views;
 
@@ -43,6 +44,16 @@ public partial class MainWindow
         if (isSuccess)
         {
             TaskManager.Instance.RefreshWaitingTaskChainDateTime(parsedDate, true);
+        }
+    }
+
+    // 输入日期后按下回车自动脱离焦点
+    private void TimeTextBoxPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            e.Handled = true;
         }
     }
 
