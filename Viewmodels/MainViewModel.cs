@@ -114,9 +114,9 @@ public partial class MainViewModel : ObservableObject
     public void AppStart()
     {
         // 读取存储的任务列表
-        if (File.Exists(MyConstant.CacheFilePath))
+        if (File.Exists(Constants.CacheFilePath))
         {
-            string json = File.ReadAllText(MyConstant.CacheFilePath);
+            string json = File.ReadAllText(Constants.CacheFilePath);
             ObservableCollection<TaskChainModel>? deserializedCollection = JsonConvert.DeserializeObject<ObservableCollection<TaskChainModel>>(json);
             if (deserializedCollection != null)
                 WaitingTaskList = deserializedCollection;
@@ -131,16 +131,7 @@ public partial class MainViewModel : ObservableObject
             Task.Run(async () =>
             {
                 await Task.Delay(1000); // 延迟1秒
-                UpdateTool.CheckBothNewVersion(true, out _, out _);
-            });
-        }
-        else if (ProgramData.SettingsData.IsAutoUpdateResources)
-        {
-            // 默认自动检查资源文件更新
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000); // 延迟1秒
-                UpdateTool.CheckNewVersion(false, true, out _, out _, true);
+                UpdateTool.CheckNewVersion(true, out _, out _);
             });
         }
     }
@@ -149,7 +140,7 @@ public partial class MainViewModel : ObservableObject
     {
         // 存储当前任务列表
         string json = JsonConvert.SerializeObject(WaitingTaskList);
-        File.WriteAllText(MyConstant.CacheFilePath, json);
+        File.WriteAllText(Constants.CacheFilePath, json);
         // 释放连接模拟器的资源
         TaskManager.Instance.MaaTaskerDispose();
         Utility.MyDebugWriteLine("关闭程序");

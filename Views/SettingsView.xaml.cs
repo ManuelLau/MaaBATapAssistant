@@ -103,9 +103,9 @@ public partial class SettingsView
         // 等待时间最低10秒，最高600秒
         if (int.TryParse(text, out int value))
         {
-            if (value > MyConstant.AutoRunEmulatorWaittingMaxTimeSpan)
+            if (value > Constants.AutoRunEmulatorWaittingMaxTimeSpan)
             {
-                ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = MyConstant.AutoRunEmulatorWaittingMaxTimeSpan;
+                ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingMaxTimeSpan;
                 SettingsViewModel.UpdateConfigJsonFile();
             }
             else
@@ -122,15 +122,15 @@ public partial class SettingsView
         tb.Text = ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan.ToString();
         if (int.TryParse(tb.Text, out int value))
         {
-            if (value < MyConstant.AutoRunEmulatorWaittingMinTimeSpan)
+            if (value < Constants.AutoRunEmulatorWaittingMinTimeSpan)
             {
-                ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = MyConstant.AutoRunEmulatorWaittingMinTimeSpan;
+                ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingMinTimeSpan;
             }
         }
         else
         {
             // 如果输入的不是数字
-            ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = MyConstant.AutoRunEmulatorWaittingDefaultTimeSpan;
+            ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingDefaultTimeSpan;
         }
 
         SettingsViewModel.UpdateConfigJsonFile();
@@ -140,7 +140,7 @@ public partial class SettingsView
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = MyConstant.BilibiliLink,
+            FileName = Constants.BilibiliLink,
             UseShellExecute = true
         });
     }
@@ -149,7 +149,7 @@ public partial class SettingsView
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = MyConstant.BilibiliReadmeLink,
+            FileName = Constants.BilibiliReadmeLink,
             UseShellExecute = true
         });
     }

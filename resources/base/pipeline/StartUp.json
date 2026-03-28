@@ -1,0 +1,280 @@
+{
+	"$__mpe_config_StartUp": {
+		"$__mpe_code": {
+			"prefix": "",
+			"savedViewport": {
+				"x": -575,
+				"y": -343,
+				"zoom": 1
+			},
+			"filename": "StartUp",
+			"version": "v1.3.1"
+		}
+	},
+	"StartUp@Start": {
+		"timeout": 120000,
+		"next": ["[JumpBack]StartUp@WaitLoading", "StartUp@RecognizeLabel", "[JumpBack]StartUp@ClientUpdatePopUp", "[JumpBack]StartUp@UpdatePopUp", "HomeScreen@MaintenancePopUp", "[JumpBack]StartUp@TitleScreen", "[JumpBack]StartUp@EventCheckInPopUp", "[JumpBack]StartUp@DailyCheckIn", "[JumpBack]StartUp@EventCheckIn", "[JumpBack]ClosePopup", "[JumpBack]CloseReward", "[JumpBack]ClickHomeButton", "[JumpBack]DisconnectPopup"],
+		"$__mpe_code": {
+			"position": {
+				"x": 725,
+				"y": 956
+			}
+		}
+	},
+	"StartUp@RecognizeLabel": {
+		"doc": "识别右上角3个按钮UI+邮箱按钮的色值。持续检测3秒，以免突然有其他弹窗出现",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1000, 0, 280, 66],
+				"template": "HomePageLabel.png",
+				"threshold": [0.9]
+			}
+		},
+		"next": ["StartUp@RecognizeMailButton", "StartUp@Start"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1276,
+				"y": 550
+			}
+		}
+	},
+	"StartUp@RecognizeMailButton": {
+		"doc": "国服日服70,99,152 国际服89,107,155,rgb的范围扩大",
+		"recognition": {
+			"type": "ColorMatch",
+			"param": {
+				"roi": [1137, 43, 12, 4],
+				"lower": [60, 89, 142],
+				"upper": [99, 117, 165],
+				"count": 46
+			}
+		},
+		"post_delay": 2000,
+		"next": ["StartUp@FinalCheck", "StartUp@Start"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1655,
+				"y": 528
+			}
+		}
+	},
+	"StartUp@FinalCheck": {
+		"recognition": {
+			"type": "And",
+			"param": {
+				"all_of": ["StartUp@RecognizeLabel", "StartUp@RecognizeMailButton"]
+			}
+		},
+		"action": {
+			"type": "StopTask",
+			"param": {}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 1998,
+				"y": 595
+			}
+		}
+	},
+	"StartUp@WaitLoading": {
+		"doc": ["正在加载", "Initialize", "正在确认", "正在更新", "正在解压", "正在初始化", "正在验证"],
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [0, 500, 1280, 220],
+				"expected": ["正在", "Initialize", "Load"]
+			}
+		},
+		"post_delay": 1000,
+		"$__mpe_code": {
+			"position": {
+				"x": 1273,
+				"y": 284
+			}
+		}
+	},
+	"StartUp@TitleScreen": {
+		"doc": "识别到标题画面。进入登录流程",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [16, 606, 106, 54],
+				"template": "MenuButton.png",
+				"green_mask": true
+			}
+		},
+		"pre_delay": 1000,
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [640, 360, 0, 0]
+			}
+		},
+		"post_delay": 1000,
+		"$__mpe_code": {
+			"position": {
+				"x": 1274,
+				"y": 1436
+			}
+		}
+	},
+	"StartUp@DailyCheckIn": {
+		"doc": "识别每日签到+活动签到界面",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [430, 0, 850, 360],
+				"template": ["DailyCheckIn.png", "EventCheckIn.png"]
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [640, 360, 0, 0]
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 1272,
+				"y": 2046
+			}
+		}
+	},
+	"StartUp@EventCheckIn": {
+		"doc": "文字识别活动签到界面，以免素材不通用",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"expected": ["剩余时间", "特别", "签到", "登录", "奖励", "还剩", "ANNIVERSARY"]
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [640, 360, 0, 0]
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 1271,
+				"y": 2327
+			}
+		}
+	},
+	"StartUp@EventCheckInPopUp": {
+		"doc": "关闭登录活动点击后出现的弹窗。例如沙勒2周年倒计时的登录活动",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"expected": ["签到奖励"]
+			}
+		},
+		"next": ["ClosePopup"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1275,
+				"y": 1799
+			}
+		}
+	},
+	"StartUp@UpdatePopUp": {
+		"doc": "识别热更下载弹窗",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"expected": ["更新提醒", "下载"]
+			}
+		},
+		"next": ["ClickConfirmButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1276,
+				"y": 1114
+			}
+		}
+	},
+	"StartUp@ClientUpdatePopUp": {
+		"doc": "识别客户端更新提示弹窗",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"expected": ["App需要更新"]
+			}
+		},
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "ClientUpdateStopTask"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 1278,
+				"y": 833
+			}
+		}
+	},
+	"$__mpe_external_DisconnectPopup_StartUp": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1271,
+				"y": 2815
+			}
+		}
+	},
+	"$__mpe_external_ClosePopup_StartUp": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1273,
+				"y": 2583
+			}
+		}
+	},
+	"$__mpe_external_ClickHomeButton_StartUp": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1270,
+				"y": 2734
+			}
+		}
+	},
+	"$__mpe_external_CloseReward_StartUp": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1274,
+				"y": 2658
+			}
+		}
+	},
+	"$__mpe_external_ClickConfirmButton_StartUp": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1658,
+				"y": 1176
+			}
+		}
+	},
+	"$__mpe_external_HomeScreen@MaintenancePopUp_StartUp": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1282,
+				"y": 1365
+			}
+		}
+	},
+	"StartUp@StartApp": {
+		"doc": "从头启动游戏",
+		"post_delay": 5000,
+		"next": ["StartUp@Start"],
+		"$__mpe_code": {
+			"position": {
+				"x": 414,
+				"y": 944
+			}
+		}
+	}
+}

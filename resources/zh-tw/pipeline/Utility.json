@@ -1,0 +1,28 @@
+{
+	"StartGame": {
+		"package": "com.nexon.bluearchive/.MxUnityPlayerActivity"
+	},
+	"CloseGame": {
+		"package": "com.nexon.bluearchive"
+	},
+	"RestartGame": {
+		"package": "com.nexon.bluearchive"
+	},
+	"CloseReward": {
+		"text": "獲得獎勵"
+	},
+	"DisconnectPopup": {
+		"text": "網路存取不順暢"
+	},
+	"HomeScreen@DisconnectedPopUp": {
+		"text": [ "認證信息已超時", "日期已變更" ]
+	},
+	"HomeScreen@DuplicatedLoginPopUp": {
+		"text": "重複登入",
+		"next": "RestartGame",
+		"doc": "国际服需要重启游戏才能重连"
+	},
+	"HomeScreen@MaintenancePopUp": {
+		"text": "維護中"
+	}
+}

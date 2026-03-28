@@ -29,7 +29,7 @@ public partial class AnnouncementWindow : Window
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = MyConstant.BilibiliReadmeLink,
+            FileName = Constants.BilibiliReadmeLink,
             UseShellExecute = true
         });
     }

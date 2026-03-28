@@ -253,7 +253,7 @@ public class TaskManager
         }
         else if (!System.IO.Path.Exists(_settingsData.EmulatorPath))
         {
-            Utility.PrintError("自动连接模拟器失败，请检查路径是否正确");
+            Utility.PrintError("自动打开模拟器失败，请检查路径是否正确");
             Utility.MyDebugWriteLine(_settingsData.EmulatorPath);
         }
         else
@@ -277,7 +277,7 @@ public class TaskManager
                     {
                         return devices;
                     }
-                    if (DateTime.Now > startTime.AddSeconds(MyConstant.AutoSearchEmulatorWaittingTimeSpan))
+                    if (DateTime.Now > startTime.AddSeconds(Constants.AutoSearchEmulatorWaittingTimeSpan))
                     {
                         Utility.PrintError("等待超时，自动打开模拟器失败！");
                         return null;
@@ -305,11 +305,11 @@ public class TaskManager
         //根据配置里的客户端类型选项改变读取的文件路径
         string[] maaSourcePaths = ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
         {
-            (int)EClientTypeSettingOptions.Zh_CN => [MyConstant.MaaSourceDirectory],
-            (int)EClientTypeSettingOptions.Zh_CN_Bilibili => [MyConstant.MaaSourceDirectory, MyConstant.MaaSourcePathBiliBiliOverride],
-            (int)EClientTypeSettingOptions.Zh_TW => [MyConstant.MaaSourceDirectory, MyConstant.MaaSourcePathZhtwOverride],
-            (int)EClientTypeSettingOptions.Jp => [MyConstant.MaaSourceDirectory, MyConstant.MaaSourcePathJpOverride],
-            _ => [MyConstant.MaaSourceDirectory],
+            (int)EClientTypeSettingOptions.Zh_CN => [Constants.MaaSourceDirectory],
+            (int)EClientTypeSettingOptions.Zh_CN_Bilibili => [Constants.MaaSourceDirectory, Constants.MaaSourcePathBiliBiliOverride],
+            (int)EClientTypeSettingOptions.Zh_TW => [Constants.MaaSourceDirectory, Constants.MaaSourcePathZhtwOverride],
+            (int)EClientTypeSettingOptions.Jp => [Constants.MaaSourceDirectory, Constants.MaaSourcePathJpOverride],
+            _ => [Constants.MaaSourceDirectory],
         };
         try
         {
@@ -614,9 +614,9 @@ public class TaskManager
     {
         TimeOnly nextRefreshTimeOnly = _settingsData.ClientTypeSettingIndex switch
         {
-            (int)EClientTypeSettingOptions.Zh_CN => MyConstant.RefreshTimeOnlyCN,
-            (int)EClientTypeSettingOptions.Zh_CN_Bilibili => MyConstant.RefreshTimeOnlyCN,
-            _ => MyConstant.RefreshTimeOnlyNexon,
+            (int)EClientTypeSettingOptions.Zh_CN => Constants.RefreshTimeOnlyCN,
+            (int)EClientTypeSettingOptions.Zh_CN_Bilibili => Constants.RefreshTimeOnlyCN,
+            _ => Constants.RefreshTimeOnlyNexon,
         };
         DateOnly nextRefreshDateOnly = DateOnly.FromDateTime(dateTime);
         if (TimeOnly.FromDateTime(dateTime) >= nextRefreshTimeOnly)
@@ -782,34 +782,7 @@ public class TaskManager
         // 如果第一个是重启游戏任务，那么就不用再添加启动游戏任务了
         if (_waitingTaskChainList[0].TaskQueue.Peek().Type == ETaskType.RestartGame)
         {
-            if (ProgramDataModel.Instance.SettingsData.IsAutoUpdateResources)
-            {
-                UpdateTool.CheckNewVersion(false, true, out _, out _, false);
-                // 等待2秒，用于覆盖更新资源文件
-                Task.Delay(2000).Wait();
-                if (!LoadMaaSource(out MaaResource? maaResource) || maaResource == null)
-                {
-                    Utility.MyDebugWriteLine("更新资源文件后，重新加载失败！");
-                }
-                else
-                {
-                    if (_maaTasker != null && !_maaTasker.IsInvalid)
-                    {
-                        _maaTasker = new()
-                        {
-
-                            Controller = _maaTasker.Controller,
-                            Resource = maaResource,
-                            DisposeOptions = DisposeOptions.All,
-                        };
-                    }
-                    else
-                    {
-                        Utility.MyDebugWriteLine("_maaTasker is null!");
-                    }
-                }
-                
-            }
+            
         }
         else
         {
@@ -839,7 +812,7 @@ public class TaskManager
         }
 
         Queue<TaskModel> tempQueue = new();
-        tempQueue.Enqueue(new("返回主界面", "RefreshGame@BackToHomePage", string.Empty, ETaskType.Normal));
+        tempQueue.Enqueue(new("返回主界面", "HomeScreen@BackToHomePage", string.Empty, ETaskType.Normal));
         _currentTaskChainList.Add(new("返回主界面", DateTime.Now, ETaskChainType.System, false, false, string.Empty, tempQueue));
         foreach (var item in _currentTaskChainList)
         {
@@ -860,7 +833,7 @@ public class TaskManager
             //启动游戏
             case ETaskType.StartGame:
                 return _settingsData.IsReconnectAfterDuplicatedLogin ?
-                    string.Empty : "{\"RefreshGame@DuplicatedLoginPopUp\":{\"next\":\"RefreshGame@DuplicatedLoginStopTask\"}}";
+                    string.Empty : "{\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
             //1号咖啡厅邀请
             case ETaskType.Cafe1Invite:
                 overrideSortType = string.Empty;
@@ -1102,36 +1075,36 @@ public class TaskManager
     }
 
     // 从json里读取配置并使用配置初始化
-    [Obsolete]
-    private static MaaAdbController InitializeController()
-    {
-        //To-do 加上从配置里读取?
-        string adbPath = "C:/Program Files/MuMuPlayer-12.0/shell/adb.exe";
-        string adbSerial = "127.0.0.1:16384";
-        AdbScreencapMethods adbScreencapMethods = AdbScreencapMethods.Default;
-        AdbInputMethods inputMethods = AdbInputMethods.Default;
-        string config = "{\"extras\":{\"mumu\":{\"enable\":true,\"index\":0,\"path\":\"C:/Program Files/MuMuPlayer-12.0\"}}";
+    //[Obsolete]
+    //private static MaaAdbController InitializeController()
+    //{
+    //    To-do 加上从配置里读取?
+    //    string adbPath = "C:/Program Files/MuMuPlayer-12.0/shell/adb.exe";
+    //    string adbSerial = "127.0.0.1:16384";
+    //    AdbScreencapMethods adbScreencapMethods = AdbScreencapMethods.Default;
+    //    AdbInputMethods inputMethods = AdbInputMethods.Default;
+    //    string config = "{\"extras\":{\"mumu\":{\"enable\":true,\"index\":0,\"path\":\"C:/Program Files/MuMuPlayer-12.0\"}}";
 
-        MaaAdbController controller = new(adbPath, adbSerial, adbScreencapMethods, inputMethods, config);
-        return controller;
-    }
+    //    MaaAdbController controller = new(adbPath, adbSerial, adbScreencapMethods, inputMethods, config);
+    //    return controller;
+    //}
 
-    [Obsolete]
-    private async void AutoDetectDevice()
-    {
-        MaaToolkit _maaToolkit = new(true);//init: true
-        var devices = await _maaToolkit.AdbDevice.FindAsync();
-        if (devices.IsEmpty)
-        {
-            Utility.MyDebugWriteLine("找不到任何设备");
-        }
-        else
-        {
-            Utility.MyDebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
-            foreach (var e in devices)
-            {
-                Utility.MyDebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
-            }
-        }
-    }
+    //[Obsolete]
+    //private async void AutoDetectDevice()
+    //{
+    //    MaaToolkit _maaToolkit = new(true);//init: true
+    //    var devices = await _maaToolkit.AdbDevice.FindAsync();
+    //    if (devices.IsEmpty)
+    //    {
+    //        Utility.MyDebugWriteLine("找不到任何设备");
+    //    }
+    //    else
+    //    {
+    //        Utility.MyDebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
+    //        foreach (var e in devices)
+    //        {
+    //            Utility.MyDebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
+    //        }
+    //    }
+    //}
 }

@@ -1,0 +1,234 @@
+{
+	"$__mpe_config_Utility": {
+		"$__mpe_code": {
+			"prefix": "",
+			"savedViewport": {
+				"x": 738,
+				"y": 236,
+				"zoom": 0.8
+			},
+			"filename": "Utility",
+			"version": "v1.3.1"
+		}
+	},
+	"Stop": {
+		"action": {
+			"type": "StopTask",
+			"param": {}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 12,
+				"y": 12
+			}
+		}
+	},
+	"ClickHomeButton": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1200, 0, 80, 45],
+				"template": "HomePageButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 2000,
+		"$__mpe_code": {
+			"position": {
+				"x": 972,
+				"y": 12
+			}
+		}
+	},
+	"ClickConfirmButton": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"template": "ConfirmButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 492,
+				"y": 12
+			}
+		}
+	},
+	"ClosePopup": {
+		"doc": "关闭带有X的弹窗，不论颜色[一般弹窗的roi:310, 82, 660, 546]",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"template": ["CloseButtonBlack.png", "CloseButtonWhite.png"],
+				"green_mask": true
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 12,
+				"y": 262
+			}
+		}
+	},
+	"IdelTapScreen": {
+		"doc": "检测不到UI栏的青辉石图标，说明可能是进入挂机状态，点击一下屏幕中央",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"template": "Pyroxene.png"
+			}
+		},
+		"inverse": true,
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [640, 360, 0, 0]
+			}
+		},
+		"post_delay": 1000,
+		"$__mpe_code": {
+			"position": {
+				"x": 492,
+				"y": 262
+			}
+		}
+	},
+	"WaitLoading": {
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [900, 600, 350, 100],
+				"expected": ["正在加载", "Load"]
+			}
+		},
+		"post_delay": 1000,
+		"$__mpe_code": {
+			"position": {
+				"x": 732,
+				"y": 12
+			}
+		}
+	},
+	"CloseReward": {
+		"doc": "关闭获得奖励界面",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"expected": ["获得奖励"]
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [640, 560, 0, 0]
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 252,
+				"y": 262
+			}
+		}
+	},
+	"DisconnectPopup": {
+		"doc": "网络断线弹窗",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"expected": ["网络连接不稳定"]
+			}
+		},
+		"next": ["ClickReconnectButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 732,
+				"y": 262
+			}
+		}
+	},
+	"ClickReconnectButton": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"template": "ReconnectButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 1052,
+				"y": 289
+			}
+		}
+	},
+	"StartGame": {
+		"doc": "启动游戏入口，先识别非从头启动的内容，检测不到再开始检测从头启动",
+		"action": {
+			"type": "StartApp",
+			"param": {
+				"package": "com.RoamingStar.BlueArchive/com.yostar.supersdk.activity.YoStarSplashActivity"
+			}
+		},
+		"post_delay": 2000,
+		"next": ["HomeScreen@Refresh"],
+		"$__mpe_code": {
+			"position": {
+				"x": 332,
+				"y": 576
+			}
+		}
+	},
+	"RestartGame": {
+		"action": {
+			"type": "StopApp",
+			"param": {
+				"package": "com.RoamingStar.BlueArchive"
+			}
+		},
+		"post_delay": 5000,
+		"next": ["StartGame"],
+		"$__mpe_code": {
+			"position": {
+				"x": 12,
+				"y": 592
+			}
+		}
+	},
+	"$__mpe_external_HomeScreen@Refresh_Utility": {
+		"$__mpe_code": {
+			"position": {
+				"x": 652,
+				"y": 660
+			}
+		}
+	},
+	"CloseGame": {
+		"action": {
+			"type": "StopApp",
+			"param": {
+				"package": "com.RoamingStar.BlueArchive"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 252,
+				"y": 12
+			}
+		}
+	}
+}

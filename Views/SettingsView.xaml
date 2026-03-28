@@ -248,21 +248,18 @@
 
                     <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 0 0 0" HorizontalAlignment="Center">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <hc:Shield Subject="软件版本" Margin="0 4 0 4" Status="{x:Static utils:MyConstant.AppVersion}" HorizontalAlignment="Center"/>
+                            <hc:Shield Subject="软件版本" Margin="0 4 0 4" Status="{x:Static utils:Constants.AppVersion}" HorizontalAlignment="Center"/>
                             <hc:Shield Subject="资源版本" Margin="0 4 0 4" Status="{Binding ProgramData.ResourcesVersion}" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <CheckBox Content="启动软件时自动检查更新" Margin="16 4 0 6"
-                                      IsChecked="{Binding ProgramData.SettingsData.IsAutoCheckAppUpdate}"
-                                      IsEnabled="False" Click="SettingsCheckBoxClick"/>
+                                      IsChecked="False" IsEnabled="False" Click="SettingsCheckBoxClick"/>
                             <CheckBox Content="自动更新资源文件" Margin="16 6 0 4"
-                                      IsChecked="{Binding ProgramData.SettingsData.IsAutoUpdateResources}"
-                                      IsEnabled="False" Click="SettingsCheckBoxClick"/>
+                                      IsChecked="False" IsEnabled="False" Click="SettingsCheckBoxClick"/>
                         </StackPanel>
                     </StackPanel>
 
                     <Button Grid.Row="4" Content="检查更新" Width="80" Height="36" Margin="0 0 0 0"
-                            IsEnabled="False"
                             Command="{Binding OpenUpdateWindowCommand}"/>
                 </Grid>
 
@@ -281,10 +278,10 @@
                                MouseDown="BilibiliLinkMouseDown"/>
                     <hc:Shield Grid.Row="2" Subject="GitHub" Status="MaaBATapAssistant" Margin="0 0 0 10"
                                VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"
-                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectGitHubUrl}"/>
+                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:Constants.ProjectGitHubUrl}"/>
                     <hc:Shield Grid.Row="3" Subject="Gitee" Status="MaaBATapAssistant" 
                                VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center"
-                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:MyConstant.ProjectGiteeUrl}"/>
+                               Command="hc:ControlCommands.OpenLink" CommandParameter="{x:Static utils:Constants.ProjectGiteeUrl}"/>
                 </Grid>
             </StackPanel>
         </hc:ScrollViewer>

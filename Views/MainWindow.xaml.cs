@@ -1,6 +1,7 @@
 ﻿using HandyControl.Controls;
 using MaaBATapAssistant.Utils;
 using MaaBATapAssistant.ViewModels;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MaaBATapAssistant.Views;
@@ -56,6 +57,13 @@ public partial class MainWindow
             e.Handled = true;
         }
     }
+    private void MenuItemClick(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            MainViewModel.Instance.LogDataList.Clear();
+        });
+    }
 
 #if DEBUG
     private static void CheckVersionIsSame()
@@ -67,7 +75,7 @@ public partial class MainWindow
         }
         else
         {
-            Version myConstantVersion = new(Utils.MyConstant.AppVersion + ".0");
+            Version myConstantVersion = new(Utils.Constants.AppVersion + ".0");
             if (version.Major == myConstantVersion.Major && version.Minor == myConstantVersion.Minor && version.Build == myConstantVersion.Build
                 == false)
             {

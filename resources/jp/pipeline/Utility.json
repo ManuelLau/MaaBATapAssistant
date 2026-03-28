@@ -1,0 +1,27 @@
+{
+	"StartGame": {
+		"package": "com.YostarJP.BlueArchive/com.yostarjp.bluearchive.MxUnityPlayerActivity"
+	},
+	"CloseGame": {
+		"package": "com.YostarJP.BlueArchive"
+	},
+	"RestartGame": {
+		"package": "com.YostarJP.BlueArchive"
+	},
+	"CloseReward": {
+		"text": "報酬獲得"
+	},
+	"DisconnectPopup": {
+		"text": "ネットワークアクセスに問題",
+		"replace": [["―", "ー"], ["一", "ー"]]
+	},
+	"HomeScreen@DisconnectedPopUp": {
+		"text": [ "有効期限を過ぎた認証情報", "日付が変わりました" ]
+	},
+	"HomeScreen@DuplicatedLoginPopUp": {
+		"text": "ログインの重複が検知されました"
+	},
+	"HomeScreen@MaintenancePopUp": {
+		"text": "ンテナンス"
+	}
+}

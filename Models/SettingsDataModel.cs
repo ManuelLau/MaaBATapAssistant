@@ -43,11 +43,10 @@ public partial class SettingsDataModel : ObservableObject
     public bool IsExitGameAfterTaskFinished { get; set; } = false;
     public bool IsExitEmulatorAfterTaskFinished { get; set; } = false;
     public bool IsAutoCheckAppUpdate { get; set; } = false;
-    public bool IsAutoUpdateResources { get; set; } = false;
     [ObservableProperty][JsonIgnore]
     public string emulatorPath = string.Empty;
     [ObservableProperty][JsonIgnore]
-    public int autoRunEmulatorWaittingTimeSpan = MyConstant.AutoRunEmulatorWaittingDefaultTimeSpan;
+    public int autoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingDefaultTimeSpan;
     public bool DoNotShowAnnouncementAgain { get; set; } = false;
     public int ExitEmulatorIndex { get; set; } = 0; //调用命令行关闭模拟器时的索引，默认关闭索引为0的模拟器
 }

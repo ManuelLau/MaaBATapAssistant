@@ -1,0 +1,314 @@
+{
+	"$__mpe_config_HomeScreen": {
+		"$__mpe_code": {
+			"prefix": "",
+			"savedViewport": {
+				"x": -10,
+				"y": -194,
+				"zoom": 0.79
+			},
+			"filename": "HomeScreen",
+			"version": "v1.3.1"
+		}
+	},
+	"HomeScreen@IdelClick": {
+		"max_hit": 1,
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [650, 66, 0, 0]
+			}
+		},
+		"post_delay": 1000,
+		"$__mpe_code": {
+			"position": {
+				"x": 889,
+				"y": 921
+			}
+		}
+	},
+	"HomeScreen@Refresh": {
+		"doc": "刷新游戏，检测掉线、重复登录等状态。前置条件是当前在游戏内。如果识别到主页按钮直接返回即可；如果在主界面则点进学生界面再返回主页",
+		"next": ["HomeScreen@BackToHomePage", "HomeScreen@GoToStudentsPage", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@IdelClick", "[JumpBack]NullNode", "StartUp@StartApp"],
+		"$__mpe_code": {
+			"position": {
+				"x": 512,
+				"y": 682
+			}
+		}
+	},
+	"HomeScreen@BackToHomePage": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1200, 0, 80, 45],
+				"template": "HomePageButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 2000,
+		"next": ["HomeScreen@Start"],
+		"$__mpe_code": {
+			"position": {
+				"x": 886,
+				"y": 364
+			}
+		}
+	},
+	"HomeScreen@RecognizeLabel": {
+		"doc": "主界面等待2秒，检测是否有异常弹窗",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1000, 0, 280, 66],
+				"template": "HomePageLabel.png",
+				"threshold": [0.9]
+			}
+		},
+		"post_delay": 2000,
+		"next": ["HomeScreen@RecognizeLabelAgain", "HomeScreen@Start"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1891,
+				"y": -21
+			}
+		}
+	},
+	"HomeScreen@GoToStudentsPage": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [286, 610, 90, 110],
+				"template": "StudentPageButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 2000,
+		"next": ["HomeScreen@BackToHomePage", "[JumpBack]DisconnectPopup", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@ClickStudentsPageButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 886,
+				"y": 662
+			}
+		}
+	},
+	"HomeScreen@ClickStudentsPageButton": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [286, 610, 90, 110],
+				"template": "StudentPageButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 2000,
+		"$__mpe_code": {
+			"position": {
+				"x": 1434,
+				"y": 1255
+			}
+		}
+	},
+	"HomeScreen@DisconnectedPopUp": {
+		"doc": "检测掉线、日期变更",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"expected": ["认证信息已超时", "日期已变更"]
+			}
+		},
+		"next": ["HomeScreen@Reconnect"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1901,
+				"y": 579
+			}
+		}
+	},
+	"HomeScreen@Reconnect": {
+		"doc": "有些弹窗需要点击2次确认才生效，循环检测",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"template": "ConfirmButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 2000,
+		"next": ["HomeScreen@Reconnect", "StartUp@StartApp"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2377,
+				"y": 436
+			}
+		}
+	},
+	"HomeScreen@DuplicatedLoginPopUp": {
+		"doc": "检测重复登录，后面触发登录流程。根据用户配置重载next字段来决定是否自动重连",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"expected": ["发现重复登录"]
+			}
+		},
+		"next": ["HomeScreen@Reconnect"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1896,
+				"y": 307
+			}
+		}
+	},
+	"HomeScreen@MaintenancePopUp": {
+		"doc": "检测服务器维护，自动停止任务",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"expected": ["服务器维护"]
+			}
+		},
+		"next": ["HomeScreen@MaintenanceConfirm"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1902,
+				"y": 848
+			}
+		}
+	},
+	"HomeScreen@MaintenanceConfirm": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"template": "ConfirmButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"next": ["HomeScreen@MaintenanceStopTask"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2223,
+				"y": 866
+			}
+		}
+	},
+	"HomeScreen@MaintenanceStopTask": {
+		"doc": "检测到服务器维护后，停止任务",
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "MaintenanceStopTask"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 2519,
+				"y": 860
+			}
+		}
+	},
+	"$__mpe_external_DisconnectPopup_HomeScreen": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1880,
+				"y": 1184
+			}
+		}
+	},
+	"$__mpe_external_ClosePopup_HomeScreen": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1849,
+				"y": 1263
+			}
+		}
+	},
+	"$__mpe_external_ClickHomeButton_HomeScreen": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1910,
+				"y": 1107
+			}
+		}
+	},
+	"$__mpe_external_StartUp@StartApp_HomeScreen": {
+		"$__mpe_code": {
+			"position": {
+				"x": 897,
+				"y": 1389
+			}
+		}
+	},
+	"HomeScreen@RecognizeLabelAgain": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1000, 0, 280, 66],
+				"template": "HomePageLabel.png",
+				"threshold": [0.9]
+			}
+		},
+		"action": {
+			"type": "StopTask",
+			"param": {}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 2227,
+				"y": 10
+			}
+		}
+	},
+	"HomeScreen@Start": {
+		"next": ["HomeScreen@RecognizeLabel", "[JumpBack]HomeScreen@DuplicatedLoginPopUp", "[JumpBack]HomeScreen@DisconnectedPopUp", "[JumpBack]HomeScreen@MaintenancePopUp", "[JumpBack]ClickHomeButton", "[JumpBack]DisconnectPopup", "[JumpBack]ClosePopup"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1458,
+				"y": 538
+			}
+		}
+	},
+	"HomeScreen@DuplicatedLoginStopTask": {
+		"doc": "检测到重复登录后，停止任务，在override中调用",
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "DuplicatedLoginStopTask"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 2342,
+				"y": 1238
+			}
+		}
+	},
+	"NullNode": {
+		"max_hit": 1,
+		"$__mpe_code": {
+			"position": {
+				"x": 888,
+				"y": 1182
+			}
+		}
+	}
+}

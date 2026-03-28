@@ -60,15 +60,15 @@ public partial class SettingsViewModel : ObservableObject
         Cafe2ApplyLayoutPMText = "16:00~次日3:59时间段2号咖啡厅应用家具预设序号";
 
         //查找config.json,如果没有则使用默认的规则生成配置文件
-        if (File.Exists(MyConstant.ConfigJsonFilePath))
+        if (File.Exists(Constants.ConfigJsonFilePath))
         {
             LoadConfigJsonFile();
             UpdateConfigJsonFile();
         }
         else
         {
-            Directory.CreateDirectory(MyConstant.ConfigJsonDirectory);
-            File.Create(MyConstant.ConfigJsonFilePath).Close();
+            Directory.CreateDirectory(Constants.ConfigJsonDirectory);
+            File.Create(Constants.ConfigJsonFilePath).Close();
             UpdateConfigJsonFile();
         }
     }
@@ -76,14 +76,13 @@ public partial class SettingsViewModel : ObservableObject
     //从config.json文件中读取配置
     private static void LoadConfigJsonFile()
     {
-        string settingsJson = File.ReadAllText(MyConstant.ConfigJsonFilePath);
+        string settingsJson = File.ReadAllText(Constants.ConfigJsonFilePath);
         SettingsDataModel? settingsData = JsonConvert.DeserializeObject<SettingsDataModel>(settingsJson);
         if (settingsData == null)
         {
             throw new Exception("无法读取config.json");
         }
         settingsData.IsAutoCheckAppUpdate = false;
-        settingsData.IsAutoUpdateResources = false;
         ProgramDataModel.Instance.SettingsData = settingsData;
     }
 
@@ -91,7 +90,7 @@ public partial class SettingsViewModel : ObservableObject
     public static void UpdateConfigJsonFile()
     {
         string formattedJson = JsonConvert.SerializeObject(ProgramDataModel.Instance.SettingsData, Formatting.Indented);
-        File.WriteAllText(MyConstant.ConfigJsonFilePath, formattedJson);
+        File.WriteAllText(Constants.ConfigJsonFilePath, formattedJson);
     }
 
     // 更改客户端后刷新UI(时间段相关的文字)
@@ -126,11 +125,11 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public static void OpenScreenshotFolder()
     {
-        if (!Directory.Exists(MyConstant.ScreenshotImageDirectory))
+        if (!Directory.Exists(Constants.ScreenshotImageDirectory))
         {
-            Directory.CreateDirectory(MyConstant.ScreenshotImageDirectory);
+            Directory.CreateDirectory(Constants.ScreenshotImageDirectory);
         }
-        Process.Start(new ProcessStartInfo("explorer.exe", MyConstant.ScreenshotImageDirectory)
+        Process.Start(new ProcessStartInfo("explorer.exe", Constants.ScreenshotImageDirectory)
         {
             UseShellExecute = true
         });

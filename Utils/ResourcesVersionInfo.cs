@@ -11,7 +11,7 @@ public class ResourcesVersionInfo
     {
         try
         {
-            string json = File.ReadAllText(MyConstant.ResourcesVersionJsonPath);
+            string json = File.ReadAllText(Constants.ResourcesVersionJsonPath);
             ResourcesVersionInfo? resourcesVersionInfo = JsonConvert.DeserializeObject<ResourcesVersionInfo>(json);
             if (resourcesVersionInfo != null)
             {

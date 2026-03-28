@@ -1,50 +1,82 @@
 {
 	"CafeApplyLayout": {
-		"next": "CafeLayout@ApplyLayout",
-		"interrupt": [
-			"CafeLayout@ClickLayoutButton",
-			"Cafe@ClickUnfoldButton",
-			"IdelTapScreen"
+		"next": [
+			"CafeLayout@ApplyLayout",
+			"[JumpBack]CafeLayout@ClickLayoutButton",
+			"[JumpBack]Cafe@ClickUnfoldButton",
+			"[JumpBack]IdelTapScreen"
 		],
 		"timeout": 2000
 	},
 	"CafeLayout@ClickLayoutButton": {
-		"recognition": "TemplateMatch",
-		"template": "CafeLayoutButton.png",
-		"roi": [314, 604, 120, 60],
-		"green_mask": true,
-		"action": "Click",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [314, 604, 120, 60],
+				"template": "CafeLayoutButton.png",
+				"green_mask": true
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
 		"post_delay": 1000
 	},
 	"CafeLayout@ApplyLayout": {
-		"recognition": "TemplateMatch",
-		"template": "CafeApplyLaout.png",
-		"roi": [888, 216, 180, 400],
-		"order_by": "Vertical",
-		"index": 0,
-		"action": "Click",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [888, 216, 180, 400],
+				"template": "CafeApplyLaout.png",
+				"order_by": "Vertical",
+				"index": 0
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
 		"post_delay": 1000,
-		"next": "CafeLayout@RecognizeCheck",
+		"next": ["CafeLayout@RecognizeCheck"],
 		"doc": "*根据配置重载这里的index字段来选择应用第几个家具预设，只支持1~3项，其他的懒得做了"
 	},
 	"CafeLayout@RecognizeCheck": {
-		"recognition": "TemplateMatch",
-		"template": "CafeApplyNeighboring.png",
-		"roi": [387, 385, 510, 60],
-		"action": "Click",
-		"next": "CafeLayout@IsCheck"
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [387, 385, 510, 60],
+				"template": "CafeApplyNeighboring.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"next": ["CafeLayout@IsCheck"]
 	},
 	"CafeLayout@IsCheck": {
-		"recognition": "TemplateMatch",
-		"template": "CafeApplyLayoutCheck.png",
-		"roi": [380, 380, 68, 68],
-		"next": "CafeLayout@Confirm"
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [380, 380, 68, 68],
+				"template": "CafeApplyLayoutCheck.png"
+			}
+		},
+		"next": ["CafeLayout@Confirm"]
 	},
 	"CafeLayout@Confirm": {
-		"recognition": "TemplateMatch",
-		"template": "ConfirmButton.png",
-		"roi": [650, 466, 236, 70],
-		"action": "Click",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [650, 466, 236, 70],
+				"template": "ConfirmButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
 		"post_delay": 2000
 	}
 }

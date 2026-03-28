@@ -1,0 +1,100 @@
+{
+	"StartUp@Start": {
+		"next": [
+			"[JumpBack]StartUp@WaitLoading",
+			"StartUp@RecognizeLabel",
+			"[JumpBack]StartUp@ClientUpdatePopUp",
+			"[JumpBack]StartUp@UpdatePopUp",
+			"HomeScreen@MaintenancePopUp",
+			"[JumpBack]StartUp@NexonLoginPopUp",
+			"[JumpBack]StartUp@TitleScreen",
+			"[JumpBack]StartUp@EventCheckInPopUp",
+			"[JumpBack]StartUp@DailyCheckIn",
+			"[JumpBack]StartUp@EventCheckIn",
+			"[JumpBack]ClosePopup",
+			"[JumpBack]CloseReward",
+			"[JumpBack]ClickHomeButton",
+			"[JumpBack]DisconnectPopup"]
+	},
+	"StartUp@WaitLoading": {
+		"recognition": {
+			"param": {
+				"expected": ["正在", "Initialize", "Load","重置遊戲資料", "正在更新", "驗證下載", "正在解壓"]
+			}
+		}
+	},
+	"StartUp@TitleScreen": {
+		"next": "StartUp@NexonCheckHomePageLabelEntry",
+		"doc": "国际服-覆写登录流程。从标题页面进入到主页，固定会弹公告，检测公告弹窗的关闭按钮"
+	},
+	"StartUp@NexonCheckHomePageLabelEntry": {
+		"next": [
+			"StartUp@NexonCheckHomePageLabel",
+			"[JumpBack]StartUp@WaitLoading",
+			"[JumpBack]StartUp@ClientUpdatePopUp",
+			"[JumpBack]StartUp@UpdatePopUp",
+			"HomeScreen@MaintenancePopUp",
+			"[JumpBack]StartUp@NexonLoginPopUp",
+			"[JumpBack]StartUp@EventCheckInPopUp",
+			"[JumpBack]StartUp@DailyCheckIn",
+			"[JumpBack]StartUp@EventCheckIn",
+			"[JumpBack]StartUp@NexonTitleScreen"
+		],
+		"timeout": 120000,
+		"doc": "先检测是否进入到主界面，再检测弹出的广告页面。*如果广告页面弹出过快，可能会有问题"
+	},
+	"StartUp@NexonCheckHomePageLabel": {
+		"recognition": "TemplateMatch",
+		"template": "HomePageLabel.png",
+		"next": "StartUp@NexonCheckAnnouncementCloseButton"
+	},
+	"StartUp@NexonCheckAnnouncementCloseButton": {
+		"recognition": "TemplateMatch",
+		"template": ["CloseButtonNexon0.png","CloseButtonNexon1.png"],
+		"green_mask": true,
+		"action": "Click"
+	},
+	"StartUp@NexonTitleScreen": {
+		"recognition": "TemplateMatch",
+		"template": "MenuButton.png",
+		"roi": [16, 606, 106, 54],
+		"green_mask": true,
+		"pre_delay": 1000,
+		"action": "Click",
+		"target": [640, 360, 0, 0],
+		"post_delay": 1000
+	},
+	"StartUp@NexonLoginPopUp": {
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"expected": "今日不再"
+			}
+		},
+		"action": {
+			"type": "Click"
+		},
+		"doc": "国际服-关闭活动提示弹窗"
+	},
+	"StartUp@EventCheckIn": {
+		"recognition": {
+			"param": {
+				"expected": ["剩餘時間", "特別", "簽到", "登錄", "獎勵", "倒數", "ANNIVERSARY"]
+			}
+		}
+	},
+	"StartUp@UpdatePopUp": {
+		"recognition": {
+			"param": {
+				"expected": ["下載必要內容", "需要下載遊戲"]
+			}
+		}
+	},
+	"StartUp@ClientUpdatePopUp": {
+		"recognition": {
+			"param": {
+				"expected": "到有新版本"
+			}
+		}
+	}
+}

@@ -1,6 +1,6 @@
 {
 	"CafeInvite@ClickSortTypeButton": {
-		"text": ["絆ランク", "お気に入", "名前", "学校"]
+		"text": ["絆ランク", "お気", "名前", "学校"]
 	},
 	"CafeInvite@ChangeSortType": {
 		"text": "絆ランク"

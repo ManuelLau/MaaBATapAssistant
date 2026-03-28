@@ -27,7 +27,7 @@
             <StackPanel Grid.Column="0" IsHitTestVisible="False"
                 HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Text="-" VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False" Margin="6 0 6 0"/>
-                <TextBlock Text="{Binding Source={x:Static utils:MyConstant.AppVersion}, StringFormat='v{0}'}"
+                <TextBlock Text="{Binding Source={x:Static utils:Constants.AppVersion}, StringFormat='v{0}'}"
                            VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False"/>
                 <TextBlock Text="- 资源版本" VerticalAlignment="Center" Foreground="Gray" IsHitTestVisible="False" Margin="6 0 6 0"/>
                 <TextBlock Text="{Binding ProgramData.ResourcesVersion, StringFormat='v{0}'}"
@@ -103,7 +103,7 @@
                             </StackPanel>
                         </Grid>
 
-                        <hc:ScrollViewer Grid.Column="1" Margin="4 10 8 10" VerticalAlignment="Top" VerticalContentAlignment="Top"
+                        <hc:ScrollViewer Grid.Column="1" Margin="4 10 8 10" VerticalAlignment="Stretch" VerticalContentAlignment="Top"
                             HorizontalScrollBarVisibility="Disabled" IsInertiaEnabled="True"
                             hc:ScrollViewerAttach.AutoHide="False" utils:AutoScrollToBottom.AlwaysScrollToBottom="True">
                             <ItemsControl ItemsSource="{Binding LogDataList}">
@@ -117,6 +117,11 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                            <hc:ScrollViewer.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="清屏" Click="MenuItemClick" Width="100"/>
+                                </ContextMenu>
+                            </hc:ScrollViewer.ContextMenu>
                         </hc:ScrollViewer>
                     </Grid>
                 </TabItem>

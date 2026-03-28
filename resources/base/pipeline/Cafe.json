@@ -1,18 +1,16 @@
 {
 	"MoveToCafe1": {
 		"next": [
+			"[JumpBack]ClosePopup",
 			"MoveToCafe1@InCafe1",
 			"MoveToCafe1@InCafe2",
-			"Cafe@EnterCafe"
-		],
-		"interrupt": [
-			"WaitLoading",
-			"DisconnectPopup",
-			"ClosePopup",
-			"CloseReward",
-			"Cafe@ClickMoveCafeButton",
-			"ClickHomeButton",
-			"IdelTapScreen"
+			"Cafe@EnterCafe",
+			"[JumpBack]WaitLoading",
+			"[JumpBack]DisconnectPopup",
+			"[JumpBack]CloseReward",
+			"[JumpBack]Cafe@ClickMoveCafeButton",
+			"[JumpBack]ClickHomeButton",
+			"[JumpBack]IdelTapScreen"
 		],
 		"doc": "可以在任何地方进入到1号咖啡厅"
 	},
@@ -30,23 +28,23 @@
 		"threshold": 0.97,
 		"action": "Click",
 		"post_delay": 1000,
-		"next": "Cafe@RecognizeTopLeftText",
-		"interrupt": "WaitLoading"
+		"next": [
+			"Cafe@RecognizeTopLeftText",
+			"[JumpBack]WaitLoading"
+		]
 	},
 
 	"MoveToCafe2": {
 		"next": [
+			"[JumpBack]ClosePopup",
 			"MoveToCafe2@InCafe2",
-			"MoveToCafe2@InCafe1"
-		],
-		"interrupt": [
-			"WaitLoading",
-			"ClosePopup",
-			"CloseReward",
-			"Cafe@ClickMoveCafeButton",
-			"ClickHomeButton",
-			"IdelTapScreen",
-			"Cafe@EnterCafe"
+			"MoveToCafe2@InCafe1",
+			"[JumpBack]WaitLoading",
+			"[JumpBack]CloseReward",
+			"[JumpBack]Cafe@ClickMoveCafeButton",
+			"[JumpBack]ClickHomeButton",
+			"[JumpBack]IdelTapScreen",
+			"[JumpBack]Cafe@EnterCafe"
 		]
 	},
 	"MoveToCafe2@InCafe2":{
@@ -63,8 +61,10 @@
 		"threshold": 0.97,
 		"action": "Click",
 		"post_delay": 1000,
-		"next": "Cafe@RecognizeTopLeftText",
-		"interrupt": "WaitLoading"
+		"next": [
+			"Cafe@RecognizeTopLeftText",
+			"[JumpBack]WaitLoading"
+		]
 	},
 
 	"Cafe@ClickMoveCafeButton": {
@@ -96,11 +96,11 @@
 		"roi": [0, 600, 150, 120],
 		"action": "Click",
 		"post_delay": 1000,
-		"next": "Cafe@RecognizeTopLeftText",
-		"interrupt": [
-			"WaitLoading",
-			"Cafe@ClickCafeButton",
-			"ClosePopup"
+		"next": [
+			"[JumpBack]ClosePopup",
+			"Cafe@RecognizeTopLeftText",
+			"[JumpBack]WaitLoading",
+			"[JumpBack]Cafe@ClickCafeButton"
 		],
 		"doc": "从主界面进入咖啡厅。默认进入1号咖啡厅，所以使用另外的pipeline"
 	},
@@ -109,10 +109,10 @@
 		"template": "CafeTopLeftText.png",
 		"roi": [84, 0, 218, 50],
 		"post_delay": 1000,
-		"next": "Cafe@RecognizeEarningsButton",
-		"interrupt": [
-			"WaitLoading",
-			"Cafe@RecognizeFirstTimePopup"
+		"next": [
+			"Cafe@RecognizeEarningsButton",
+			"[JumpBack]WaitLoading",
+			"[JumpBack]Cafe@RecognizeFirstTimePopup"
 		],
 		"doc": "第一个任务检查点：识别左上角文字。确保进入到了咖啡厅，但是可能会有弹窗出现。进入后等待2秒"
 	},

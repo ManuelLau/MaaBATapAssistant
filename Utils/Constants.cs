@@ -1,15 +1,15 @@
 ﻿namespace MaaBATapAssistant.Utils;
 
-public static class MyConstant
+public static class Constants
 {
-    public const string AppVersion = "0.3.8";
+    public const string AppVersion = "0.3.9";
     public const string PlatformTag = "win-x";
     public const string ProjectGitHubUrl = "https://github.com/ManuelLau/MaaBATapAssistant";
     public const string ProjectGiteeUrl = "https://gitee.com/manuel33/MaaBATapAssistant";
     public const string AppGitHubApiUrl = "https://api.github.com/repos/ManuelLau/MaaBATapAssistant/releases";
     public const string AppGiteeApiUrl = "https://gitee.com/api/v5/repos/manuel33/MaaBATapAssistant/releases";
-    public const string ResourcesGitHubApiUrl = "https://api.github.com/repos/ManuelLau/MaaBATapAssistantResource/releases";
-    public const string ResourcesGiteeApiUrl = "https://gitee.com/api/v5/repos/manuel33/MaaBATapAssistantResource/releases";
+    //public const string ResourcesGitHubApiUrl = "https://api.github.com/repos/ManuelLau/MaaBATapAssistantResource/releases";
+    //public const string ResourcesGiteeApiUrl = "https://gitee.com/api/v5/repos/manuel33/MaaBATapAssistantResource/releases";
     public const string BilibiliLink = "https://space.bilibili.com/3493267989596771";
     public const string BilibiliReadmeLink = "https://www.bilibili.com/opus/1058736840406728723";
 
