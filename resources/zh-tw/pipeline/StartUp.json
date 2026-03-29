@@ -50,7 +50,7 @@
 	},
 	"StartUp@NexonCheckAnnouncementCloseButton": {
 		"recognition": "TemplateMatch",
-		"template": ["CloseButtonNexon0.png","CloseButtonNexon1.png"],
+		"template": ["CloseButtonNexon0.png","CloseButtonNexon1.png","CloseButtonNexon2.png"],
 		"green_mask": true,
 		"action": "Click"
 	},

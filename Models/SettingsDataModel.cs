@@ -40,13 +40,12 @@ public partial class SettingsDataModel : ObservableObject
     public bool IsRelationshipRankUpAutoScreenShot { get; set; } = true;
     public bool NoScreenShot { get; set; } = false;
     public bool IsReconnectAfterDuplicatedLogin { get; set; } = true;
-    public bool IsExitGameAfterTaskFinished { get; set; } = false;
-    public bool IsExitEmulatorAfterTaskFinished { get; set; } = false;
+    public bool IsExitDeviceAfterTaskFinished { get; set; } = false;
     public bool IsAutoCheckAppUpdate { get; set; } = false;
     [ObservableProperty][JsonIgnore]
-    public string emulatorPath = string.Empty;
+    public string devicePath = string.Empty;
     [ObservableProperty][JsonIgnore]
-    public int autoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingDefaultTimeSpan;
+    public int autoRunDeviceWaittingTimeSpan = Constants.AutoRunDeviceWaittingDefaultTimeSpan;
     public bool DoNotShowAnnouncementAgain { get; set; } = false;
     public int ExitEmulatorIndex { get; set; } = 0; //调用命令行关闭模拟器时的索引，默认关闭索引为0的模拟器
 }

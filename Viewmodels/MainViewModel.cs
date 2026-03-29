@@ -47,21 +47,21 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public static void StartTaskButton()
     {
-        Utility.MyDebugWriteLine("手动点击开始任务按钮");
+        Utility.CustomDebugWriteLine("手动点击开始任务按钮");
         TaskManager.Instance.Start();
     }
 
     [RelayCommand]
     public static void StopTaskButton()
     {
-        Utility.MyDebugWriteLine("手动点击停止任务按钮");
+        Utility.CustomDebugWriteLine("手动点击停止任务按钮");
         TaskManager.Instance.Stop(true);
     }
 
     [RelayCommand]
     public static void CreateButton()
     {
-        Utility.MyDebugWriteLine("手动点击生成/刷新任务按钮");
+        Utility.CustomDebugWriteLine("手动点击生成/刷新任务按钮");
         // 用户手动点击，先清空当前任务列表
         Instance.WaitingTaskList.Clear();
         DateTime nextCafeRefreshDateTime = TaskManager.Instance.CreateTask(DateTime.Now);
@@ -142,7 +142,7 @@ public partial class MainViewModel : ObservableObject
         string json = JsonConvert.SerializeObject(WaitingTaskList);
         File.WriteAllText(Constants.CacheFilePath, json);
         // 释放连接模拟器的资源
-        TaskManager.Instance.MaaTaskerDispose();
-        Utility.MyDebugWriteLine("关闭程序");
+        TaskManager.Instance.DisposeMaaTasker();
+        Utility.CustomDebugWriteLine("关闭程序");
     }
 }

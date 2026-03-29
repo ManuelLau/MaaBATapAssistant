@@ -20,7 +20,7 @@ public class ResourcesVersionInfo
         }
         catch
         {
-            Utility.MyDebugWriteLine("无法读取ResourcesVersionInfo");
+            Utility.CustomDebugWriteLine("无法读取ResourcesVersionInfo");
         }
         return "0.0.0.0";
     }

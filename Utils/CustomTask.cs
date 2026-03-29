@@ -2,6 +2,7 @@
 using MaaFramework.Binding;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
+using Newtonsoft.Json.Linq;
 using System.IO;
 
 namespace MaaBATapAssistant.Utils;
@@ -30,19 +31,19 @@ public static class CustomTask
                 }
                 else
                 {
-                    Utility.MyDebugWriteLine("截图数据为空！");
+                    Utility.CustomDebugWriteLine("截图数据为空！");
                     return false;
                 }
             }
             else
             {
-                Utility.MyDebugWriteLine("截图失败！- TryGetEncodedData()");
+                Utility.CustomDebugWriteLine("截图失败！- TryGetEncodedData()");
                 return false;
             }
         }
         else
         {
-            Utility.MyDebugWriteLine("截图失败！- GetCachedImage()");
+            Utility.CustomDebugWriteLine("截图失败！- GetCachedImage()");
             return false;
         }
     }
@@ -172,6 +173,26 @@ public static class CustomTask
         }
     }
 
+    public class FindHardLevel : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(FindHardLevel);
+
+        public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
+        {
+            int currentChapter = int.Parse(GetFilteredNodeContent(args, 0, "text"));
+            int targetChapter = int.Parse(ProgramDataModel.Instance.SettingsData.HardLevel.Split('-')[0]);
+            if (currentChapter > targetChapter)
+            {
+                context.OverridePipeline("{\"Mission@GoLeft\":{\"enabled\":true,\"repeat\":" + Math.Abs(currentChapter - targetChapter) + "}}");
+            }
+            else if (currentChapter < targetChapter)
+            {
+                context.OverridePipeline("{\"Mission@GoRight\":{\"enabled\":true,\"repeat\":" + Math.Abs(currentChapter - targetChapter) + "}}");
+            }
+            return true;
+        }
+    }
+
     public class PrintSweepError : IMaaCustomAction
     {
         public string Name { get; set; } = nameof(PrintSweepError);
@@ -222,6 +243,41 @@ public static class CustomTask
                 }
             }
             return true;
+        }
+    }
+
+    private static string GetFilteredNodeContent(RunArgs args, int index, string nodeName)
+    {
+        if (string.IsNullOrWhiteSpace(args.RecognitionDetail.Detail))
+        {
+            return string.Empty;
+        }
+        try
+        {
+            JObject? root = JObject.Parse(args.RecognitionDetail.Detail);
+            if (root == null)
+            {
+                Utility.CustomDebugWriteLine("识别结果的json解析为空 | JObject is null");
+                return string.Empty;
+            }
+            JArray? filteredToken = root["filtered"] as JArray;
+            if (filteredToken == null)
+            {
+                Utility.CustomDebugWriteLine("filtered节点为空 | filteredToken is null");
+                return string.Empty;
+            }
+            var textToken = filteredToken[index][nodeName];
+            if (textToken == null)
+            {
+                Utility.CustomDebugWriteLine($"{nodeName}节点为空 | {nodeName} is null");
+                return string.Empty;
+            }
+            return textToken.ToObject<string>() ?? string.Empty;
+        }
+        catch (Exception e)
+        {
+            Utility.CustomDebugWriteLine("解析json出现异常：" + e.Message);
+            return string.Empty;
         }
     }
 }

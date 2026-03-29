@@ -3,8 +3,8 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": -10,
-				"y": -194,
+				"x": -57,
+				"y": -115,
 				"zoom": 0.79
 			},
 			"filename": "HomeScreen",
@@ -29,7 +29,7 @@
 	},
 	"HomeScreen@Refresh": {
 		"doc": "刷新游戏，检测掉线、重复登录等状态。前置条件是当前在游戏内。如果识别到主页按钮直接返回即可；如果在主界面则点进学生界面再返回主页",
-		"next": ["HomeScreen@BackToHomePage", "HomeScreen@GoToStudentsPage", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@IdelClick", "[JumpBack]NullNode", "StartUp@StartApp"],
+		"next": ["HomeScreen@BackToHomePage", "[JumpBack]HomeScreen@DisconnectedPopUp", "HomeScreen@GoToStudentsPage", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@IdelClick", "[JumpBack]NullNode", "StartUp@StartApp"],
 		"$__mpe_code": {
 			"position": {
 				"x": 512,
@@ -90,7 +90,7 @@
 			"param": {}
 		},
 		"post_delay": 2000,
-		"next": ["HomeScreen@BackToHomePage", "[JumpBack]DisconnectPopup", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@ClickStudentsPageButton"],
+		"next": ["HomeScreen@BackToHomePage", "[JumpBack]DisconnectPopup", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@ClickStudentsPageButton", "[JumpBack]HomeScreen@DisconnectedPopUp"],
 		"$__mpe_code": {
 			"position": {
 				"x": 886,
@@ -124,7 +124,7 @@
 			"type": "OCR",
 			"param": {
 				"roi": [310, 82, 660, 546],
-				"expected": ["认证信息已超时", "日期已变更"]
+				"expected": ["认证信息已超时", "日期已"]
 			}
 		},
 		"next": ["HomeScreen@Reconnect"],

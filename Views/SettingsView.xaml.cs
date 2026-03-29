@@ -76,7 +76,7 @@ public partial class SettingsView
             if (!regex.IsMatch(textBox.Text))
             {
                 HandyControl.Controls.MessageBox.Error("请输入正确的困难关卡");
-                Utility.MyDebugWriteLine($"输入了错误的关卡 H{textBox.Text}");
+                Utility.CustomDebugWriteLine($"输入了错误的关卡 H{textBox.Text}");
                 textBox.Clear();
             }
             ProgramDataModel.Instance.SettingsData.HardLevel = textBox.Text;
@@ -84,53 +84,53 @@ public partial class SettingsView
         }
     }
 
-    private void EmulatorPathTextBoxTextChanged(object sender, TextChangedEventArgs e)
+    private void DevicePathTextBoxTextChanged(object sender, TextChangedEventArgs e)
     {
         TextBox tb = (TextBox)sender;
-        ProgramDataModel.Instance.SettingsData.EmulatorPath = tb.Text;
+        ProgramDataModel.Instance.SettingsData.DevicePath = tb.Text;
         SettingsViewModel.UpdateConfigJsonFile();
     }
 
-    private void AutoRunEmulatorWaittingTimeSpanTextBoxPreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void AutoRunDeviceWaittingTimeSpanTextBoxPreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         e.Handled = !Regex.IsMatch(e.Text, "^[0-9]$");
     }
 
-    private void AutoRunEmulatorWaittingTimeSpanTextBoxTextChanged(object sender, TextChangedEventArgs e)
+    private void AutoRunDeviceWaittingTimeSpanTextBoxTextChanged(object sender, TextChangedEventArgs e)
     {
         TextBox tb = (TextBox)sender;
         string text = tb.Text;
         // 等待时间最低10秒，最高600秒
         if (int.TryParse(text, out int value))
         {
-            if (value > Constants.AutoRunEmulatorWaittingMaxTimeSpan)
+            if (value > Constants.AutoRunDeviceWaittingMaxTimeSpan)
             {
-                ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingMaxTimeSpan;
+                ProgramDataModel.Instance.SettingsData.AutoRunDeviceWaittingTimeSpan = Constants.AutoRunDeviceWaittingMaxTimeSpan;
                 SettingsViewModel.UpdateConfigJsonFile();
             }
             else
             {
-                ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = value;
+                ProgramDataModel.Instance.SettingsData.AutoRunDeviceWaittingTimeSpan = value;
                 SettingsViewModel.UpdateConfigJsonFile();
             }
         }
     }
 
-    private void AutoRunEmulatorWaittingTimeSpanTextBoxLostFocus(object sender, RoutedEventArgs e)
+    private void AutoRunDeviceWaittingTimeSpanTextBoxLostFocus(object sender, RoutedEventArgs e)
     {
         TextBox tb = (TextBox)sender;
-        tb.Text = ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan.ToString();
+        tb.Text = ProgramDataModel.Instance.SettingsData.AutoRunDeviceWaittingTimeSpan.ToString();
         if (int.TryParse(tb.Text, out int value))
         {
-            if (value < Constants.AutoRunEmulatorWaittingMinTimeSpan)
+            if (value < Constants.AutoRunDeviceWaittingMinTimeSpan)
             {
-                ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingMinTimeSpan;
+                ProgramDataModel.Instance.SettingsData.AutoRunDeviceWaittingTimeSpan = Constants.AutoRunDeviceWaittingMinTimeSpan;
             }
         }
         else
         {
             // 如果输入的不是数字
-            ProgramDataModel.Instance.SettingsData.AutoRunEmulatorWaittingTimeSpan = Constants.AutoRunEmulatorWaittingDefaultTimeSpan;
+            ProgramDataModel.Instance.SettingsData.AutoRunDeviceWaittingTimeSpan = Constants.AutoRunDeviceWaittingDefaultTimeSpan;
         }
 
         SettingsViewModel.UpdateConfigJsonFile();

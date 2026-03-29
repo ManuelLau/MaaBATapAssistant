@@ -35,7 +35,7 @@ public static class UpdateTool
             ProgramDataModel.Instance.UpdateInfo = "获取当前软件版本失败";
             if (needPrintLog)
                 Utility.PrintLog(ProgramDataModel.Instance.UpdateInfo);
-            Utility.MyDebugWriteLine("获取当前软件版本失败，LocalVersion为空");
+            Utility.CustomDebugWriteLine("获取当前软件版本失败，LocalVersion为空");
             return;
         }
         // 获取版本号
@@ -44,12 +44,12 @@ public static class UpdateTool
         {
             if (needPrintLog)
                 Utility.PrintLog("检查软件新版本时网络请求出错");
-            Utility.MyDebugWriteLine("检查软件新版本时网络请求出错");
+            Utility.CustomDebugWriteLine("检查软件新版本时网络请求出错");
             return;
         }
         // 比较版本号大小
         Version latestVersion = new(RemoveFirstLetterV(latestVersionString));
-        Utility.MyDebugWriteLine($"App - LocalVersion:{localAppVersion} | LatestVersion:{latestVersion}");
+        Utility.CustomDebugWriteLine($"App - LocalVersion:{localAppVersion} | LatestVersion:{latestVersion}");
         if (localAppVersion != null && localAppVersion.CompareTo(latestVersion) >= 0)
         {
             isUpToDate = true;
@@ -63,7 +63,7 @@ public static class UpdateTool
             ProgramDataModel.Instance.UpdateInfo = $"发现软件新版本{latestVersionString}，是否更新？";
             if (needPrintLog)
                 Utility.PrintLog($"发现软件新版本{latestVersionString}，请前往设置页面手动更新");
-            Utility.MyDebugWriteLine($"发现软件新版本 {latestVersionString}");
+            Utility.CustomDebugWriteLine($"发现软件新版本 {latestVersionString}");
         }
     }
 
@@ -79,7 +79,7 @@ public static class UpdateTool
     {
         ProgramDataModel.Instance.IsCheckingNewVersion = true;
         ProgramDataModel.Instance.UpdateInfo = "正在检查更新...";
-        Utility.MyDebugWriteLine($"正在检查更新,apiUrl = {apiUrl}");
+        Utility.CustomDebugWriteLine($"正在检查更新,apiUrl = {apiUrl}");
         apiUrl += "/latest"; //获取最新版本，不论是否为pre-release
         latestVersionString = string.Empty;
         downloadUrl = string.Empty;
@@ -98,14 +98,14 @@ public static class UpdateTool
                 JObject json = JObject.Parse(jsonString);
                 if (json == null)
                 {
-                    Utility.MyDebugWriteLine("获取的Json为空");
+                    Utility.CustomDebugWriteLine("获取的Json为空");
                     ProgramDataModel.Instance.IsCheckingNewVersion = false;
                     return false;
                 }
                 var tagNameToken = json["tag_name"];
                 if (tagNameToken == null)
                 {
-                    Utility.MyDebugWriteLine("获取的tag_name为空");
+                    Utility.CustomDebugWriteLine("获取的tag_name为空");
                     ProgramDataModel.Instance.IsCheckingNewVersion = false;
                     return false;
                 }
@@ -129,7 +129,7 @@ public static class UpdateTool
                             else
                             {
                                 ProgramDataModel.Instance.UpdateInfo = "ERR:下载链接中找不到对应的PlatformTag";
-                                Utility.MyDebugWriteLine("下载链接中找不到对应的PlatformTag");
+                                Utility.CustomDebugWriteLine("下载链接中找不到对应的PlatformTag");
                             }
                         }
                     }
@@ -138,7 +138,7 @@ public static class UpdateTool
             else
             {
                 ProgramDataModel.Instance.UpdateInfo = $"检查新版本时网络请求出错-{response.StatusCode}";
-                Utility.MyDebugWriteLine($"检查新版本时网络请求出错: {response.StatusCode} - {response.ReasonPhrase}");
+                Utility.CustomDebugWriteLine($"检查新版本时网络请求出错: {response.StatusCode} - {response.ReasonPhrase}");
                 ProgramDataModel.Instance.IsCheckingNewVersion = false;
                 return false;
             }
@@ -146,7 +146,7 @@ public static class UpdateTool
         catch (Exception e)
         {
             ProgramDataModel.Instance.UpdateInfo = "检查新版本时网络请求出错";
-            Utility.MyDebugWriteLine($"检查新版本时网络请求出错: {e.Message}");
+            Utility.CustomDebugWriteLine($"检查新版本时网络请求出错: {e.Message}");
             ProgramDataModel.Instance.IsCheckingNewVersion = false;
             return false;
         }
@@ -174,11 +174,11 @@ public static class UpdateTool
         if (!GetLatestVersionAndDownloadUrl(apiUrl, Constants.PlatformTag, out string latestVersionString, out string downloadUrl))
         {
             ProgramDataModel.Instance.HasNewVersion = false;
-            Utility.MyDebugWriteLine("检查软件新版本号出错! - UpdateApp()");
+            Utility.CustomDebugWriteLine("检查软件新版本号出错! - UpdateApp()");
             return string.Empty;
         }
-        Utility.MyDebugWriteLine($"开始下载更新 - 由v{Constants.AppVersion}更新至{latestVersionString}");
-        Utility.MyDebugWriteLine("DownloadUrl:" + downloadUrl);
+        Utility.CustomDebugWriteLine($"开始下载更新 - 由v{Constants.AppVersion}更新至{latestVersionString}");
+        Utility.CustomDebugWriteLine("DownloadUrl:" + downloadUrl);
         // 创建临时文件存放路径temp\
         var tempFileDirectory = @".\temp";
         if (Directory.Exists(tempFileDirectory))
@@ -197,12 +197,12 @@ public static class UpdateTool
         if (!await DownloadAndExtractFile(downloadUrl, tempFileDirectory, tempFileName))
         {
             MainViewModel.Instance.ProgramData.UpdateInfo = "文件下载失败！";
-            Utility.MyDebugWriteLine("文件下载失败");
+            Utility.CustomDebugWriteLine("文件下载失败");
             MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
             return string.Empty;
         }
         MainViewModel.Instance.ProgramData.UpdateInfo = $"文件下载完成，是否重启并更新软件";
-        Utility.MyDebugWriteLine($"{tempFileName}下载+解压完成");
+        Utility.CustomDebugWriteLine($"{tempFileName}下载+解压完成");
         MainViewModel.Instance.ProgramData.IsDownloadingFiles = false;
         MainViewModel.Instance.ProgramData.IsReadyForApplyUpdate = true;
         MainViewModel.Instance.SetUpdateWindowTopmost(true);
@@ -227,7 +227,7 @@ public static class UpdateTool
     private static async Task<bool> DownloadAndExtractFile(string url, string tempFileDirectory, string tempFileName)
     {
         string tempFilePath = Path.Combine(tempFileDirectory, tempFileName);
-        Utility.MyDebugWriteLine(tempFilePath);
+        Utility.CustomDebugWriteLine(tempFilePath);
         MainViewModel.Instance.ProgramData.DownloadProgress = 0;
         MainViewModel.Instance.ProgramData.DownloadedSizeInfo = "";
         try
@@ -266,7 +266,7 @@ public static class UpdateTool
             }
             if (!File.Exists(tempFilePath))
             {
-                Utility.MyDebugWriteLine("找不到已下载的文件!");
+                Utility.CustomDebugWriteLine("找不到已下载的文件!");
                 return false;
             }
             switch (Path.GetExtension(tempFilePath))
@@ -298,17 +298,17 @@ public static class UpdateTool
         }
         catch (HttpRequestException httpEx)
         {
-            Utility.MyDebugWriteLine($"HTTP请求出现异常: {httpEx.Message}");
+            Utility.CustomDebugWriteLine($"HTTP请求出现异常: {httpEx.Message}");
             return false;
         }
         catch (IOException ioEx)
         {
-            Utility.MyDebugWriteLine($"文件操作出现异常: {ioEx.Message}");
+            Utility.CustomDebugWriteLine($"文件操作出现异常: {ioEx.Message}");
             return false;
         }
         catch (Exception ex)
         {
-            Utility.MyDebugWriteLine($"出现未知异常: {ex.Message}");
+            Utility.CustomDebugWriteLine($"出现未知异常: {ex.Message}");
             return false;
         }
         return true;
@@ -319,7 +319,7 @@ public static class UpdateTool
     /// </summary>
     public static async void ApplyUpdate(string tempFileName)
     {
-        Utility.MyDebugWriteLine("开始应用更新");
+        Utility.CustomDebugWriteLine("开始应用更新");
         if (!Directory.Exists(Path.Combine(@".\temp", Path.GetFileNameWithoutExtension(tempFileName))))
         {
             Utility.MyGrowlError("解压的文件不存在!");
@@ -332,7 +332,7 @@ public static class UpdateTool
         var assembly = Assembly.GetEntryAssembly();
         if (assembly == null)
         {
-            Utility.MyDebugWriteLine("GetEntryAssembly 失败");
+            Utility.CustomDebugWriteLine("GetEntryAssembly 失败");
             return;
         }
         // 生成update.bat文件来实现复制文件+启动应用

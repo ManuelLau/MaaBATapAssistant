@@ -1,11 +1,12 @@
-﻿using MaaBATapAssistant.ViewModels;
-using MaaBATapAssistant.Models;
+﻿using MaaBATapAssistant.Models;
+using MaaBATapAssistant.ViewModels;
 using MaaFramework.Binding;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using static MaaBATapAssistant.Utils.CustomTask;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace MaaBATapAssistant.Utils;
 
@@ -20,12 +21,21 @@ public class TaskManager
     }
     private readonly MaaToolkit _maaToolkit;
     private MaaTasker? _maaTasker;
+    private string _maaControllerName = string.Empty;
     //用于界面显示的任务列表，包含执行中的、待机的任务
     private readonly ObservableCollection<TaskChainModel> _waitingTaskChainList = MainViewModel.Instance.WaitingTaskList;
     //要马上执行的任务队列，执行前会进行模拟器连接、启动游戏的流程，执行后进行返回主界面
     private readonly List<TaskChainModel> _currentTaskChainList = [];
     private readonly SettingsDataModel _settingsData = ProgramDataModel.Instance.SettingsData;
     private CancellationTokenSource _cancellationTokenSource;
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool IsIconic(IntPtr hWnd);
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
     public TaskManager()
     {
@@ -75,10 +85,10 @@ public class TaskManager
         _cancellationTokenSource = new();
         await Task.Run(async () =>
         {
-            // 如果填写了模拟器路径，则开始任务时候不检测模拟器是否连接
-            if (string.IsNullOrEmpty(_settingsData.EmulatorPath))
+            // 如果正确填写了设备路径，则开始任务时候不检测设备是否已连接
+            if (!System.IO.Path.Exists(_settingsData.DevicePath))
             {
-                if (!await AutoConnect(_cancellationTokenSource.Token))
+                if (!await InitMaaTasker(_cancellationTokenSource.Token))
                 {
                     Stop(false);
                     return;
@@ -111,10 +121,10 @@ public class TaskManager
         }
         catch (Exception e)
         {
-            Utility.MyDebugWriteLine("Stop()-_cancellationTokenSource.Cancel() failed!");
-            Utility.MyDebugWriteLine($"Error: {e.Message}");
+            Utility.CustomDebugWriteLine("Stop()-_cancellationTokenSource.Cancel() failed!");
+            Utility.CustomDebugWriteLine($"Error: {e.Message}");
         }
-        await Task.Run(MaaTaskerDispose);
+        await Task.Run(DisposeMaaTasker);
         if (!isExecutingCurrentTask)
         {
             StopCurrentTask();
@@ -188,32 +198,61 @@ public class TaskManager
         //对任务按时间排序?
     }
 
-    //自动连接模拟器和Maa资源，默认选择搜索到的第一个模拟器
-    private async Task<bool> AutoConnect(CancellationToken token)
+    // 初始化MaaTasker，自动连接设备和Maa资源
+    private async Task<bool> InitMaaTasker(CancellationToken token)
     {
-        var devices = _maaToolkit.AdbDevice.Find();
-        if (devices.IsEmpty)
+        if (_maaTasker is not null && !_maaTasker.IsInvalid)
         {
-            devices = await AutoRunEmulator(token);
+            // 已有有效的MaaTasker，直接获取设备
+            if (_maaTasker.Controller.IsConnected && !_maaTasker.Controller.IsInvalid)
+            {
+                if (DeviceIsEmulator())
+                {
+                    var devices = _maaToolkit.AdbDevice.Find();
+                    if (!devices.IsEmpty)
+                    {
+                        // 已有有效的Adb设备，直接跳过自动连接
+                        return true;
+                    }
+                }
+                else
+                {
+                    DesktopWindowInfo? gameWindow = FindWindow();
+                    if (gameWindow is not null)
+                    {
+                        // 已有有效的Window，直接跳过自动连接
+                        return true;
+                    }
+                }
+            }
+            Utility.CustomDebugWriteLine("Controller is not connected or invalid!");
+            Utility.PrintLog("失去连接，正在重新打开...");
         }
-        if (devices == null || token.IsCancellationRequested)
+        Utility.CustomDebugWriteLine("MaaTasker is null or invalid");
+        DisposeMaaTasker();
+
+        MaaController? maaController = await InitMaaController(token);
+        if (maaController is null || token.IsCancellationRequested)
         {
-            Utility.MyDebugWriteLine($"自动打开模拟器失败-AutoRunEmulator()-token.IsCancellationRequested:{token.IsCancellationRequested}");
+            Utility.CustomDebugWriteLine($"InitMaaController failed - maaController is null or token.IsCancellationRequested:{token.IsCancellationRequested}");
             return false;
         }
 
-        if (!LoadMaaSource(out MaaResource? maaResource) || maaResource == null)
+        MaaResource? maaResource = LoadMaaSource();
+        if (maaResource is null)
         {
             return false;
         }
 
-        Utility.PrintLog("正在连接模拟器...");
+        if (DeviceIsEmulator())
+            Utility.PrintLog("正在连接模拟器...");
+        else
+            Utility.PrintLog("正在连接PC端...");
         try
         {
             _maaTasker = new()
             {
-                //默认使用第0个模拟器，后续再改To-do
-                Controller = devices[0].ToAdbController(),
+                Controller = maaController,
                 Resource = maaResource,
                 DisposeOptions = DisposeOptions.All,
             };
@@ -226,49 +265,120 @@ public class TaskManager
             _maaTasker.Resource.Register(new MaintenanceStopTask());
             _maaTasker.Resource.Register(new ClientUpdateStopTask());
             _maaTasker.Resource.Register(new IPBlockedStopTask());
+            _maaTasker.Resource.Register(new FindHardLevel());
             _maaTasker.Resource.Register(new PrintSweepError());
             _maaTasker.Resource.Register(new PrintFindeLevelError());
             _maaTasker.Resource.Register(new SweepDropScreenshot());
         }
         catch (Exception e)
         {
-            Utility.PrintLog("模拟器初始化失败，可能是ADB连接出现问题，请尝试重启模拟器、ADB或者重启系统");
-            Utility.MyDebugWriteLine($"Error: {e.Message}");
+            if (DeviceIsEmulator())
+                Utility.PrintLog("模拟器初始化失败，可能是ADB连接出现问题，请尝试重启ADB、模拟器或系统");
+            else
+                Utility.PrintLog("PC端初始化失败，请尝试重启PC端或系统");
+            Utility.CustomDebugWriteLine($"Error: {e.Message}");
             return false;
         }
+
         if (_maaTasker == null || !_maaTasker.IsInitialized)
         {
-            Utility.PrintLog("模拟器初始化失败，可能是ADB连接出现问题，请尝试重启模拟器、ADB或者重启系统");
+            if (DeviceIsEmulator())
+                Utility.PrintLog("模拟器初始化失败，可能是ADB连接出现问题，请尝试重启ADB、模拟器或系统");
+            else
+                Utility.PrintLog("PC端初始化失败，请尝试重启PC端或系统");
+            Utility.CustomDebugWriteLine("_maaTasker is null or _maaTasker.IsInitialized is false");
             return false;
         }
-        Utility.PrintLog("成功连接至模拟器" + devices[0].Name);
+        if (DeviceIsEmulator())
+            Utility.PrintLog("成功连接至模拟器" + _maaControllerName);
+        else
+            Utility.PrintLog("成功连接至PC端" + _maaControllerName);
         return true;
     }
 
+    private DesktopWindowInfo? FindWindow()
+    {
+        var windows = _maaToolkit.Desktop.Window.Find();
+        DesktopWindowInfo? gameWindow = null;
+        string GameClientName = string.Empty;
+        switch ((EClientTypeSettingOptions)_settingsData.ClientTypeSettingIndex)
+        {
+            case EClientTypeSettingOptions.Zh_TW_PC:
+                GameClientName = Constants.GameClientName[0];
+                break;
+        }
+        foreach (var e in windows)
+        {
+            if (e.Name.Equals(GameClientName))
+            {
+                gameWindow = e;
+                break;
+            }
+        }
+        return gameWindow;
+    }
+
+    private async Task<MaaController?> InitMaaController(CancellationToken token)
+    {
+        if (DeviceIsEmulator())
+        {
+            var devices = _maaToolkit.AdbDevice.Find();
+            if (devices.IsEmpty)
+            {
+                devices = await AutoRunEmulator(token);
+            }
+            if (devices is null || token.IsCancellationRequested)
+            {
+                Utility.CustomDebugWriteLine($"自动打开模拟器失败 - token.IsCancellationRequested:{token.IsCancellationRequested}");
+                return null;
+            }
+            //默认使用第0个模拟器
+            return devices[0].ToAdbController();
+        }
+        else
+        {
+            DesktopWindowInfo? gameWindow = FindWindow();
+            gameWindow ??= await AutoRunPCClient(token);
+            if (gameWindow is null || token.IsCancellationRequested)
+            {
+                Utility.CustomDebugWriteLine($"自动打开客户端失败 - token.IsCancellationRequested:{token.IsCancellationRequested}");
+                return null;
+            }
+            // 寻找到窗口，但是最小化了，切换至前台
+            if (IsIconic(gameWindow.Handle))
+            {
+                ShowWindow(gameWindow.Handle, 4);
+            }
+            _maaControllerName = gameWindow.Name;
+            return gameWindow.ToWin32ControllerWith(Win32ScreencapMethod.FramePool, Win32InputMethod.SendMessageWithCursorPos, Win32InputMethod.SendMessageWithCursorPos);
+        }
+    }
+
+    //自动启动模拟器
     private async Task<MaaFramework.Binding.Buffers.IMaaListBuffer<AdbDeviceInfo>?> AutoRunEmulator(CancellationToken token)
     {
-        if (string.IsNullOrEmpty(_settingsData.EmulatorPath))
+        if (string.IsNullOrEmpty(_settingsData.DevicePath))
         {
             Utility.PrintError("未设置模拟器路径，请先设置模拟器路径或手动打开模拟器");
         }
-        else if (!System.IO.Path.Exists(_settingsData.EmulatorPath))
+        else if (!System.IO.Path.Exists(_settingsData.DevicePath))
         {
             Utility.PrintError("自动打开模拟器失败，请检查路径是否正确");
-            Utility.MyDebugWriteLine(_settingsData.EmulatorPath);
+            Utility.CustomDebugWriteLine(_settingsData.DevicePath);
         }
         else
         {
             try
             {
-                Utility.MyDebugWriteLine("找不到模拟器，将自动打开模拟器：" + _settingsData.EmulatorPath);
+                Utility.CustomDebugWriteLine("找不到模拟器，将自动打开模拟器：" + _settingsData.DevicePath);
                 Utility.PrintLog("正在打开模拟器...");
-                Process.Start(new ProcessStartInfo(_settingsData.EmulatorPath)
+                Process.Start(new ProcessStartInfo(_settingsData.DevicePath)
                 {
                     UseShellExecute = true
                 });
 
-                // 等待模拟器启动时间X秒，最大等待搜索设备时间100秒
-                await Task.Delay(_settingsData.AutoRunEmulatorWaittingTimeSpan * 1000, token);
+                // 等待模拟器启动时间X秒，最大等待搜索设备时间120秒
+                await Task.Delay(_settingsData.AutoRunDeviceWaittingTimeSpan * 1000, token);
                 DateTime startTime = DateTime.Now;
                 while (!token.IsCancellationRequested)
                 {
@@ -277,7 +387,7 @@ public class TaskManager
                     {
                         return devices;
                     }
-                    if (DateTime.Now > startTime.AddSeconds(Constants.AutoSearchEmulatorWaittingTimeSpan))
+                    if (DateTime.Now > startTime.AddSeconds(Constants.AutoSearchDeviceMaxWaittingTimeSpan))
                     {
                         Utility.PrintError("等待超时，自动打开模拟器失败！");
                         return null;
@@ -287,28 +397,91 @@ public class TaskManager
             }
             catch (TaskCanceledException)
             {
-                Utility.MyDebugWriteLine("手动停止自动打开模拟器");
-                //StopCurrentTask();
+                Utility.CustomDebugWriteLine("手动停止自动打开模拟器");
             }
             catch (Exception e)
             {
-                Utility.MyDebugWriteLine($"无法打开模拟器: {e.Message}");
+                Utility.CustomDebugWriteLine($"无法打开模拟器: {e.Message}");
                 Utility.PrintError("打开模拟器失败！请检查路径是否正确");
             }
         }
         return null;
     }
 
-    private static bool LoadMaaSource(out MaaResource? resource)
+    //自动启动PC端
+    private async Task<DesktopWindowInfo?> AutoRunPCClient(CancellationToken token)
     {
-        resource = null;
+        if (string.IsNullOrEmpty(_settingsData.DevicePath))
+        {
+            Utility.PrintError("未设置PC端路径，请先设置路径或手动打开PC端");
+        }
+        else if (!System.IO.Path.Exists(_settingsData.DevicePath))
+        {
+            Utility.PrintError("自动连接PC端失败，请检查路径是否正确");
+            Utility.CustomDebugWriteLine(_settingsData.DevicePath);
+        }
+        else
+        {
+            try
+            {
+                Utility.CustomDebugWriteLine("找不到正在运行的PC端，将自动打开：" + _settingsData.DevicePath);
+                Utility.PrintLog("正在打开PC端...");
+                Process.Start(new ProcessStartInfo(_settingsData.DevicePath)
+                {
+                    UseShellExecute = true
+                });
+
+                // 等待PC端启动，默认/最小等待时间为10秒
+                await Task.Delay(_settingsData.AutoRunDeviceWaittingTimeSpan * 1000, token);
+                DateTime startTime = DateTime.Now;
+                while (!token.IsCancellationRequested)
+                {
+                    //var windows = _maaToolkit.Desktop.Window.Find();
+                    //foreach (var e in windows)
+                    //{
+                    //    if (e.Name.Equals(Constants.GameClientName[_settingsData.ClientTypeSettingIndex]))
+                    //    {
+                    //        return e;
+                    //    }
+                    //}
+                    var window = FindWindow();
+                    if (window is not null)
+                    {
+                        return window;
+                    }
+                    if (DateTime.Now > startTime.AddSeconds(Constants.AutoSearchDeviceMaxWaittingTimeSpan))
+                    {
+                        Utility.PrintError("等待超时，自动打开PC端失败！");
+                        return null;
+                    }
+                    Thread.Sleep(1000); // 每秒执行一次
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                Utility.CustomDebugWriteLine("手动停止自动打开PC端");
+            }
+            catch (Exception e)
+            {
+                Utility.CustomDebugWriteLine($"无法打开PC端: {e.Message}");
+                Utility.PrintError("打开PC端失败！请检查路径是否正确");
+            }
+        }
+        return null;
+    }
+
+    private static MaaResource? LoadMaaSource()
+    {
+        MaaResource? resource;
         //根据配置里的客户端类型选项改变读取的文件路径
         string[] maaSourcePaths = ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
         {
             (int)EClientTypeSettingOptions.Zh_CN => [Constants.MaaSourceDirectory],
             (int)EClientTypeSettingOptions.Zh_CN_Bilibili => [Constants.MaaSourceDirectory, Constants.MaaSourcePathBiliBiliOverride],
             (int)EClientTypeSettingOptions.Zh_TW => [Constants.MaaSourceDirectory, Constants.MaaSourcePathZhtwOverride],
+            (int)EClientTypeSettingOptions.Zh_TW_PC => [Constants.MaaSourceDirectory, Constants.MaaSourcePathZhtwOverride],
             (int)EClientTypeSettingOptions.Jp => [Constants.MaaSourceDirectory, Constants.MaaSourcePathJpOverride],
+            //(int)EClientTypeSettingOptions.Jp_PC => [Constants.MaaSourceDirectory, Constants.MaaSourcePathJpOverride],
             _ => [Constants.MaaSourceDirectory],
         };
         try
@@ -318,12 +491,21 @@ public class TaskManager
         catch (Exception e)
         {
             Utility.PrintLog("加载资源文件失败");
-            Utility.MyDebugWriteLine($"Error: {e.Message}");
-            return false;
+            Utility.CustomDebugWriteLine($"Error: {e.Message}");
+            return null;
         }
-        return true;
+        return resource;
     }
 
+    private static bool DeviceIsEmulator()
+    {
+        return ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
+        {
+            (int)EClientTypeSettingOptions.Zh_TW_PC => false,
+            //(int)EClientTypeSettingOptions.JP_PC => false,
+            _ => true,
+        };
+    }
     //开启挂机任务
     private async Task StartAfkTask(CancellationToken token)
     {
@@ -358,12 +540,12 @@ public class TaskManager
             {
                 if (DateTime.Now >= taskChainItem.ExecuteDateTime)
                 {
-                    Utility.MyDebugWriteLine($"检测到有任务可以执行");
+                    Utility.CustomDebugWriteLine($"检测到有任务可以执行");
                     ProgramDataModel.Instance.IsCurrentTaskExecuting = true;
                     firstTimeExecute = false;
                     CreateCurrentTaskQueue();
                     await ExecuteCurrentTask(token);
-                    Utility.MyDebugWriteLine($"已入列的任务执行完成或任务停止");
+                    Utility.CustomDebugWriteLine($"已入列的任务执行完成或任务停止");
                     ProgramDataModel.Instance.IsCurrentTaskExecuting = false;
                     break;
                 }
@@ -397,48 +579,62 @@ public class TaskManager
             var currentTaskChain = _currentTaskChainList[0];
             currentTaskChain.Status = ETaskChainStatus.Running;
 
-            if (_maaTasker == null || _maaTasker.IsInvalid)
+            if (!await InitMaaTasker(token))
             {
-                Utility.MyDebugWriteLine($"maaTasker is null or invalid!");
-                Utility.PrintLog("模拟器未连接");
-                if (!await AutoConnect(token))
-                {
-                    if (!_cancellationTokenSource.IsCancellationRequested)
-                    {
-                        Stop(true);
-                    }
-                    return;
-                }
+                Utility.CustomDebugWriteLine("maaTasker初始化失败");
             }
             if (_maaTasker == null)
             {
-                Utility.MyDebugWriteLine("maaTasker依然是null，直接停止任务");
+                Utility.CustomDebugWriteLine("maaTasker依然是null，直接停止任务");
                 if (!_cancellationTokenSource.IsCancellationRequested)
                 {
                     Stop(true);
                 }
                 return;
             }
-            var device = _maaTasker.Toolkit.AdbDevice.Find();
-            if (device.IsEmpty || device.IsInvalid)
-            {
-                Utility.MyDebugWriteLine($"device is empty or invalid!");
-                Utility.PrintLog("模拟器失去连接，正在重新打开...");
-                if (!await AutoConnect(token))
-                {
-                    if (!_cancellationTokenSource.IsCancellationRequested)
-                    {
-                        Stop(true);
-                    }
-                    return;
-                }
-            }
+
+            //if (_maaTasker == null || _maaTasker.IsInvalid)
+            //{
+            //    Utility.CustomDebugWriteLine($"maaTasker is null or invalid!");
+            //    Utility.PrintLog("模拟器未连接");
+            //    if (!await AutoConnect(token))
+            //    {
+            //        if (!_cancellationTokenSource.IsCancellationRequested)
+            //        {
+            //            Stop(true);
+            //        }
+            //        return;
+            //    }
+            //}
+            //if (_maaTasker == null)
+            //{
+            //    Utility.CustomDebugWriteLine("maaTasker依然是null，直接停止任务");
+            //    if (!_cancellationTokenSource.IsCancellationRequested)
+            //    {
+            //        Stop(true);
+            //    }
+            //    return;
+            //}
+            //var device = _maaTasker.Toolkit.AdbDevice.Find();
+            //if (device.IsEmpty || device.IsInvalid)
+            //{
+            //    Utility.CustomDebugWriteLine($"device is empty or invalid!");
+            //    Utility.PrintLog("模拟器失去连接，正在重新打开...");
+            //    if (!await AutoConnect(token))
+            //    {
+            //        if (!_cancellationTokenSource.IsCancellationRequested)
+            //        {
+            //            Stop(true);
+            //        }
+            //        return;
+            //    }
+            //}
 
             if (token.IsCancellationRequested)
             {
                 return;
             }
-            Utility.MyDebugWriteLine($"[任务链]   - 执行 - {currentTaskChain.Name}");
+            Utility.CustomDebugWriteLine($"[任务链]   - 执行 - {currentTaskChain.Name}");
             if (currentTaskChain.NeedPrintLog)
             {
                 Utility.PrintLog(currentTaskChain.StartLogMessage);
@@ -458,25 +654,25 @@ public class TaskManager
                         break;
                     }
                 }
-                Utility.MyDebugWriteLine($"[单个任务] - 执行 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
-                Utility.MyDebugWriteLine($"PipelineOverride - {taskItem.PipelineOverride}");
+                Utility.CustomDebugWriteLine($"[单个任务] - 执行 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                Utility.CustomDebugWriteLine($"PipelineOverride - {taskItem.PipelineOverride}");
                 var status = string.IsNullOrEmpty(taskItem.PipelineOverride) ?
                     _maaTasker.AppendTask(taskItem.Entry).Wait() :
                     _maaTasker.AppendTask(taskItem.Entry, taskItem.PipelineOverride).Wait();
                 if (status.IsSucceeded())
                 {
-                    Utility.MyDebugWriteLine($"[单个任务] - 完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
+                    Utility.CustomDebugWriteLine($"[单个任务] - 完成 - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry})");
                 }
                 else
                 {
                     anyTaskFailed = true;
-                    Utility.MyDebugWriteLine($"[单个任务] - 失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
+                    Utility.CustomDebugWriteLine($"[单个任务] - 失败! - {taskItem.Name} - maaTasker.AppendPipeline({taskItem.Entry}) - {status}");
 
                     // 检测是否因为停止任务导致释放了maaTasker，如果不break会导致闪退
                     if (token.IsCancellationRequested)
                     {
                         CurrentTaskChainPrintFinishedLog = false;
-                        Utility.MyDebugWriteLine("停止任务 - 跳出当前任务链");
+                        Utility.CustomDebugWriteLine("停止任务 - 跳出当前任务链");
                         break;
                     }
                     // 不是手动或系统停止的话,有Pipeline失败后会继续执行后面的Pipeline
@@ -487,13 +683,13 @@ public class TaskManager
             {
                 if (CurrentTaskChainPrintFinishedLog && currentTaskChain.NeedPrintLog)
                     Utility.PrintError(currentTaskChain.FailedLogMessage);
-                Utility.MyDebugWriteLine($"[任务链]   - 异常! - 执行任务链过程中出现异常 - {currentTaskChain.Name}");
+                Utility.CustomDebugWriteLine($"[任务链]   - 异常! - 执行任务链过程中出现异常 - {currentTaskChain.Name}");
             }
             else
             {
                 if (CurrentTaskChainPrintFinishedLog && currentTaskChain.NeedPrintLog)
                     Utility.PrintLog(currentTaskChain.SucceededLogMessage);
-                Utility.MyDebugWriteLine($"[任务链]   - 完成 - {currentTaskChain.Name}");
+                Utility.CustomDebugWriteLine($"[任务链]   - 完成 - {currentTaskChain.Name}");
             }
             //移除任务链。如果是因为用户手动取消的话就不移除，并将状态设为等待中
             if (token.IsCancellationRequested)
@@ -515,52 +711,12 @@ public class TaskManager
 
         RefreshWaitingTaskChainDateTime(DateTime.Now, false);
 
-        bool isExitEmulatorSucceed = false;
-        if (_settingsData.IsExitEmulatorAfterTaskFinished)
+        if (_settingsData.IsExitDeviceAfterTaskFinished)
         {
-            if (string.IsNullOrEmpty(_settingsData.EmulatorPath))
-            {
-                Utility.PrintError("自动退出模拟器失败，请先填写模拟器路径");
-            }
-            else if (!System.IO.Path.Exists(_settingsData.EmulatorPath))
-            {
-                Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
-            }
+            if (DeviceIsEmulator())
+                ExitEmulator();
             else
-            {
-                try
-                {
-                    if (ExitEmulator())
-                    {
-                        isExitEmulatorSucceed = true;
-                        Utility.PrintLog("已自动退出模拟器");
-                    }
-                    else
-                    {
-                        Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
-                    Utility.MyDebugWriteLine($"自动退出模拟器时出现错误: {e.Message}");
-                }
-            }
-        }
-        if (!isExitEmulatorSucceed && _settingsData.IsExitGameAfterTaskFinished)
-        {
-            if (_maaTasker != null)
-            {
-                var status = _maaTasker.AppendTask("CloseGame").Wait();
-                if (status.IsSucceeded())
-                {
-                    Utility.PrintLog("已自动退出游戏");
-                }
-                else
-                {
-                    Utility.PrintLog("自动退出游戏失败!");
-                }
-            }
+                ExitPCClient();
         }
         Utility.PrintLog("当前任务已完成，小助手待机中");
     }
@@ -816,7 +972,7 @@ public class TaskManager
         _currentTaskChainList.Add(new("返回主界面", DateTime.Now, ETaskChainType.System, false, false, string.Empty, tempQueue));
         foreach (var item in _currentTaskChainList)
         {
-            Utility.MyDebugWriteLine($"{item.ExecuteDateTime} - {item.Name}");
+            Utility.CustomDebugWriteLine($"{item.ExecuteDateTime} - {item.Name}");
         }
     }
 
@@ -832,8 +988,11 @@ public class TaskManager
                 return "";
             //启动游戏
             case ETaskType.StartGame:
-                return _settingsData.IsReconnectAfterDuplicatedLogin ?
-                    string.Empty : "{\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
+                if (DeviceIsEmulator())
+                    return _settingsData.IsReconnectAfterDuplicatedLogin ? string.Empty : "{\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
+                else
+                    return _settingsData.IsReconnectAfterDuplicatedLogin ? "{\"StartGame\":{\"action\":{\"type\":\"DoNothing\",\"param\":{}}}}" :
+                        "{\"StartGame\":{\"action\":{\"type\":\"DoNothing\",\"param\":{}}},\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
             //1号咖啡厅邀请
             case ETaskType.Cafe1Invite:
                 overrideSortType = string.Empty;
@@ -854,6 +1013,7 @@ public class TaskManager
                         }
                         break;
                     case (int)EClientTypeSettingOptions.Zh_TW:
+                    case (int)EClientTypeSettingOptions.Zh_TW_PC:
                         switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
                         {
                             case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
@@ -867,6 +1027,7 @@ public class TaskManager
                         }
                         break;
                     case (int)EClientTypeSettingOptions.Jp:
+                    //case (int)EClientTypeSettingOptions.Jp_PC:
                         switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
                         {
                             case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
@@ -922,6 +1083,7 @@ public class TaskManager
                         }
                         break;
                     case (int)EClientTypeSettingOptions.Zh_TW:
+                    case (int)EClientTypeSettingOptions.Zh_TW_PC:
                         switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
                         {
                             case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
@@ -935,6 +1097,7 @@ public class TaskManager
                         }
                         break;
                     case (int)EClientTypeSettingOptions.Jp:
+                    //case (int)EClientTypeSettingOptions.Jp_PC:
                         switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
                         {
                             case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
@@ -972,13 +1135,13 @@ public class TaskManager
                 return "{\"CafeLayout@ApplyLayout\":{\"index\":" + _settingsData.Cafe2PMApplyLayoutIndex + "}}";
             //扫荡困难关卡
             case ETaskType.SweepHardLevel:
-                return "{\"Mission@RecognizeMissionLevel\":{\"text\":\"" + _settingsData.HardLevel + "\"}}";
+                return "{\"Mission@RecognizeMissionLevel\":{\"recognition\":{\"param\":{\"expected\":\""+ _settingsData.HardLevel + "\"}}}}";
             default:
                 return "";
         }
     }
 
-    public void MaaTaskerDispose()
+    public void DisposeMaaTasker()
     {
         try
         {
@@ -986,11 +1149,16 @@ public class TaskManager
             {
                 _maaTasker.Stop().Wait();
                 _maaTasker.Dispose();
+                _maaTasker = null;
             }
         }
-        catch (Exception ex)
+        catch (ObjectDisposedException)
         {
-            Utility.MyDebugWriteLine(ex.Message);
+            Utility.CustomDebugWriteLine("MaaTasker was already disposed");
+        }
+        catch (Exception e)
+        {
+            Utility.CustomDebugWriteLine($"MaaTasker Dispose failed: {e.Message}");
         }
     }
 
@@ -1000,34 +1168,45 @@ public class TaskManager
     /// </summary>
     private bool ExitEmulator()
     {
+        if (string.IsNullOrEmpty(_settingsData.DevicePath))
+        {
+            Utility.PrintError("自动退出模拟器失败，请先填写模拟器路径");
+            return false;
+        }
+        else if (!System.IO.Path.Exists(_settingsData.DevicePath))
+        {
+            Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
+            return false;
+        }
+
         string mumu = "MuMuPlayer";
         string leidian = "dnplayer";
-        if (_settingsData.EmulatorPath.IndexOf(mumu, StringComparison.OrdinalIgnoreCase) >= 0
-            || _settingsData.EmulatorPath.IndexOf(leidian, StringComparison.OrdinalIgnoreCase) >= 0)
+        if (_settingsData.DevicePath.Contains(mumu, StringComparison.OrdinalIgnoreCase) || _settingsData.DevicePath.Contains(leidian, StringComparison.OrdinalIgnoreCase))
         {
             // 调用MuMu的控制台方法关闭模拟器
-            string? directory = System.IO.Path.GetDirectoryName(_settingsData.EmulatorPath);
+            string? directory = System.IO.Path.GetDirectoryName(_settingsData.DevicePath);
             if (string.IsNullOrEmpty(directory))
-            { 
+            {
+                Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
                 return false;
             }
             string programPath = string.Empty;
             string argument = string.Empty;
             // MuMu模拟器
-            if (_settingsData.EmulatorPath.IndexOf(mumu, StringComparison.OrdinalIgnoreCase) >= 0)
+            if (_settingsData.DevicePath.Contains(mumu, StringComparison.OrdinalIgnoreCase))
             {
                 programPath = System.IO.Path.Combine(directory, "MuMuManager.exe");
                 argument = $"control -v {_settingsData.ExitEmulatorIndex} shutdown";
             }
             // 雷电模拟器
-            else if (_settingsData.EmulatorPath.IndexOf(leidian, StringComparison.OrdinalIgnoreCase) >= 0)
+            else if (_settingsData.DevicePath.Contains(leidian, StringComparison.OrdinalIgnoreCase))
             {
                 programPath = System.IO.Path.Combine(directory, "ldconsole.exe");
                 argument = $"quit --index {_settingsData.ExitEmulatorIndex}";
             }
 
             // 执行命令行任务
-            Utility.MyDebugWriteLine($"执行命令行 - ProgramPath:{programPath} - Argument:{argument}");
+            Utility.CustomDebugWriteLine($"执行命令行 - ProgramPath:{programPath} - Argument:{argument}");
             ProcessStartInfo processStartInfo = new()
             {
                 FileName = programPath,
@@ -1048,21 +1227,22 @@ public class TaskManager
             // 检查是否有错误输出
             if (!string.IsNullOrEmpty(errorOutput))
             {
-                Utility.MyDebugWriteLine("执行命令行遇到错误！运行结果：" + output);
-                Utility.MyDebugWriteLine("错误：" + errorOutput);
+                Utility.CustomDebugWriteLine("执行命令行遇到错误！运行结果：" + output);
+                Utility.CustomDebugWriteLine("错误：" + errorOutput);
                 return false;
             }
+            Utility.PrintLog("已自动退出模拟器");
             return true;
         }
         // 通用的退出方法，直接关闭同名进程
         else
         {
-            string fileName = System.IO.Path.GetFileName(_settingsData.EmulatorPath);
+            string fileName = System.IO.Path.GetFileName(_settingsData.DevicePath);
             Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(fileName));
             foreach (Process process in processes)
             {
                 if (process.MainModule != null &&
-                    process.MainModule.FileName.Equals(_settingsData.EmulatorPath, StringComparison.InvariantCultureIgnoreCase))
+                    process.MainModule.FileName.Equals(_settingsData.DevicePath, StringComparison.InvariantCultureIgnoreCase))
                 {
                     process.Kill();
                     process.WaitForExit();
@@ -1070,8 +1250,29 @@ public class TaskManager
                 }
             }
         }
-
         return false;
+    }
+
+    private void ExitPCClient()
+    {
+        if (_maaTasker != null)
+        {
+            DesktopWindowInfo? gameWindow = FindWindow();
+            if (gameWindow is null)
+            {
+                Utility.PrintLog("未找到游戏窗口，无法自动退出客户端");
+                return;
+            }
+            bool success = PostMessage(gameWindow.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+            if (success)
+            {
+                Utility.PrintLog("即将自动退出客户端");
+            }
+            else
+            {
+                Utility.PrintLog("自动退出客户端失败!");
+            }
+        }
     }
 
     // 从json里读取配置并使用配置初始化
@@ -1096,14 +1297,14 @@ public class TaskManager
     //    var devices = await _maaToolkit.AdbDevice.FindAsync();
     //    if (devices.IsEmpty)
     //    {
-    //        Utility.MyDebugWriteLine("找不到任何设备");
+    //        Utility.CustomDebugWriteLine("找不到任何设备");
     //    }
     //    else
     //    {
-    //        Utility.MyDebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
+    //        Utility.CustomDebugWriteLine($"一共有{devices.MaaSizeCount}个Adb设备");
     //        foreach (var e in devices)
     //        {
-    //            Utility.MyDebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
+    //            Utility.CustomDebugWriteLine($"Name = {e.Name}\nAdbPath = {e.AdbPath}\nAdbSerial = {e.AdbSerial}\nConfig = {e.Config}");
     //        }
     //    }
     //}

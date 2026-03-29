@@ -23,7 +23,7 @@
                 <hc:Divider Content="任务设置" Margin="10 10 10 10"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Text="客户端类型" Style="{StaticResource SettingTextBlockStyle}"/>
+                    <TextBlock Text="设备类型" Style="{StaticResource SettingTextBlockStyle}"/>
                     <hc:ComboBox ItemsSource="{Binding ClientTypeSettingOptionsText}"
                                  SelectedIndex="{Binding ProgramData.SettingsData.ClientTypeSettingIndex}"
                                  SelectionChanged="SettingsClientTypeSelectionChanged"
@@ -210,12 +210,8 @@
                           IsChecked="{Binding ProgramData.SettingsData.IsReconnectAfterDuplicatedLogin}"
                           Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                 </CheckBox>
-                <CheckBox Content="完成当前任务后退出游戏" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          IsChecked="{Binding ProgramData.SettingsData.IsExitGameAfterTaskFinished}"
-                          Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
-                </CheckBox>
-                <CheckBox Content="完成当前任务后退出模拟器" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          IsChecked="{Binding ProgramData.SettingsData.IsExitEmulatorAfterTaskFinished}"
+                <CheckBox Content="完成当前任务后退出模拟器/PC端" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding ProgramData.SettingsData.IsExitDeviceAfterTaskFinished}"
                           Click="SettingsCheckBoxClick" IsEnabled="{c:Binding !ProgramData.IsCurrentTaskExecuting}">
                 </CheckBox>
 
@@ -230,20 +226,20 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="模拟器路径" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="模拟器/PC端路径" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Button Content="选择" Width="56" Height="32" Margin="8 0 0 0"
-                                Command="{Binding SelectEmulatorPathCommand}"/>
+                                Command="{Binding SelectDevicePathCommand}"/>
                     </StackPanel>
-                    <TextBox Grid.Row="1" Text="{Binding ProgramData.SettingsData.EmulatorPath}" Width="400" Height="32"
-                             TextChanged="EmulatorPathTextBoxTextChanged"/>
+                    <TextBox Grid.Row="1" Text="{Binding ProgramData.SettingsData.DevicePath}" Width="400" Height="32"
+                             TextChanged="DevicePathTextBoxTextChanged"/>
                     
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="等待模拟器启动时间（秒）" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding ProgramData.SettingsData.AutoRunEmulatorWaittingTimeSpan}" Width="36" Height="32" Margin="4 0 0 0"
+                        <TextBlock Text="等待模拟器/PC端启动时间（秒）" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding ProgramData.SettingsData.AutoRunDeviceWaittingTimeSpan}" Width="36" Height="32" Margin="4 0 0 0"
                                  HorizontalContentAlignment="Center"
-                                 PreviewTextInput="AutoRunEmulatorWaittingTimeSpanTextBoxPreviewTextInput"
-                                 TextChanged="AutoRunEmulatorWaittingTimeSpanTextBoxTextChanged"
-                                 LostFocus="AutoRunEmulatorWaittingTimeSpanTextBoxLostFocus"/>
+                                 PreviewTextInput="AutoRunDeviceWaittingTimeSpanTextBoxPreviewTextInput"
+                                 TextChanged="AutoRunDeviceWaittingTimeSpanTextBoxTextChanged"
+                                 LostFocus="AutoRunDeviceWaittingTimeSpanTextBoxLostFocus"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 0 0 0" HorizontalAlignment="Center">

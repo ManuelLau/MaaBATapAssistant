@@ -32,26 +32,15 @@ public partial class SettingsViewModel : ObservableObject
     public SettingsViewModel()
     {
         // 初始化设置选项文本
-        ClientTypeSettingOptionsText =
-        [
-            "官服",
-            "B服",
-            "国际服-繁体",
-            "日服"
-        ];
+        ClientTypeSettingOptionsText = Utility.GetEnumDescriptions<EClientTypeSettingOptions>();
         CafeInviteTimeSettingOptionsText =
         [
             "4:00~15:59",
             "16:00~次日3:59",
-            "立即，无视时间段",
+            "立即，无视重置时间",
             "不使用"
         ];
-        CafeInviteSortTypeSettingOptionsText =
-        [
-            "好感等级由高到低",
-            "好感等级由低到高",
-            "精选(自上而下)"
-        ];
+        CafeInviteSortTypeSettingOptionsText = Utility.GetEnumDescriptions<ECafeInviteSortTypeSettingOptions>();
         CafeInviteIndexSettingOptionsText = [1, 2, 3, 4, 5];
         CafeApplyLayoutSettingOptionsText = [1, 2, 3];
         Cafe1ApplyLayoutAMText = "4:00~15:59时间段1号咖啡厅应用家具预设序号";
@@ -96,8 +85,6 @@ public partial class SettingsViewModel : ObservableObject
     // 更改客户端后刷新UI(时间段相关的文字)
     public void UpdateSettingUI()
     {
-        int cafe1Index = ProgramDataModel.Instance.SettingsData.Cafe1InviteTimeSettingIndex;
-        int cafe2Index = ProgramDataModel.Instance.SettingsData.Cafe2InviteTimeSettingIndex;
         switch ((EClientTypeSettingOptions)ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex)
         {
             default:
@@ -110,6 +97,7 @@ public partial class SettingsViewModel : ObservableObject
                 break;
             case EClientTypeSettingOptions.Zh_TW:
             case EClientTypeSettingOptions.Jp:
+            case EClientTypeSettingOptions.Zh_TW_PC:
                 CafeInviteTimeSettingOptionsText[0] = "3:00~14:59";
                 CafeInviteTimeSettingOptionsText[1] = "15:00~次日2:59";
                 Cafe1ApplyLayoutAMText = "3:00~14:59时间段1号咖啡厅应用家具预设序号";
@@ -118,8 +106,6 @@ public partial class SettingsViewModel : ObservableObject
                 Cafe2ApplyLayoutPMText = "15:00~次日2:59时间段2号咖啡厅应用家具预设序号";
                 break;
         }
-        ProgramDataModel.Instance.SettingsData.Cafe1InviteTimeSettingIndex = cafe1Index;
-        ProgramDataModel.Instance.SettingsData.Cafe2InviteTimeSettingIndex = cafe2Index;
     }
 
     [RelayCommand]
@@ -142,18 +128,18 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void SelectEmulatorPath()
+    public void SelectDevicePath()
     {
         OpenFileDialog openFileDialog = new()
         {
-            Filter = "Executable Files (*.exe)|*.exe",
-            Title = "选择模拟器路径"
+            Filter = "应用程序(*.exe)|*.exe",
+            Title = "选择程序"
         };
 
         // 显示对话框并检查用户是否选择了文件
         if (openFileDialog.ShowDialog() == true)
         {
-            ProgramData.SettingsData.EmulatorPath = openFileDialog.FileName;
+            ProgramData.SettingsData.DevicePath = openFileDialog.FileName;
             UpdateConfigJsonFile();
         }
     }

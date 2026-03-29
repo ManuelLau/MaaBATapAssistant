@@ -1,10 +1,12 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Reflection;
+using System.Windows;
 
 namespace MaaBATapAssistant.Utils;
 
 public static class Utility
 {
-    public static void MyDebugWriteLine(string content)
+    public static void CustomDebugWriteLine(string content)
     {
         Serilog.Log.Information("[WriteLine]  " + content);
 #if DEBUG
@@ -50,5 +52,27 @@ public static class Utility
     {
         Serilog.Log.Information("[GrowlAsk]   " + content);
         HandyControl.Controls.Growl.Ask(content, funcBeforeClose);
+    }
+
+    // 获取枚举所有值的 Description
+    public static List<string> GetEnumDescriptions<T>() where T : Enum
+    {
+        var descriptions = new List<string>();
+        var values = Enum.GetValues(typeof(T));
+
+        foreach (var value in values)
+        {
+            var field = typeof(T).GetField(value.ToString() ?? string.Empty);
+            var attribute = field?.GetCustomAttribute<DescriptionAttribute>();
+            if (attribute != null)
+            {
+                descriptions.Add(attribute.Description);
+            }
+            else
+            {
+                descriptions.Add(value.ToString() ?? string.Empty);
+            }
+        }
+        return descriptions;
     }
 }

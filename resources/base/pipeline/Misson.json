@@ -1,177 +1,435 @@
 {
+	"$__mpe_config_Mission": {
+		"$__mpe_code": {
+			"prefix": "",
+			"savedViewport": {
+				"x": 353,
+				"y": 282,
+				"zoom": 0.47
+			},
+			"filename": "Mission",
+			"version": "v1.3.1"
+		}
+	},
 	"SweepHardLevel": {
-		"next": [
-			"[JumpBack]ClosePopup",
-			"Mission@EnterCampaign",
-			"[JumpBack]WaitLoading",
-			"[JumpBack]DisconnectPopup",
-			"[JumpBack]CloseReward",
-			"[JumpBack]ClickHomeButton"
-		]
+		"next": ["[JumpBack]ClosePopup", "Mission@EnterCampaign", "[JumpBack]WaitLoading", "[JumpBack]DisconnectPopup", "[JumpBack]CloseReward", "[JumpBack]ClickHomeButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 12,
+				"y": 828
+			}
+		}
 	},
 	"Mission@EnterCampaign": {
-		"recognition": "TemplateMatch",
-		"template": "CampaignButton.png",
-		"roi": [1000, 460, 280, 260],
-		"action": "Click",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1000, 460, 280, 260],
+				"template": "CampaignButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
 		"post_delay": 1000,
-		"next": [
-			"Mission@EnterMisson",
-			"[JumpBack]WaitLoading",
-			"[JumpBack]DisconnectPopup",
-			"[JumpBack]Mission@ClickCampaignButton"
-		]
+		"next": ["Mission@EnterMisson", "[JumpBack]WaitLoading", "[JumpBack]DisconnectPopup", "[JumpBack]Mission@ClickCampaignButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 326,
+				"y": 610
+			}
+		}
 	},
-	"Mission@ClickCampaignButton":{
-		"recognition": "TemplateMatch",
-		"template": "CampaignButton.png",
-		"roi": [1000, 460, 280, 260],
-		"action": "Click",
-		"post_delay": 1000
+	"Mission@ClickCampaignButton": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1000, 460, 280, 260],
+				"template": "CampaignButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 1000,
+		"$__mpe_code": {
+			"position": {
+				"x": 663,
+				"y": 888
+			}
+		}
 	},
 	"Mission@EnterMisson": {
-		"recognition": "TemplateMatch",
-		"template": "Mission.png",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [640, 100, 350, 260],
+				"template": "Mission.png"
+			}
+		},
 		"pre_delay": 1000,
-		"roi": [640, 100, 350, 260],
-		"action": "Click",
-		"post_delay": 1000,
-		"next": [
-			"Mission@SelectHardMission",
-			"[JumpBack]WaitLoading",
-			"[JumpBack]DisconnectPopup",
-			"[JumpBack]Mission@ClickMissionButton"
-		]
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 2000,
+		"next": ["Mission@SelectHardMission", "[JumpBack]Mission@ClickMissionButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 663,
+				"y": 606
+			}
+		}
 	},
-	"Mission@ClickMissionButton":{
-		"recognition": "TemplateMatch",
-		"template": "Mission.png",
-		"roi": [640, 100, 350, 260],
-		"action": "Click",
-		"post_delay": 1000
+	"Mission@ClickMissionButton": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [640, 100, 350, 260],
+				"template": "Mission.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"post_delay": 2000,
+		"$__mpe_code": {
+			"position": {
+				"x": 1018,
+				"y": 923
+			}
+		}
 	},
 	"Mission@SelectHardMission": {
-		"recognition": "TemplateMatch",
-		"template": ["MissionHard0.png", "MissionHard1.png"],
-		"roi": [960, 100, 210, 110],
-		"action": "Click",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [960, 100, 210, 110],
+				"template": ["MissionHard0.png", "MissionHard1.png"]
+			}
+		},
+		"pre_delay": 1000,
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
 		"post_delay": 1000,
-		"next": [
-			"Mission@RecognizeMissionLevel",
-			"Mission@GoToRightmost",
-			"[JumpBack]WaitLoading",
-			"[JumpBack]DisconnectPopup",
-			"[JumpBack]Mission@ClickMissionButton"
-		],
 		"timeout": 1000,
-		"on_error": "Mission@GoToLeftAndFindLevel"
+		"next": ["RecognizeChapter"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1018,
+				"y": 598
+			}
+		}
 	},
-	"Mission@GoToRightmost": {
-		"recognition": "TemplateMatch",
-		"template": "MissionRightButton.png",
-		"roi": [1200, 270, 80, 180],
-		"action": "Click",
+	"Mission@GoRight": {
+		"enabled": false,
+		"max_hit": 1,
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1200, 270, 80, 180],
+				"template": "MissionRightButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"repeat": 1,
+		"repeat_delay": 800,
 		"post_delay": 1000,
-		"next": [
-			"Mission@RecognizeMissionLevel",
-			"Mission@GoToRightmost",
-			"[JumpBack]WaitLoading",
-			"[JumpBack]DisconnectPopup"
-		],
-		"timeout": 1000,
-		"on_error": "Mission@GoToLeftAndFindLevel"
-	},
-	"Mission@GoToLeftAndFindLevel": {
-		"next": [
-			"Mission@RecognizeMissionLevel",
-			"[JumpBack]Mission@GoToLeft",
-			"[JumpBack]WaitLoading",
-			"[JumpBack]DisconnectPopup"
-		],
-		"timeout": 5000,
-		"on_error": "Mission@PrintFindeLevelError"
+		"$__mpe_code": {
+			"position": {
+				"x": 1708,
+				"y": 449
+			}
+		}
 	},
 	"Mission@RecognizeMissionLevel": {
-		"recognition": "OCR",
-		"text": "22-3",
-		"replace": ["'", ""],
-		"roi": [626, 146, 186, 438],
-		"action": "Click",
-		"target_offset": [400, 10, 0, 0],
-		"next": "Mission@ClickMaxButton",
+		"doc": "根据用户选择重载此处的任务关卡",
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [656, 180, 120, 400],
+				"expected": ["22-3"],
+				"replace": [
+					["'", ""]
+				]
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {
+				"target_offset": [400, 10, 0, 0]
+			}
+		},
 		"timeout": 5000,
-		"on_error": "Mission@PrintFindeLevelError",
-		"doc": "根据用户选择重载此处的任务关卡"
+		"next": ["Mission@ClickMaxButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1711,
+				"y": 821
+			}
+		}
 	},
-	"Mission@GoToLeft": {
-		"recognition": "TemplateMatch",
-		"template": "MissionLeftButton.png",
-		"roi": [0, 270, 80, 180],
-		"action": "Click",
-		"post_delay": 1000
+	"Mission@GoLeft": {
+		"enabled": false,
+		"max_hit": 1,
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [0, 270, 80, 180],
+				"template": "MissionLeftButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"repeat": 1,
+		"repeat_delay": 800,
+		"post_delay": 1000,
+		"$__mpe_code": {
+			"position": {
+				"x": 1706,
+				"y": 79
+			}
+		}
 	},
 	"Mission@ClickMaxButton": {
-		"recognition": "TemplateMatch",
-		"template": ["MissionMaxButton0.png", "MissionMaxButton1.png"],
-		"roi": [1000, 238, 160, 124],
-		"action": "Click",
-		"next": "Mission@ClickSweepButton"
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [1000, 238, 160, 124],
+				"template": ["MissionMaxButton0.png", "MissionMaxButton1.png"]
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"next": ["Mission@ClickSweepButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2031,
+				"y": 880
+			}
+		}
 	},
 	"Mission@ClickSweepButton": {
-		"recognition": "TemplateMatch",
-		"template": ["MissionSweepButton0.png", "MissionSweepButton1.png"],
-		"roi": [750, 336, 370, 126],
-		"action": "Click",
+		"doc": "体力足够的话按钮是蓝色的确认按钮，体力不足则是黄色的确认按钮",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [750, 336, 370, 126],
+				"template": ["MissionSweepButton0.png", "MissionSweepButton1.png"]
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
 		"post_delay": 2000,
-		"next": [
-			"Mission@RecognizeOtherPopup",
-			"Mission@RecognizeSweepPopup"
-		],
 		"timeout": 5000,
-		"on_error": "Mission@PrintFindeLevelError",
-		"doc": "体力足够的话按钮是蓝色的确认按钮，体力不足则是黄色的确认按钮"
+		"next": ["Mission@RecognizeOtherPopup", "Mission@RecognizeSweepPopup"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2319,
+				"y": 842
+			}
+		}
 	},
 	"Mission@RecognizeOtherPopup": {
-		"recognition": "TemplateMatch",
-		"template": ["MissionPurchaseAP.png", "MissionRecover.png"],
-		"roi": [312, 128, 658, 468],
-		"threshold": 0.9,
-		"next": "Mission@PrintSweepError",
-		"doc": "识别异常情况：体力不足或者次数不足"
+		"doc": "识别异常情况：体力不足或者次数不足",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [312, 128, 658, 468],
+				"template": ["MissionPurchaseAP.png", "MissionRecover.png"],
+				"threshold": 0.9
+			}
+		},
+		"next": ["Mission@PrintSweepError"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2630,
+				"y": 336
+			}
+		}
 	},
 	"Mission@RecognizeSweepPopup": {
-		"recognition": "TemplateMatch",
-		"template": ["MissionSweepPopup0.png", "MissionSweepPopup1.png"],
-		"roi": [312, 128, 658, 468],
-		"threshold": 0.9,
-		"next": "Mission@ClickConfirmButton"
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [312, 128, 658, 468],
+				"template": ["MissionSweepPopup0.png", "MissionSweepPopup1.png"],
+				"threshold": 0.9
+			}
+		},
+		"next": ["Mission@ClickConfirmButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2627,
+				"y": 683
+			}
+		}
 	},
 	"Mission@ClickConfirmButton": {
-		"recognition": "TemplateMatch",
-		"template": "ConfirmButton.png",
-		"roi": [310, 82, 660, 546],
-		"action": "Click",
-		"next": "Mission@RecognizeRewardPopup"
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [310, 82, 660, 546],
+				"template": "ConfirmButton.png"
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"next": ["Mission@RecognizeRewardPopup"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2926,
+				"y": 696
+			}
+		}
 	},
 	"Mission@RecognizeRewardPopup": {
-		"recognition": "TemplateMatch",
-		"template": "MissionFinalReward.png",
-		"roi": [138, 352, 506, 328],
-		"next": "Mission@SweepDropScreenshot"
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [138, 352, 506, 328],
+				"template": "MissionFinalReward.png"
+			}
+		},
+		"next": ["Mission@SweepDropScreenshot"],
+		"$__mpe_code": {
+			"position": {
+				"x": 3227,
+				"y": 699
+			}
+		}
 	},
 	"Mission@SweepDropScreenshot": {
-		"action": "Custom",
-		"custom_action": "SweepDropScreenshot",
-		"doc": "截图掉落，最多保存10个截图"
+		"doc": "截图掉落，最多保存10个截图",
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "SweepDropScreenshot"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 3520,
+				"y": 692
+			}
+		}
 	},
 	"Mission@PrintSweepError": {
-		"action": "Custom",
-		"custom_action": "PrintSweepError",
-		"next": "ClosePopup"
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "PrintSweepError"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 2937,
+				"y": 378
+			}
+		}
 	},
 	"Mission@PrintFindeLevelError": {
-		"action": "Custom",
-		"custom_action": "PrintFindeLevelError",
-		"next": "Stop"
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "PrintFindeLevelError"
+			}
+		},
+		"next": ["Stop"],
+		"$__mpe_code": {
+			"position": {
+				"x": 2022,
+				"y": 448
+			}
+		}
+	},
+	"$__mpe_external_ClosePopup_Mission": {
+		"$__mpe_code": {
+			"position": {
+				"x": 334,
+				"y": 532
+			}
+		}
+	},
+	"$__mpe_external_WaitLoading_Mission": {
+		"$__mpe_code": {
+			"position": {
+				"x": 332,
+				"y": 873
+			}
+		}
+	},
+	"$__mpe_external_DisconnectPopup_Mission": {
+		"$__mpe_code": {
+			"position": {
+				"x": 332,
+				"y": 950
+			}
+		}
+	},
+	"$__mpe_external_CloseReward_Mission": {
+		"$__mpe_code": {
+			"position": {
+				"x": 330,
+				"y": 1023
+			}
+		}
+	},
+	"$__mpe_external_ClickHomeButton_Mission": {
+		"$__mpe_code": {
+			"position": {
+				"x": 331,
+				"y": 1100
+			}
+		}
+	},
+	"$__mpe_external_Stop_Mission": {
+		"$__mpe_code": {
+			"position": {
+				"x": 2299,
+				"y": 482
+			}
+		}
+	},
+	"RecognizeChapter": {
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [110, 174, 64, 50],
+				"replace": [
+					["'", ""]
+				]
+			}
+		},
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "FindHardLevel"
+			}
+		},
+		"next": ["[JumpBack]Mission@GoLeft", "[JumpBack]Mission@GoRight", "Mission@RecognizeMissionLevel"],
+		"on_error": ["Mission@PrintFindeLevelError"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1380,
+				"y": 632
+			}
+		}
 	}
 }
