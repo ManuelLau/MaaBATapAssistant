@@ -1,17 +1,18 @@
 ﻿<hc:Window x:Class="MaaBATapAssistant.Views.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:views="clr-namespace:MaaBATapAssistant.Views"
-    xmlns:utils="clr-namespace:MaaBATapAssistant.Utils"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
-    xmlns:viewmodels="clr-namespace:MaaBATapAssistant.ViewModels"
-    xmlns:models="clr-namespace:MaaBATapAssistant.Models"
-    d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
-    mc:Ignorable="d"  Height="520" Width="720" MinHeight="520" MinWidth="700" 
-    Icon="/MaaBATapAssistant;component/resources/AppIcon_256x256.ico" Title="MaaBA摸头小助手" Background="White">
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:views="clr-namespace:MaaBATapAssistant.Views"
+           xmlns:utils="clr-namespace:MaaBATapAssistant.Utils"
+           xmlns:hc="https://handyorg.github.io/handycontrol"
+           xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+           xmlns:viewmodels="clr-namespace:MaaBATapAssistant.ViewModels"
+           xmlns:models="clr-namespace:MaaBATapAssistant.Models"
+           mc:Ignorable="d"
+           d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+           Icon="/MaaBATapAssistant;component/resources/AppIcon_256x256.ico" Title="MaaBA摸头小助手" Background="White"
+           Height="520" Width="720" MinHeight="520" MinWidth="700" >
 
     <hc:Window.Resources>
         <utils:TaskStatusToColorConverter x:Key="TaskStatusToColorConverter" />
@@ -126,9 +127,14 @@
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="设置" IsSelected="False">
+                <TabItem Header="任务设置" IsSelected="False">
                     <Border>
-                        <views:SettingsView/>
+                        <views:TaskSettingsView/>
+                    </Border>
+                </TabItem>
+                <TabItem Header="软件设置" IsSelected="False">
+                    <Border>
+                        <views:AppSettingsView/>
                     </Border>
                 </TabItem>
             </TabControl>

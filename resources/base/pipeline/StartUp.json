@@ -3,9 +3,9 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": -575,
-				"y": -343,
-				"zoom": 1
+				"x": -181,
+				"y": -178,
+				"zoom": 0.79
 			},
 			"filename": "StartUp",
 			"version": "v1.3.1"
@@ -13,7 +13,7 @@
 	},
 	"StartUp@Start": {
 		"timeout": 120000,
-		"next": ["[JumpBack]StartUp@WaitLoading", "StartUp@RecognizeLabel", "[JumpBack]StartUp@ClientUpdatePopUp", "[JumpBack]StartUp@UpdatePopUp", "HomeScreen@MaintenancePopUp", "[JumpBack]StartUp@TitleScreen", "[JumpBack]StartUp@EventCheckInPopUp", "[JumpBack]StartUp@DailyCheckIn", "[JumpBack]StartUp@EventCheckIn", "[JumpBack]ClosePopup", "[JumpBack]CloseReward", "[JumpBack]ClickHomeButton", "[JumpBack]DisconnectPopup"],
+		"next": ["[JumpBack]StartUp@WaitLoading", "StartUp@FirstCheck", "[JumpBack]StartUp@ClientUpdatePopUp", "[JumpBack]StartUp@UpdatePopUp", "HomeScreen@MaintenancePopUp", "[JumpBack]StartUp@TitleScreen", "[JumpBack]StartUp@EventCheckInPopUp", "[JumpBack]StartUp@DailyCheckIn", "[JumpBack]StartUp@EventCheckIn", "[JumpBack]ClosePopup", "[JumpBack]CloseReward", "[JumpBack]ClickHomeButton", "[JumpBack]DisconnectPopup"],
 		"$__mpe_code": {
 			"position": {
 				"x": 725,
@@ -22,7 +22,7 @@
 		}
 	},
 	"StartUp@RecognizeLabel": {
-		"doc": "识别右上角3个按钮UI+邮箱按钮的色值。持续检测3秒，以免突然有其他弹窗出现",
+		"doc": "识别右上角3个按钮UI+邮箱按钮的色值。3秒后再次检测，以免突然有其他弹窗出现",
 		"recognition": {
 			"type": "TemplateMatch",
 			"param": {
@@ -31,11 +31,10 @@
 				"threshold": [0.9]
 			}
 		},
-		"next": ["StartUp@RecognizeMailButton", "StartUp@Start"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1276,
-				"y": 550
+				"x": 1839,
+				"y": 721
 			}
 		}
 	},
@@ -50,12 +49,10 @@
 				"count": 46
 			}
 		},
-		"post_delay": 2000,
-		"next": ["StartUp@FinalCheck", "StartUp@Start"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1655,
-				"y": 528
+				"x": 2096,
+				"y": 709
 			}
 		}
 	},
@@ -72,8 +69,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1998,
-				"y": 595
+				"x": 1638,
+				"y": 530
 			}
 		}
 	},
@@ -89,8 +86,8 @@
 		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
-				"x": 1273,
-				"y": 284
+				"x": 1269,
+				"y": 244
 			}
 		}
 	},
@@ -114,8 +111,8 @@
 		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
-				"x": 1274,
-				"y": 1436
+				"x": 1264,
+				"y": 1316
 			}
 		}
 	},
@@ -136,8 +133,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1272,
-				"y": 2046
+				"x": 1262,
+				"y": 1929
 			}
 		}
 	},
@@ -157,8 +154,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1271,
-				"y": 2327
+				"x": 1259,
+				"y": 2212
 			}
 		}
 	},
@@ -174,8 +171,8 @@
 		"next": ["ClosePopup"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1275,
-				"y": 1799
+				"x": 1262,
+				"y": 1680
 			}
 		}
 	},
@@ -191,8 +188,8 @@
 		"next": ["ClickConfirmButton"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1276,
-				"y": 1114
+				"x": 1267,
+				"y": 998
 			}
 		}
 	},
@@ -213,56 +210,56 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1278,
-				"y": 833
+				"x": 1267,
+				"y": 714
 			}
 		}
 	},
 	"$__mpe_external_DisconnectPopup_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1271,
-				"y": 2815
+				"x": 1263,
+				"y": 2681
 			}
 		}
 	},
 	"$__mpe_external_ClosePopup_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1273,
-				"y": 2583
+				"x": 1266,
+				"y": 2470
 			}
 		}
 	},
 	"$__mpe_external_ClickHomeButton_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1270,
-				"y": 2734
+				"x": 1264,
+				"y": 2608
 			}
 		}
 	},
 	"$__mpe_external_CloseReward_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1274,
-				"y": 2658
+				"x": 1265,
+				"y": 2539
 			}
 		}
 	},
 	"$__mpe_external_ClickConfirmButton_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1658,
-				"y": 1176
+				"x": 1643,
+				"y": 1061
 			}
 		}
 	},
 	"$__mpe_external_HomeScreen@MaintenancePopUp_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1282,
-				"y": 1365
+				"x": 1272,
+				"y": 1248
 			}
 		}
 	},
@@ -274,6 +271,22 @@
 			"position": {
 				"x": 414,
 				"y": 944
+			}
+		}
+	},
+	"StartUp@FirstCheck": {
+		"recognition": {
+			"type": "And",
+			"param": {
+				"all_of": ["StartUp@RecognizeLabel", "StartUp@RecognizeMailButton"]
+			}
+		},
+		"post_delay": 2000,
+		"next": ["StartUp@FinalCheck", "StartUp@Start"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1269,
+				"y": 513
 			}
 		}
 	}

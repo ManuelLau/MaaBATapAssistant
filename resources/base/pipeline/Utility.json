@@ -3,12 +3,21 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": 738,
-				"y": 236,
-				"zoom": 0.8
+				"x": 489,
+				"y": 42,
+				"zoom": 1.01
 			},
 			"filename": "Utility",
 			"version": "v1.3.1"
+		}
+	},
+	"PCClientStartGame": {
+		"next": ["HomeScreen@Refresh"],
+		"$__mpe_code": {
+			"position": {
+				"x": 333,
+				"y": 533
+			}
 		}
 	},
 	"Stop": {
@@ -38,7 +47,7 @@
 		"post_delay": 2000,
 		"$__mpe_code": {
 			"position": {
-				"x": 972,
+				"x": 732,
 				"y": 12
 			}
 		}
@@ -57,8 +66,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 492,
-				"y": 12
+				"x": 572,
+				"y": 259
 			}
 		}
 	},
@@ -77,8 +86,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 12,
-				"y": 262
+				"x": 972,
+				"y": 12
 			}
 		}
 	},
@@ -100,8 +109,8 @@
 		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
-				"x": 492,
-				"y": 262
+				"x": 12,
+				"y": 249
 			}
 		}
 	},
@@ -116,7 +125,7 @@
 		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
-				"x": 732,
+				"x": 492,
 				"y": 12
 			}
 		}
@@ -137,8 +146,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 252,
-				"y": 262
+				"x": 1212,
+				"y": 12
 			}
 		}
 	},
@@ -153,8 +162,8 @@
 		"next": ["ClickReconnectButton"],
 		"$__mpe_code": {
 			"position": {
-				"x": 732,
-				"y": 262
+				"x": 812,
+				"y": 249
 			}
 		}
 	},
@@ -171,8 +180,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1052,
-				"y": 289
+				"x": 1132,
+				"y": 274
 			}
 		}
 	},
@@ -189,7 +198,7 @@
 		"$__mpe_code": {
 			"position": {
 				"x": 332,
-				"y": 576
+				"y": 668
 			}
 		}
 	},
@@ -204,8 +213,8 @@
 		"next": ["StartGame"],
 		"$__mpe_code": {
 			"position": {
-				"x": 12,
-				"y": 592
+				"x": 9,
+				"y": 678
 			}
 		}
 	},
@@ -213,7 +222,7 @@
 		"$__mpe_code": {
 			"position": {
 				"x": 652,
-				"y": 660
+				"y": 579
 			}
 		}
 	},
@@ -228,6 +237,22 @@
 			"position": {
 				"x": 252,
 				"y": 12
+			}
+		}
+	},
+	"PCClientExitGame": {
+		"action": {
+			"type": "ClickKey",
+			"param": {
+				"key": [27]
+			}
+		},
+		"post_delay": 1000,
+		"next": ["ClickConfirmButton"],
+		"$__mpe_code": {
+			"position": {
+				"x": 252,
+				"y": 249
 			}
 		}
 	}

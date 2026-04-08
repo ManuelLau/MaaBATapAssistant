@@ -71,6 +71,17 @@ public static class CustomTask
         }
     }
 
+    public class CafeTapResetMaxHit : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(CafeTapResetMaxHit);
+
+        public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
+        {
+            context.ClearHitCount("CafeTap@EmptyNode");
+            return true;
+        }
+    }
+
     public class InviteUnavailableSkipTask : IMaaCustomAction
     {
         public string Name { get; set; } = nameof(InviteUnavailableSkipTask);

@@ -38,6 +38,7 @@
 			"[JumpBack]StartUp@EventCheckInPopUp",
 			"[JumpBack]StartUp@DailyCheckIn",
 			"[JumpBack]StartUp@EventCheckIn",
+			"[JumpBack]CloseReward",
 			"[JumpBack]StartUp@NexonTitleScreen"
 		],
 		"timeout": 120000,

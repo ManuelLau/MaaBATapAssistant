@@ -10,7 +10,10 @@
     <Compile Update="Views\AnnouncementWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\SettingsView.xaml.cs">
+    <Compile Update="Views\AppSettingsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\TaskSettingsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\UpdateWindow.xaml.cs">
@@ -25,9 +28,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Style.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\UpdateWindow.xaml">

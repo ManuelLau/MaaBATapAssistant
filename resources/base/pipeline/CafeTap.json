@@ -3,8 +3,8 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": 365,
-				"y": 28,
+				"x": 250,
+				"y": 98,
 				"zoom": 1
 			},
 			"filename": "CafeTap",
@@ -38,10 +38,11 @@
 			}
 		},
 		"post_delay": 1000,
+		"next": ["CafeTap@ResetMaxHit"],
 		"$__mpe_code": {
 			"position": {
-				"x": 587,
-				"y": 12
+				"x": 586,
+				"y": -24
 			}
 		}
 	},
@@ -50,8 +51,8 @@
 		"next": ["CafeTap@RefreshStep1", "[JumpBack]Cafe@ClickUnfoldButton", "[JumpBack]CafeTap@RecognizeRelationshipRankUp"],
 		"$__mpe_code": {
 			"position": {
-				"x": 586,
-				"y": 690
+				"x": 583,
+				"y": 789
 			}
 		}
 	},
@@ -100,7 +101,7 @@
 	"CafeTap@Start": {
 		"doc": "循环执行3轮摸头识别任务",
 		"max_hit": 3,
-		"next": ["[JumpBack]CafeTap@Tap", "[JumpBack]CafeTap@RecognizeRelationshipRankUp", "[JumpBack]CloseReward", "[JumpBack]ClosePopup", "CafeTap@RefreshStep0", "Stop"],
+		"next": ["[JumpBack]CafeTap@Tap", "[JumpBack]CloseReward", "[JumpBack]ClosePopup", "[JumpBack]CafeTap@RecognizeRelationshipRankUp", "[JumpBack]CafeTap@EmptyNode", "CafeTap@RefreshStep0", "Stop"],
 		"$__mpe_code": {
 			"position": {
 				"x": 288,
@@ -119,8 +120,8 @@
 		"next": ["CafeTap@CloseRelationshipRankUp"],
 		"$__mpe_code": {
 			"position": {
-				"x": 587,
-				"y": 343
+				"x": 586,
+				"y": 426
 			}
 		}
 	},
@@ -138,6 +139,7 @@
 				"target": [640, 360, 0, 0]
 			}
 		},
+		"next": ["CafeTap@ResetMaxHit"],
 		"$__mpe_code": {
 			"position": {
 				"x": 874,
@@ -148,16 +150,16 @@
 	"$__mpe_external_CloseReward_CafeTap": {
 		"$__mpe_code": {
 			"position": {
-				"x": 593,
-				"y": 542
+				"x": 594,
+				"y": 305
 			}
 		}
 	},
 	"$__mpe_external_ClosePopup_CafeTap": {
 		"$__mpe_code": {
 			"position": {
-				"x": 592,
-				"y": 612
+				"x": 593,
+				"y": 365
 			}
 		}
 	},
@@ -172,8 +174,8 @@
 	"$__mpe_external_Stop_CafeTap": {
 		"$__mpe_code": {
 			"position": {
-				"x": 587,
-				"y": 891
+				"x": 584,
+				"y": 976
 			}
 		}
 	},
@@ -194,6 +196,29 @@
 			"position": {
 				"x": 132,
 				"y": 655
+			}
+		}
+	},
+	"CafeTap@EmptyNode": {
+		"max_hit": 1,
+		"$__mpe_code": {
+			"position": {
+				"x": 585,
+				"y": 618
+			}
+		}
+	},
+	"CafeTap@ResetMaxHit": {
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "CafeTapResetMaxHit"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 1128,
+				"y": 111
 			}
 		}
 	}

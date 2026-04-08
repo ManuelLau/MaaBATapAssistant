@@ -17,7 +17,7 @@
             <StackPanel Grid.Row="0">
                 <TextBlock x:Name="MainTitle" FontSize="32" Margin="0" HorizontalAlignment="Center" FontWeight="Bold"/>
                 <!--<TextBlock x:Name="LatestUpdateTitle" FontSize="20" Margin="0 10 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>-->
-                <TextBlock x:Name="LatestUpdateContent" FontSize="20" Margin="10 16 10 4" TextWrapping="Wrap" FontWeight="Bold"/>
+                <TextBlock x:Name="LatestUpdateContent" FontSize="18" Margin="10 16 10 4" TextWrapping="Wrap"/>
                 <hc:Divider Margin="10 8 20 8"/>
                 <TextBlock x:Name="NotesTitle" FontSize="20" Margin="0 4 0 4" HorizontalAlignment="Left" FontWeight="Bold"/>
                 <TextBlock x:Name="NotesContent" FontSize="16" Margin="10 4 10 4" TextWrapping="Wrap"/>

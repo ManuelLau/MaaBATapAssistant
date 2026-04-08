@@ -2,7 +2,7 @@
 
 public static class Constants
 {
-    public const string AppVersion = "0.3.9";
+    public const string AppVersion = "0.4.0";
     public const string PlatformTag = "win-x";
     public const string ProjectGitHubUrl = "https://github.com/ManuelLau/MaaBATapAssistant";
     public const string ProjectGiteeUrl = "https://gitee.com/manuel33/MaaBATapAssistant";
@@ -26,7 +26,8 @@ public static class Constants
     public static readonly string MaaSourcePathEnOverride = GetPath(@"resources\en");
     public static readonly string MaaSourcePathJpOverride = GetPath(@"resources\jp");
 
-    public static readonly string[] GameClientName = ["Blue Archive"];  //PC端游戏进程名
+    public static readonly string PCClientNameTW = "Blue Archive";  //PC端游戏进程名
+    public static readonly string[] PCClientNameJP = ["BlueArchive", "ブルーアーカイブ"];
 
     public static readonly TimeOnly RefreshTimeOnlyCN = new(4, 0, 0);
     public static readonly TimeOnly RefreshTimeOnlyNexon = new(3, 0, 0);

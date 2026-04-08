@@ -57,6 +57,7 @@ public partial class MainWindow
             e.Handled = true;
         }
     }
+
     private void MenuItemClick(object sender, RoutedEventArgs e)
     {
         Application.Current.Dispatcher.Invoke(() =>

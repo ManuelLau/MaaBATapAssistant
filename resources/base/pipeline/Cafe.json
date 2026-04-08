@@ -110,9 +110,10 @@
 		"roi": [84, 0, 218, 50],
 		"post_delay": 1000,
 		"next": [
+			"[JumpBack]Cafe@RecognizeFirstTimePopup",
+			"[JumpBack]ClosePopup",
 			"Cafe@RecognizeEarningsButton",
-			"[JumpBack]WaitLoading",
-			"[JumpBack]Cafe@RecognizeFirstTimePopup"
+			"[JumpBack]WaitLoading"
 		],
 		"doc": "第一个任务检查点：识别左上角文字。确保进入到了咖啡厅，但是可能会有弹窗出现。进入后等待2秒"
 	},

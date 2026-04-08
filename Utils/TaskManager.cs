@@ -191,7 +191,10 @@ public class TaskManager
         if (taskDateTime == nextServerRefreshDateTime)
         {
             Queue<TaskModel> taskQueue = new();
-            taskQueue.Enqueue(new("重启游戏", "RestartGame", string.Empty, ETaskType.RestartGame));
+            if (DeviceIsEmulator())
+                taskQueue.Enqueue(new("重启游戏", "RestartGame", string.Empty, ETaskType.RestartGame));
+            else
+                taskQueue.Enqueue(new("重启游戏", "PCClientStartGame", string.Empty, ETaskType.RestartGame));
             AddToWaitingTaskList(new("重启游戏", taskDateTime, ETaskChainType.System, true, true, "日期已变更，重启游戏中...", taskQueue));
         }
         return taskDateTime;
@@ -258,6 +261,7 @@ public class TaskManager
             };
             // 注册自定义识别、动作
             _maaTasker.Resource.Register(new RelationshipRankUpScreenshot());
+            _maaTasker.Resource.Register(new CafeTapResetMaxHit());
             _maaTasker.Resource.Register(new InviteUnavailableSkipTask());
             _maaTasker.Resource.Register(new InviteScreenshot());
             _maaTasker.Resource.Register(new InviteCancelNotify());
@@ -292,7 +296,17 @@ public class TaskManager
         if (DeviceIsEmulator())
             Utility.PrintLog("成功连接至模拟器" + _maaControllerName);
         else
+        {
             Utility.PrintLog("成功连接至PC端" + _maaControllerName);
+            // PC端检测分辨率是否为16比9。如果不是16比9，识别会不准确
+            _maaTasker.Controller.Screencap().Wait();
+            _maaTasker.Controller.GetResolution(out int width, out int height);
+            Utility.CustomDebugWriteLine($"程序分辨率 - 宽: {width}, 高: {height}");
+            if (width * 9L != height * 16L)
+            {
+                Utility.PrintLog($"注意：当前分辨率比例不是16:9，可能会导致图像识别不准确（当前分辨率{width}*{height}）");
+            }
+        }
         return true;
     }
 
@@ -300,20 +314,28 @@ public class TaskManager
     {
         var windows = _maaToolkit.Desktop.Window.Find();
         DesktopWindowInfo? gameWindow = null;
-        string GameClientName = string.Empty;
         switch ((EClientTypeSettingOptions)_settingsData.ClientTypeSettingIndex)
         {
             case EClientTypeSettingOptions.Zh_TW_PC:
-                GameClientName = Constants.GameClientName[0];
+                foreach (var e in windows)
+                {
+                    if (e.Name.Equals(Constants.PCClientNameTW))
+                    {
+                        gameWindow = e;
+                        break;
+                    }
+                }
                 break;
-        }
-        foreach (var e in windows)
-        {
-            if (e.Name.Equals(GameClientName))
-            {
-                gameWindow = e;
-                break;
-            }
+            //case EClientTypeSettingOptions.Jp_PC:
+            //    foreach (var e in windows)
+            //    {
+            //        if (e.Name.Equals(Constants.PCClientNameJP[0]) || e.Name.Equals(Constants.PCClientNameJP[1]))
+            //        {
+            //            gameWindow = e;
+            //            break;
+            //        }
+            //    }
+            //    break;
         }
         return gameWindow;
     }
@@ -436,14 +458,6 @@ public class TaskManager
                 DateTime startTime = DateTime.Now;
                 while (!token.IsCancellationRequested)
                 {
-                    //var windows = _maaToolkit.Desktop.Window.Find();
-                    //foreach (var e in windows)
-                    //{
-                    //    if (e.Name.Equals(Constants.GameClientName[_settingsData.ClientTypeSettingIndex]))
-                    //    {
-                    //        return e;
-                    //    }
-                    //}
                     var window = FindWindow();
                     if (window is not null)
                     {
@@ -502,7 +516,7 @@ public class TaskManager
         return ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
         {
             (int)EClientTypeSettingOptions.Zh_TW_PC => false,
-            //(int)EClientTypeSettingOptions.JP_PC => false,
+            //(int)EClientTypeSettingOptions.Jp_PC => false,
             _ => true,
         };
     }
@@ -592,43 +606,6 @@ public class TaskManager
                 }
                 return;
             }
-
-            //if (_maaTasker == null || _maaTasker.IsInvalid)
-            //{
-            //    Utility.CustomDebugWriteLine($"maaTasker is null or invalid!");
-            //    Utility.PrintLog("模拟器未连接");
-            //    if (!await AutoConnect(token))
-            //    {
-            //        if (!_cancellationTokenSource.IsCancellationRequested)
-            //        {
-            //            Stop(true);
-            //        }
-            //        return;
-            //    }
-            //}
-            //if (_maaTasker == null)
-            //{
-            //    Utility.CustomDebugWriteLine("maaTasker依然是null，直接停止任务");
-            //    if (!_cancellationTokenSource.IsCancellationRequested)
-            //    {
-            //        Stop(true);
-            //    }
-            //    return;
-            //}
-            //var device = _maaTasker.Toolkit.AdbDevice.Find();
-            //if (device.IsEmpty || device.IsInvalid)
-            //{
-            //    Utility.CustomDebugWriteLine($"device is empty or invalid!");
-            //    Utility.PrintLog("模拟器失去连接，正在重新打开...");
-            //    if (!await AutoConnect(token))
-            //    {
-            //        if (!_cancellationTokenSource.IsCancellationRequested)
-            //        {
-            //            Stop(true);
-            //        }
-            //        return;
-            //    }
-            //}
 
             if (token.IsCancellationRequested)
             {
@@ -938,12 +915,15 @@ public class TaskManager
         // 如果第一个是重启游戏任务，那么就不用再添加启动游戏任务了
         if (_waitingTaskChainList[0].TaskQueue.Peek().Type == ETaskType.RestartGame)
         {
-            
+
         }
         else
         {
             Queue<TaskModel> tempQueue0 = new();
-            tempQueue0.Enqueue(new("启动游戏", "StartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
+            if (DeviceIsEmulator())
+                tempQueue0.Enqueue(new("启动游戏", "StartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
+            else
+                tempQueue0.Enqueue(new("启动游戏", "PCClientStartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
             _currentTaskChainList.Add(new("启动游戏", DateTime.Now, ETaskChainType.System, false, true, string.Empty, tempQueue0));
         }
 
@@ -988,11 +968,7 @@ public class TaskManager
                 return "";
             //启动游戏
             case ETaskType.StartGame:
-                if (DeviceIsEmulator())
-                    return _settingsData.IsReconnectAfterDuplicatedLogin ? string.Empty : "{\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
-                else
-                    return _settingsData.IsReconnectAfterDuplicatedLogin ? "{\"StartGame\":{\"action\":{\"type\":\"DoNothing\",\"param\":{}}}}" :
-                        "{\"StartGame\":{\"action\":{\"type\":\"DoNothing\",\"param\":{}}},\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
+                return _settingsData.IsReconnectAfterDuplicatedLogin ? string.Empty : "{\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
             //1号咖啡厅邀请
             case ETaskType.Cafe1Invite:
                 overrideSortType = string.Empty;
@@ -1263,10 +1239,10 @@ public class TaskManager
                 Utility.PrintLog("未找到游戏窗口，无法自动退出客户端");
                 return;
             }
-            bool success = PostMessage(gameWindow.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
-            if (success)
+            var status = _maaTasker.AppendTask("PCClientExitGame").Wait();
+            if (status.IsSucceeded())
             {
-                Utility.PrintLog("即将自动退出客户端");
+                Utility.PrintLog("已自动退出客户端");
             }
             else
             {
