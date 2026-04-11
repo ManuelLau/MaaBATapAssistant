@@ -3,12 +3,12 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": 250,
-				"y": 98,
+				"x": -371,
+				"y": -228,
 				"zoom": 1
 			},
 			"filename": "CafeTap",
-			"version": "v1.3.1"
+			"version": "v1.4.1"
 		}
 	},
 	"CafeTap": {
@@ -48,7 +48,13 @@
 	},
 	"CafeTap@RefreshStep0": {
 		"max_hit": 2,
-		"next": ["CafeTap@RefreshStep1", "[JumpBack]Cafe@ClickUnfoldButton", "[JumpBack]CafeTap@RecognizeRelationshipRankUp"],
+		"next": ["CafeTap@RefreshStep1", {
+			"name": "Cafe@ClickUnfoldButton",
+			"jump_back": true
+		}, {
+			"name": "CafeTap@RecognizeRelationshipRankUp",
+			"jump_back": true
+		}],
 		"$__mpe_code": {
 			"position": {
 				"x": 583,
@@ -70,7 +76,13 @@
 			"type": "Click",
 			"param": {}
 		},
-		"next": ["CafeTap@RefreshStep2", "[JumpBack]Cafe@ClickUnfoldButton"],
+		"next": ["CafeTap@RefreshStep2", {
+			"name": "Cafe@ClickUnfoldButton",
+			"jump_back": true
+		}, {
+			"name": "CafeTap@ClickEditButton",
+			"jump_back": true
+		}],
 		"$__mpe_code": {
 			"position": {
 				"x": 872,
@@ -101,7 +113,22 @@
 	"CafeTap@Start": {
 		"doc": "循环执行3轮摸头识别任务",
 		"max_hit": 3,
-		"next": ["[JumpBack]CafeTap@Tap", "[JumpBack]CloseReward", "[JumpBack]ClosePopup", "[JumpBack]CafeTap@RecognizeRelationshipRankUp", "[JumpBack]CafeTap@EmptyNode", "CafeTap@RefreshStep0", "Stop"],
+		"next": [{
+			"name": "CafeTap@Tap",
+			"jump_back": true
+		}, {
+			"name": "CloseReward",
+			"jump_back": true
+		}, {
+			"name": "ClosePopup",
+			"jump_back": true
+		}, {
+			"name": "CafeTap@RecognizeRelationshipRankUp",
+			"jump_back": true
+		}, {
+			"name": "CafeTap@EmptyNode",
+			"jump_back": true
+		}, "CafeTap@RefreshStep0", "Stop"],
 		"$__mpe_code": {
 			"position": {
 				"x": 288,
@@ -219,6 +246,26 @@
 			"position": {
 				"x": 1128,
 				"y": 111
+			}
+		}
+	},
+	"CafeTap@ClickEditButton": {
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [40, 604, 100, 60],
+				"template": "CafeEditButton.png",
+				"green_mask": true
+			}
+		},
+		"action": {
+			"type": "Click",
+			"param": {}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 1168,
+				"y": 977
 			}
 		}
 	}
