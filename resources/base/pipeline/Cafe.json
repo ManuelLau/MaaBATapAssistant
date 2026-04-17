@@ -8,24 +8,31 @@
 			"[JumpBack]WaitLoading",
 			"[JumpBack]DisconnectPopup",
 			"[JumpBack]CloseReward",
-			"[JumpBack]Cafe@ClickMoveCafeButton",
 			"[JumpBack]ClickHomeButton",
 			"[JumpBack]IdelTapScreen"
 		],
 		"doc": "可以在任何地方进入到1号咖啡厅"
 	},
 	"MoveToCafe1@InCafe1":{
-		"recognition": "TemplateMatch",
-		"template": "MoveToCafe2Button.png",
-		"roi": [ 38, 76, 192, 54 ],
-		"threshold": 0.97,
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"template": "MoveToCafe2Button.png",
+				"threshold": 0.97
+			}
+		},
 		"next": "Stop"
 	},
 	"MoveToCafe1@InCafe2": {
-		"recognition": "TemplateMatch",
-		"template": "MoveToCafe1Button.png",
-		"roi": [ 38, 76, 192, 54 ],
-		"threshold": 0.97,
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"template": "MoveToCafe1Button.png",
+				"threshold": 0.97
+			}
+		},
 		"action": "Click",
 		"post_delay": 1000,
 		"next": [
@@ -41,24 +48,31 @@
 			"MoveToCafe2@InCafe1",
 			"[JumpBack]WaitLoading",
 			"[JumpBack]CloseReward",
-			"[JumpBack]Cafe@ClickMoveCafeButton",
 			"[JumpBack]ClickHomeButton",
 			"[JumpBack]IdelTapScreen",
 			"[JumpBack]Cafe@EnterCafe"
 		]
 	},
 	"MoveToCafe2@InCafe2":{
-		"recognition": "TemplateMatch",
-		"template": "MoveToCafe1Button.png",
-		"roi": [ 38, 76, 192, 54 ],
-		"threshold": 0.97,
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"template": "MoveToCafe1Button.png",
+				"threshold": 0.97
+			}
+		},
 		"next": "Stop"
 	},
 	"MoveToCafe2@InCafe1": {
-		"recognition": "TemplateMatch",
-		"template": "MoveToCafe2Button.png",
-		"roi": [ 38, 76, 192, 54 ],
-		"threshold": 0.97,
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"template": "MoveToCafe2Button.png",
+				"threshold": 0.97
+			}
+		},
 		"action": "Click",
 		"post_delay": 1000,
 		"next": [
@@ -67,21 +81,6 @@
 		]
 	},
 
-	"Cafe@ClickMoveCafeButton": {
-		"recognition": "OCR",
-		"text": "前往咖啡",
-		"roi": [5, 55, 385, 125],
-		"action": "Click",
-		"post_delay": 1000
-	},
-	"Cafe@CloseMoveCafeButtonThenDoJob": {
-		"recognition": "OCR",
-		"text": "前往咖啡",
-		"roi": [5, 55, 385, 125],
-		"action": "Click",
-		"post_delay": 1000,
-		"next": "Stop"
-	},
 	"Cafe@ClickCafeButton": {
 		"recognition": "TemplateMatch",
 		"template": "CafeButton.png",

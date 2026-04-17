@@ -3,9 +3,9 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": -371,
-				"y": -228,
-				"zoom": 1
+				"x": 372,
+				"y": 93,
+				"zoom": 0.79
 			},
 			"filename": "CafeTap",
 			"version": "v1.4.1"
@@ -48,13 +48,7 @@
 	},
 	"CafeTap@RefreshStep0": {
 		"max_hit": 2,
-		"next": ["CafeTap@RefreshStep1", {
-			"name": "Cafe@ClickUnfoldButton",
-			"jump_back": true
-		}, {
-			"name": "CafeTap@RecognizeRelationshipRankUp",
-			"jump_back": true
-		}],
+		"next": ["CafeTap@RefreshStep1", "[JumpBack]Cafe@ClickUnfoldButton", "[JumpBack]CafeTap@RecognizeRelationshipRankUp"],
 		"$__mpe_code": {
 			"position": {
 				"x": 583,
@@ -76,13 +70,8 @@
 			"type": "Click",
 			"param": {}
 		},
-		"next": ["CafeTap@RefreshStep2", {
-			"name": "Cafe@ClickUnfoldButton",
-			"jump_back": true
-		}, {
-			"name": "CafeTap@ClickEditButton",
-			"jump_back": true
-		}],
+		"post_delay": 1000,
+		"next": ["CafeTap@RefreshStep2", "[JumpBack]Cafe@ClickUnfoldButton", "[JumpBack]CafeTap@ClickEditButton"],
 		"$__mpe_code": {
 			"position": {
 				"x": 872,
@@ -102,33 +91,19 @@
 			"type": "Click",
 			"param": {}
 		},
+		"post_delay": 1000,
 		"next": ["CafeTap@Start"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1167,
-				"y": 687
+				"x": 1171,
+				"y": 657
 			}
 		}
 	},
 	"CafeTap@Start": {
 		"doc": "循环执行3轮摸头识别任务",
 		"max_hit": 3,
-		"next": [{
-			"name": "CafeTap@Tap",
-			"jump_back": true
-		}, {
-			"name": "CloseReward",
-			"jump_back": true
-		}, {
-			"name": "ClosePopup",
-			"jump_back": true
-		}, {
-			"name": "CafeTap@RecognizeRelationshipRankUp",
-			"jump_back": true
-		}, {
-			"name": "CafeTap@EmptyNode",
-			"jump_back": true
-		}, "CafeTap@RefreshStep0", "Stop"],
+		"next": ["[JumpBack]CafeTap@Tap", "[JumpBack]CloseReward", "[JumpBack]ClosePopup", "[JumpBack]CafeTap@RecognizeRelationshipRankUp", "[JumpBack]CafeTap@EmptyNode", "CafeTap@RefreshStep0", "Stop"],
 		"$__mpe_code": {
 			"position": {
 				"x": 288,
@@ -194,14 +169,14 @@
 		"$__mpe_code": {
 			"position": {
 				"x": 1172,
-				"y": 897
+				"y": 908
 			}
 		}
 	},
 	"$__mpe_external_Stop_CafeTap": {
 		"$__mpe_code": {
 			"position": {
-				"x": 584,
+				"x": 588,
 				"y": 976
 			}
 		}
@@ -262,6 +237,7 @@
 			"type": "Click",
 			"param": {}
 		},
+		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
 				"x": 1168,

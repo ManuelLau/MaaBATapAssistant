@@ -301,11 +301,7 @@ public class TaskManager
             // PC端检测分辨率是否为16比9。如果不是16比9，识别会不准确
             _maaTasker.Controller.Screencap().Wait();
             _maaTasker.Controller.GetResolution(out int width, out int height);
-            Utility.CustomDebugWriteLine($"程序分辨率 - 宽: {width}, 高: {height}");
-            if (width * 9L != height * 16L)
-            {
-                Utility.PrintLog($"注意：当前分辨率比例不是16:9，可能会导致图像识别不准确（当前分辨率{width}*{height}）");
-            }
+            Utility.CustomDebugWriteLine($"程序分辨率 - {width}*{height}");
         }
         return true;
     }

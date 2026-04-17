@@ -1,0 +1,55 @@
+{
+	"MoveToCafe1@InCafe1":{
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"expected": ["2號店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.97
+			}
+		}
+	},
+	"MoveToCafe1@InCafe2": {
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"expected": ["1號店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.97
+			}
+		}
+	},
+	
+	"MoveToCafe2@InCafe2":{
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"expected": ["1號店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.97
+			}
+		}
+	},
+	"MoveToCafe2@InCafe1": {
+		"recognition": {
+			"type": "OCR",
+			"param": {
+				"roi": [38, 76, 192, 54],
+				"expected": ["2號店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.97
+			}
+		}
+	}
+}
