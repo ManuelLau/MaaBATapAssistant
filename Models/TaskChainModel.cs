@@ -15,7 +15,7 @@ public enum ETaskChainType
     Invite,
     ApplyLayout,
     SweepHardLevel,
-    System, //系统自动添加的任务，比如启动游戏、重启游戏
+    System, //由程序添加的任务，比如启动游戏、重启游戏
 }
 
 /// <summary>
@@ -48,7 +48,6 @@ public partial class TaskChainModel : ObservableObject
     public bool NeedPrintLog { get; set; }
 
     public Queue<TaskModel> TaskQueue { get; set; }
-    //public Action Action { get; set; }
 
     /// <summary>不需要的string用string.Empty</summary>
     public TaskChainModel(
@@ -69,19 +68,5 @@ public partial class TaskChainModel : ObservableObject
         NeedPrintLog = _needPrintLog;
         TaskQueue = _taskQueue;
         OverrideStartLogMessage = _overrideStartLogMessage;
-        //Action = action;
     }
-
-    //public bool Run()
-    //{
-    //    try
-    //    {
-    //        Action();
-    //        return true;
-    //    }
-    //    catch (Exception)
-    //    {
-    //        return false;
-    //    }
-    //}
 }

@@ -3,12 +3,20 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": -57,
-				"y": -115,
+				"x": 131,
+				"y": -202,
 				"zoom": 0.79
 			},
 			"filename": "HomeScreen",
-			"version": "v1.3.1"
+			"version": "v1.4.1"
+		}
+	},
+	"$__mpe_external_StartUp@Start_HomeScreen": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1218,
+				"y": 925
+			}
 		}
 	},
 	"HomeScreen@IdelClick": {
@@ -22,14 +30,14 @@
 		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
-				"x": 889,
-				"y": 921
+				"x": 882,
+				"y": 1159
 			}
 		}
 	},
 	"HomeScreen@Refresh": {
 		"doc": "刷新游戏，检测掉线、重复登录等状态。前置条件是当前在游戏内。如果识别到主页按钮直接返回即可；如果在主界面则点进学生界面再返回主页",
-		"next": ["HomeScreen@BackToHomePage", "[JumpBack]HomeScreen@DisconnectedPopUp", "HomeScreen@GoToStudentsPage", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@IdelClick", "[JumpBack]NullNode", "StartUp@StartApp"],
+		"next": ["HomeScreen@BackToHomePage", "[JumpBack]HomeScreen@DisconnectedPopUp", "HomeScreen@GoToStudentsPage", "[JumpBack]ClosePopup", "HomeScreen@TitleScreen", "[JumpBack]HomeScreen@IdelClick", "[JumpBack]NullNode", "StartUp@StartApp"],
 		"$__mpe_code": {
 			"position": {
 				"x": 512,
@@ -81,7 +89,7 @@
 		"recognition": {
 			"type": "TemplateMatch",
 			"param": {
-				"roi": [286, 610, 90, 110],
+				"roi": [268, 610, 120, 110],
 				"template": "StudentPageButton.png"
 			}
 		},
@@ -90,11 +98,11 @@
 			"param": {}
 		},
 		"post_delay": 2000,
-		"next": ["HomeScreen@BackToHomePage", "[JumpBack]DisconnectPopup", "[JumpBack]ClosePopup", "[JumpBack]HomeScreen@ClickStudentsPageButton", "[JumpBack]HomeScreen@DisconnectedPopUp"],
+		"next": ["HomeScreen@BackToHomePage", "[JumpBack]DisconnectPopup", "[JumpBack]HomeScreen@DisconnectedPopUp", "[JumpBack]HomeScreen@ClickStudentsPageButton", "[JumpBack]ClosePopup"],
 		"$__mpe_code": {
 			"position": {
-				"x": 886,
-				"y": 662
+				"x": 883,
+				"y": 623
 			}
 		}
 	},
@@ -253,8 +261,8 @@
 	"$__mpe_external_StartUp@StartApp_HomeScreen": {
 		"$__mpe_code": {
 			"position": {
-				"x": 897,
-				"y": 1389
+				"x": 885,
+				"y": 1590
 			}
 		}
 	},
@@ -306,8 +314,26 @@
 		"max_hit": 1,
 		"$__mpe_code": {
 			"position": {
-				"x": 888,
-				"y": 1182
+				"x": 881,
+				"y": 1414
+			}
+		}
+	},
+	"HomeScreen@TitleScreen": {
+		"doc": "识别到标题画面。进入登录流程",
+		"recognition": {
+			"type": "TemplateMatch",
+			"param": {
+				"roi": [16, 606, 106, 54],
+				"template": "MenuButton.png",
+				"green_mask": true
+			}
+		},
+		"next": ["StartUp@Start"],
+		"$__mpe_code": {
+			"position": {
+				"x": 885,
+				"y": 875
 			}
 		}
 	}

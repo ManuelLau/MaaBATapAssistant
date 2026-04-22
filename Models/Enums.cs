@@ -11,7 +11,7 @@ public enum EClientTypeSettingOptions
     [Description("模拟器 国际服(繁体中文)")] Zh_TW,
     [Description("模拟器 日服")] Jp,
     [Description("PC端 国际服(繁体中文)")] Zh_TW_PC,
-    //[Description("PC端 日服")] Jp_PC,
+    [Description("PC端 日服")] Jp_PC,
 }
 
 public enum ECafeInviteTimeSettingOptions

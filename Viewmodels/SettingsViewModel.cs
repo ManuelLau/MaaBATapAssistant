@@ -132,7 +132,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         OpenFileDialog openFileDialog = new()
         {
-            Filter = "应用程序(*.exe)|*.exe",
+            Filter = "应用程序(*.exe)|*.exe;*.bat",
             Title = "选择程序"
         };
 

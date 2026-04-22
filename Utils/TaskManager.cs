@@ -4,6 +4,7 @@ using MaaFramework.Binding;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Windows;
 using static MaaBATapAssistant.Utils.CustomTask;
@@ -79,6 +80,17 @@ public class TaskManager
         if (!nextPeriodHasTask)
         {
             Utility.PrintError("注意：下一个时间段没有任务");
+        }
+        // 日服PC端检测管理员权限
+        if (_settingsData.ClientTypeSettingIndex == (int)EClientTypeSettingOptions.Jp_PC)
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new(identity);
+            if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+            {
+                Utility.PrintError("未检测到管理员权限。连接日服PC端需要管理员权限，请使用管理员身份运行小助手");
+                return;
+            }
         }
 
         ProgramDataModel.Instance.IsAfkTaskRunning = true;
@@ -234,25 +246,32 @@ public class TaskManager
         Utility.CustomDebugWriteLine("MaaTasker is null or invalid");
         DisposeMaaTasker();
 
-        MaaController? maaController = await InitMaaController(token);
-        if (maaController is null || token.IsCancellationRequested)
-        {
-            Utility.CustomDebugWriteLine($"InitMaaController failed - maaController is null or token.IsCancellationRequested:{token.IsCancellationRequested}");
-            return false;
-        }
-
-        MaaResource? maaResource = LoadMaaSource();
-        if (maaResource is null)
-        {
-            return false;
-        }
-
         if (DeviceIsEmulator())
             Utility.PrintLog("正在连接模拟器...");
         else
-            Utility.PrintLog("正在连接PC端...");
+        {
+            if (_settingsData.ClientTypeSettingIndex == (int)EClientTypeSettingOptions.Zh_TW_PC)
+                Utility.PrintLog("正在连接国际服PC端...");
+            else if (_settingsData.ClientTypeSettingIndex == (int)EClientTypeSettingOptions.Jp_PC)
+                Utility.PrintLog("正在连接日服PC端...");
+        }
+
         try
         {
+            MaaController? maaController = await InitMaaController(token);
+            if (token.IsCancellationRequested)
+            {
+                Utility.CustomDebugWriteLine($"InitMaaController failed - token.IsCancellationRequested:{token.IsCancellationRequested}");
+                return false;
+            }
+            if (maaController is null)
+            {
+                Utility.CustomDebugWriteLine("InitMaaController failed - maaController is null");
+                throw new Exception("初始化控制器失败");
+            }
+
+            MaaResource? maaResource = LoadMaaSource() ?? throw new Exception("加载资源文件失败");
+
             _maaTasker = new()
             {
                 Controller = maaController,
@@ -293,16 +312,18 @@ public class TaskManager
             Utility.CustomDebugWriteLine("_maaTasker is null or _maaTasker.IsInitialized is false");
             return false;
         }
+
         if (DeviceIsEmulator())
             Utility.PrintLog("成功连接至模拟器" + _maaControllerName);
         else
         {
             Utility.PrintLog("成功连接至PC端" + _maaControllerName);
-            // PC端检测分辨率是否为16比9。如果不是16比9，识别会不准确
+            // PC端检测分辨率
             _maaTasker.Controller.Screencap().Wait();
             _maaTasker.Controller.GetResolution(out int width, out int height);
             Utility.CustomDebugWriteLine($"程序分辨率 - {width}*{height}");
         }
+        Utility.CustomDebugWriteLine($"资源文件版本 - {ProgramDataModel.Instance.ResourcesVersion}");
         return true;
     }
 
@@ -322,16 +343,16 @@ public class TaskManager
                     }
                 }
                 break;
-            //case EClientTypeSettingOptions.Jp_PC:
-            //    foreach (var e in windows)
-            //    {
-            //        if (e.Name.Equals(Constants.PCClientNameJP[0]) || e.Name.Equals(Constants.PCClientNameJP[1]))
-            //        {
-            //            gameWindow = e;
-            //            break;
-            //        }
-            //    }
-            //    break;
+            case EClientTypeSettingOptions.Jp_PC:
+                foreach (var e in windows)
+                {
+                    if (e.Name.Equals(Constants.PCClientNameJP[0]) || e.Name.Equals(Constants.PCClientNameJP[1]))
+                    {
+                        gameWindow = e;
+                        break;
+                    }
+                }
+                break;
         }
         return gameWindow;
     }
@@ -442,9 +463,27 @@ public class TaskManager
         {
             try
             {
-                Utility.CustomDebugWriteLine("找不到正在运行的PC端，将自动打开：" + _settingsData.DevicePath);
+                string devicePath = _settingsData.DevicePath;
+                //日服PC端额外处理，直接启动游戏无效，需要执行run.bat脚本
+                if (_settingsData.ClientTypeSettingIndex == (int)EClientTypeSettingOptions.Jp_PC)
+                {
+                    string? directory = System.IO.Path.GetDirectoryName(_settingsData.DevicePath);
+                    if (directory is null)
+                    {
+                        Utility.CustomDebugWriteLine("获取客户端所在目录失败：" + directory);
+                        Utility.PrintError("自动连接PC端失败，请检查路径是否正确");
+                        return null;
+                    }
+                    devicePath = System.IO.Path.Combine(directory, "run.bat");
+                    if (!System.IO.Path.Exists(devicePath))
+                    {
+                        Utility.PrintError("自动连接PC端失败，请检查路径是否正确");
+                        Utility.CustomDebugWriteLine("找不到run.bat文件 - " + _settingsData.DevicePath);
+                    }
+                }
+                Utility.CustomDebugWriteLine("找不到正在运行的PC端，将自动打开：" + devicePath);
                 Utility.PrintLog("正在打开PC端...");
-                Process.Start(new ProcessStartInfo(_settingsData.DevicePath)
+                Process.Start(new ProcessStartInfo(devicePath)
                 {
                     UseShellExecute = true
                 });
@@ -491,7 +530,7 @@ public class TaskManager
             (int)EClientTypeSettingOptions.Zh_TW => [Constants.MaaSourceDirectory, Constants.MaaSourcePathZhtwOverride],
             (int)EClientTypeSettingOptions.Zh_TW_PC => [Constants.MaaSourceDirectory, Constants.MaaSourcePathZhtwOverride],
             (int)EClientTypeSettingOptions.Jp => [Constants.MaaSourceDirectory, Constants.MaaSourcePathJpOverride],
-            //(int)EClientTypeSettingOptions.Jp_PC => [Constants.MaaSourceDirectory, Constants.MaaSourcePathJpOverride],
+            (int)EClientTypeSettingOptions.Jp_PC => [Constants.MaaSourceDirectory, Constants.MaaSourcePathJpOverride],
             _ => [Constants.MaaSourceDirectory],
         };
         try
@@ -512,7 +551,7 @@ public class TaskManager
         return ProgramDataModel.Instance.SettingsData.ClientTypeSettingIndex switch
         {
             (int)EClientTypeSettingOptions.Zh_TW_PC => false,
-            //(int)EClientTypeSettingOptions.Jp_PC => false,
+            (int)EClientTypeSettingOptions.Jp_PC => false,
             _ => true,
         };
     }
@@ -999,7 +1038,7 @@ public class TaskManager
                         }
                         break;
                     case (int)EClientTypeSettingOptions.Jp:
-                    //case (int)EClientTypeSettingOptions.Jp_PC:
+                    case (int)EClientTypeSettingOptions.Jp_PC:
                         switch (_settingsData.Cafe1InviteSortTypeSettingIndex)
                         {
                             case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:
@@ -1069,7 +1108,7 @@ public class TaskManager
                         }
                         break;
                     case (int)EClientTypeSettingOptions.Jp:
-                    //case (int)EClientTypeSettingOptions.Jp_PC:
+                    case (int)EClientTypeSettingOptions.Jp_PC:
                         switch (_settingsData.Cafe2InviteSortTypeSettingIndex)
                         {
                             case (int)ECafeInviteSortTypeSettingOptions.BondLvFromLowToHigh:

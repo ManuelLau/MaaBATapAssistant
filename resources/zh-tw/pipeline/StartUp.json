@@ -2,19 +2,19 @@
 	"StartUp@Start": {
 		"next": [
 			"[JumpBack]StartUp@WaitLoading",
-			"StartUp@RecognizeLabel",
+			"StartUp@FirstCheck",
 			"[JumpBack]StartUp@ClientUpdatePopUp",
 			"[JumpBack]StartUp@UpdatePopUp",
 			"HomeScreen@MaintenancePopUp",
 			"[JumpBack]StartUp@NexonLoginPopUp",
 			"[JumpBack]StartUp@TitleScreen",
 			"[JumpBack]StartUp@EventCheckInPopUp",
-			"[JumpBack]StartUp@DailyCheckIn",
-			"[JumpBack]StartUp@EventCheckIn",
+			"[JumpBack]DisconnectPopup",
 			"[JumpBack]ClosePopup",
 			"[JumpBack]CloseReward",
-			"[JumpBack]ClickHomeButton",
-			"[JumpBack]DisconnectPopup"]
+			"[JumpBack]StartUp@DailyCheckIn",
+			"[JumpBack]StartUp@EventCheckIn",
+			"[JumpBack]ClickHomeButton"]
 	},
 	"StartUp@WaitLoading": {
 		"recognition": {

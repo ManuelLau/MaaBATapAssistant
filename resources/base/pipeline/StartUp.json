@@ -3,17 +3,17 @@
 		"$__mpe_code": {
 			"prefix": "",
 			"savedViewport": {
-				"x": -181,
-				"y": -178,
-				"zoom": 0.79
+				"x": 35,
+				"y": -436,
+				"zoom": 0.63
 			},
 			"filename": "StartUp",
-			"version": "v1.3.1"
+			"version": "v1.4.1"
 		}
 	},
 	"StartUp@Start": {
 		"timeout": 120000,
-		"next": ["[JumpBack]StartUp@WaitLoading", "StartUp@FirstCheck", "[JumpBack]StartUp@ClientUpdatePopUp", "[JumpBack]StartUp@UpdatePopUp", "HomeScreen@MaintenancePopUp", "[JumpBack]StartUp@TitleScreen", "[JumpBack]StartUp@EventCheckInPopUp", "[JumpBack]StartUp@DailyCheckIn", "[JumpBack]StartUp@EventCheckIn", "[JumpBack]ClosePopup", "[JumpBack]CloseReward", "[JumpBack]ClickHomeButton", "[JumpBack]DisconnectPopup"],
+		"next": ["[JumpBack]StartUp@WaitLoading", "StartUp@FirstCheck", "[JumpBack]StartUp@ClientUpdatePopUp", "[JumpBack]StartUp@UpdatePopUp", "HomeScreen@MaintenancePopUp", "[JumpBack]StartUp@TitleScreen", "[JumpBack]StartUp@EventCheckInPopUp", "[JumpBack]DisconnectPopup", "[JumpBack]ClosePopup", "[JumpBack]CloseReward", "[JumpBack]StartUp@DailyCheckIn", "[JumpBack]StartUp@EventCheckIn", "[JumpBack]ClickHomeButton"],
 		"$__mpe_code": {
 			"position": {
 				"x": 725,
@@ -133,8 +133,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1262,
-				"y": 1929
+				"x": 1258,
+				"y": 2131
 			}
 		}
 	},
@@ -154,8 +154,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1259,
-				"y": 2212
+				"x": 1256,
+				"y": 2413
 			}
 		}
 	},
@@ -171,8 +171,8 @@
 		"next": ["ClosePopup"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1262,
-				"y": 1680
+				"x": 1263,
+				"y": 1679
 			}
 		}
 	},
@@ -218,32 +218,32 @@
 	"$__mpe_external_DisconnectPopup_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1263,
-				"y": 2681
+				"x": 1266,
+				"y": 1926
 			}
 		}
 	},
 	"$__mpe_external_ClosePopup_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1266,
-				"y": 2470
+				"x": 1265,
+				"y": 1994
 			}
 		}
 	},
 	"$__mpe_external_ClickHomeButton_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1264,
-				"y": 2608
+				"x": 1261,
+				"y": 2665
 			}
 		}
 	},
 	"$__mpe_external_CloseReward_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1265,
-				"y": 2539
+				"x": 1266,
+				"y": 2060
 			}
 		}
 	},

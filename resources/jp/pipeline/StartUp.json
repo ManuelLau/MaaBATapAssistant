@@ -1,21 +1,21 @@
 {
 	"StartUp@Start": {
 		"next": [
-			"StartUp@RecognizeLabel",
 			"[JumpBack]StartUp@WaitLoading",
+			"StartUp@FirstCheck",
 			"[JumpBack]StartUp@ClientUpdatePopUp",
 			"[JumpBack]StartUp@UpdatePopUp",
 			"[JumpBack]StartUp@JpBindingPage",
 			"[JumpBack]StartUp@JpCloseRequestFail300300",
 			"[JumpBack]StartUp@JpIPBlockedPopUp",
-			"[JumpBack]HomeScreen@MaintenancePopUp",
+			"HomeScreen@MaintenancePopUp",
 			"[JumpBack]StartUp@TitleScreen",
 			"[JumpBack]StartUp@EventCheckInPopUp",
-			"[JumpBack]StartUp@DailyCheckIn",
-			"[JumpBack]StartUp@EventCheckIn",
 			"[JumpBack]DisconnectPopup",
 			"[JumpBack]ClosePopup",
 			"[JumpBack]CloseReward",
+			"[JumpBack]StartUp@DailyCheckIn",
+			"[JumpBack]StartUp@EventCheckIn",
 			"[JumpBack]ClickHomeButton"
 		]
 	},
@@ -30,6 +30,13 @@
 			"確認しました"
 		],
 		"replace": [["―","ー"],["一","ー"]]
+	},
+	"StartUp@RecognizeMailButton": {
+		"recognition": {
+			"param": {
+				"roi": [1148, 38, 12, 4]
+			}
+		}
 	},
 	"StartUp@JpBindingPage": {
         "recognition": "TemplateMatch",
