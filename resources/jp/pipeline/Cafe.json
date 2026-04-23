@@ -8,7 +8,7 @@
 				"replace": [
 					["'", ""]
 				],
-				"threshold": 0.97
+				"threshold": 0.9
 			}
 		}
 	},
@@ -21,7 +21,7 @@
 				"replace": [
 					["'", ""]
 				],
-				"threshold": 0.97
+				"threshold": 0.9
 			}
 		}
 	},
@@ -35,7 +35,7 @@
 				"replace": [
 					["'", ""]
 				],
-				"threshold": 0.97
+				"threshold": 0.9
 			}
 		}
 	},
@@ -48,7 +48,7 @@
 				"replace": [
 					["'", ""]
 				],
-				"threshold": 0.97
+				"threshold": 0.9
 			}
 		}
 	}
