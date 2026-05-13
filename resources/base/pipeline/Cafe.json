@@ -15,25 +15,36 @@
 	},
 	"MoveToCafe1@InCafe1":{
 		"recognition": {
-			"type": "TemplateMatch",
+			"type": "OCR",
 			"param": {
 				"roi": [38, 76, 192, 54],
-				"template": "MoveToCafe2Button.png",
-				"threshold": 0.97
+				"expected": ["2号店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.9
 			}
 		},
 		"next": "Stop"
 	},
 	"MoveToCafe1@InCafe2": {
 		"recognition": {
-			"type": "TemplateMatch",
+			"type": "OCR",
 			"param": {
 				"roi": [38, 76, 192, 54],
-				"template": "MoveToCafe1Button.png",
-				"threshold": 0.97
+				"expected": ["1号店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.9
 			}
 		},
-		"action": "Click",
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [140, 100, 2, 2]
+			}
+		},
 		"post_delay": 1000,
 		"next": [
 			"Cafe@RecognizeTopLeftText",
@@ -55,25 +66,36 @@
 	},
 	"MoveToCafe2@InCafe2":{
 		"recognition": {
-			"type": "TemplateMatch",
+			"type": "OCR",
 			"param": {
 				"roi": [38, 76, 192, 54],
-				"template": "MoveToCafe1Button.png",
-				"threshold": 0.97
+				"expected": ["1号店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.9
 			}
 		},
 		"next": "Stop"
 	},
 	"MoveToCafe2@InCafe1": {
 		"recognition": {
-			"type": "TemplateMatch",
+			"type": "OCR",
 			"param": {
 				"roi": [38, 76, 192, 54],
-				"template": "MoveToCafe2Button.png",
-				"threshold": 0.97
+				"expected": ["2号店"],
+				"replace": [
+					["'", ""]
+				],
+				"threshold": 0.9
 			}
 		},
-		"action": "Click",
+		"action": {
+			"type": "Click",
+			"param": {
+				"target": [140, 100, 2, 2]
+			}
+		},
 		"post_delay": 1000,
 		"next": [
 			"Cafe@RecognizeTopLeftText",
