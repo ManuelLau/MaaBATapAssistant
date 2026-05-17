@@ -2,7 +2,7 @@
 
 public static class Constants
 {
-    public const string AppVersion = "0.4.3";
+    public const string AppVersion = "0.4.4";
     public const string PlatformTag = "win-x";
     public const string ProjectGitHubUrl = "https://github.com/ManuelLau/MaaBATapAssistant";
     public const string ProjectGiteeUrl = "https://gitee.com/manuel33/MaaBATapAssistant";

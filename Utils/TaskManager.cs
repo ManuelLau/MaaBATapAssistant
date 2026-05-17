@@ -3,6 +3,7 @@ using MaaBATapAssistant.ViewModels;
 using MaaFramework.Binding;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
@@ -313,15 +314,33 @@ public class TaskManager
             return false;
         }
 
-        if (DeviceIsEmulator())
+        // 检测分辨率，要求分辨率比例约为1.7777 +- 0.05
+        _maaTasker.Controller.Screencap().Wait();
+        _maaTasker.Controller.GetResolution(out int width, out int height);
+        double ratio = (double)width / height;
+        double target = 16.0 / 9.0;
+        double tolerance = 0.05;
+        bool showWarning = false;
+        if (Math.Abs(ratio - target) > tolerance)
+        {
+            showWarning = true;
+        }
+        if (DeviceIsEmulator()){
             Utility.PrintLog("成功连接至模拟器" + _maaControllerName);
+            Utility.CustomDebugWriteLine($"模拟器分辨率 - {width}*{height}");
+            if (showWarning)
+            {
+                Utility.PrintError($"注意：当前模拟器分辨率比例不是16:9，可能会导致图像识别不准确或其他问题");
+            }
+        }
         else
         {
             Utility.PrintLog("成功连接至PC端" + _maaControllerName);
-            // PC端检测分辨率
-            _maaTasker.Controller.Screencap().Wait();
-            _maaTasker.Controller.GetResolution(out int width, out int height);
-            Utility.CustomDebugWriteLine($"程序分辨率 - {width}*{height}");
+            Utility.CustomDebugWriteLine($"PC端分辨率 - {width}*{height}");
+            if (showWarning)
+            {
+                Utility.PrintError($"注意：当前PC端分辨率比例不是16:9，可能会导致图像识别不准确或其他问题");
+            }
         }
         Utility.CustomDebugWriteLine($"资源文件版本 - {ProgramDataModel.Instance.ResourcesVersion}");
         return true;
@@ -1194,71 +1213,87 @@ public class TaskManager
         string leidian = "dnplayer";
         if (_settingsData.DevicePath.Contains(mumu, StringComparison.OrdinalIgnoreCase) || _settingsData.DevicePath.Contains(leidian, StringComparison.OrdinalIgnoreCase))
         {
-            // 调用MuMu的控制台方法关闭模拟器
-            string? directory = System.IO.Path.GetDirectoryName(_settingsData.DevicePath);
-            if (string.IsNullOrEmpty(directory))
+            try
             {
-                Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
-                return false;
-            }
-            string programPath = string.Empty;
-            string argument = string.Empty;
-            // MuMu模拟器
-            if (_settingsData.DevicePath.Contains(mumu, StringComparison.OrdinalIgnoreCase))
-            {
-                programPath = System.IO.Path.Combine(directory, "MuMuManager.exe");
-                argument = $"control -v {_settingsData.ExitEmulatorIndex} shutdown";
-            }
-            // 雷电模拟器
-            else if (_settingsData.DevicePath.Contains(leidian, StringComparison.OrdinalIgnoreCase))
-            {
-                programPath = System.IO.Path.Combine(directory, "ldconsole.exe");
-                argument = $"quit --index {_settingsData.ExitEmulatorIndex}";
-            }
+                // 调用模拟器控制台方法关闭模拟器
+                string? directory = System.IO.Path.GetDirectoryName(_settingsData.DevicePath);
+                if (string.IsNullOrEmpty(directory))
+                {
+                    Utility.PrintError("自动退出模拟器失败，请检查路径是否正确");
+                    return false;
+                }
+                string programPath = string.Empty;
+                string argument = string.Empty;
+                // MuMu模拟器
+                if (_settingsData.DevicePath.Contains(mumu, StringComparison.OrdinalIgnoreCase))
+                {
+                    programPath = System.IO.Path.Combine(directory, "MuMuManager.exe");
+                    argument = $"control -v {_settingsData.ExitEmulatorIndex} shutdown";
+                }
+                // 雷电模拟器
+                else if (_settingsData.DevicePath.Contains(leidian, StringComparison.OrdinalIgnoreCase))
+                {
+                    programPath = System.IO.Path.Combine(directory, "ldconsole.exe");
+                    argument = $"quit --index {_settingsData.ExitEmulatorIndex}";
+                }
 
-            // 执行命令行任务
-            Utility.CustomDebugWriteLine($"执行命令行 - ProgramPath:{programPath} - Argument:{argument}");
-            ProcessStartInfo processStartInfo = new()
-            {
-                FileName = programPath,
-                Arguments = argument,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
+                // 执行命令行任务
+                Utility.CustomDebugWriteLine($"执行命令行 - ProgramPath:{programPath} - Argument:{argument}");
+                ProcessStartInfo processStartInfo = new()
+                {
+                    FileName = programPath,
+                    Arguments = argument,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
 
-            using Process process = new();
-            process.StartInfo = processStartInfo;
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            string errorOutput = process.StandardError.ReadToEnd();
-            process.WaitForExit();
+                using Process process = new();
+                process.StartInfo = processStartInfo;
+                process.Start();
+                string output = process.StandardOutput.ReadToEnd();
+                string errorOutput = process.StandardError.ReadToEnd();
+                process.WaitForExit();
 
-            // 检查是否有错误输出
-            if (!string.IsNullOrEmpty(errorOutput))
-            {
-                Utility.CustomDebugWriteLine("执行命令行遇到错误！运行结果：" + output);
-                Utility.CustomDebugWriteLine("错误：" + errorOutput);
-                return false;
+                // 检查是否有错误输出
+                if (!string.IsNullOrEmpty(errorOutput))
+                {
+                    Utility.CustomDebugWriteLine("执行命令行遇到错误！运行结果：" + output);
+                    Utility.CustomDebugWriteLine("错误：" + errorOutput);
+                    return false;
+                }
+                Utility.PrintLog("已自动退出模拟器");
+                return true;
             }
-            Utility.PrintLog("已自动退出模拟器");
-            return true;
+            catch (Exception ex)
+            {
+                Utility.CustomDebugWriteLine("调用控制台关闭模拟器遇到异常：" + ex.Message);
+                Utility.PrintError("自动退出模拟器失败");
+            }
         }
         // 通用的退出方法，直接关闭同名进程
         else
         {
-            string fileName = System.IO.Path.GetFileName(_settingsData.DevicePath);
-            Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(fileName));
-            foreach (Process process in processes)
+            try
             {
-                if (process.MainModule != null &&
-                    process.MainModule.FileName.Equals(_settingsData.DevicePath, StringComparison.InvariantCultureIgnoreCase))
+                string fileName = System.IO.Path.GetFileName(_settingsData.DevicePath);
+                Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(fileName));
+                foreach (Process process in processes)
                 {
-                    process.Kill();
-                    process.WaitForExit();
-                    return true;
+                    if (process.MainModule != null &&
+                        process.MainModule.FileName.Equals(_settingsData.DevicePath, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        process.Kill();
+                        process.WaitForExit();
+                        return true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Utility.CustomDebugWriteLine("自动退出模拟器(通用退出方法)遇到异常：" + ex.Message);
+                Utility.PrintError("自动退出模拟器失败");
             }
         }
         return false;

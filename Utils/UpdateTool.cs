@@ -277,7 +277,7 @@ public static class UpdateTool
                 case ".rar":
                 case ".7z":
                     Directory.CreateDirectory(extractDir);
-                    var archive = ArchiveFactory.Open(tempFilePath);
+                    var archive = ArchiveFactory.OpenArchive(tempFilePath);
                     foreach (var entry in archive.Entries)
                     {
                         if (!entry.IsDirectory)
