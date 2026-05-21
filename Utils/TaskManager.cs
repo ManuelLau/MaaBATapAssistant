@@ -3,7 +3,6 @@ using MaaBATapAssistant.ViewModels;
 using MaaFramework.Binding;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
@@ -1209,7 +1208,7 @@ public class TaskManager
             return false;
         }
 
-        string mumu = "MuMuPlayer";
+        string mumu = "MuMuNxDevice";
         string leidian = "dnplayer";
         if (_settingsData.DevicePath.Contains(mumu, StringComparison.OrdinalIgnoreCase) || _settingsData.DevicePath.Contains(leidian, StringComparison.OrdinalIgnoreCase))
         {
@@ -1227,7 +1226,17 @@ public class TaskManager
                 // MuMu模拟器
                 if (_settingsData.DevicePath.Contains(mumu, StringComparison.OrdinalIgnoreCase))
                 {
-                    programPath = System.IO.Path.Combine(directory, "MuMuManager.exe");
+                    // 切换目录到nx_main下
+                    System.IO.DirectoryInfo? dir = new System.IO.DirectoryInfo(_settingsData.DevicePath).Parent;
+                    dir = dir?.Parent;
+                    dir = dir?.Parent;
+                    dir = dir?.Parent;
+                    if (dir == null)
+                    {
+                        Utility.CustomDebugWriteLine("无法切换到MuMu根目录");
+                        throw new Exception("无法切换到MuMu根目录");
+                    }
+                    programPath = System.IO.Path.Combine(dir.FullName, "nx_main", "MuMuManager.exe");
                     argument = $"control -v {_settingsData.ExitEmulatorIndex} shutdown";
                 }
                 // 雷电模拟器
