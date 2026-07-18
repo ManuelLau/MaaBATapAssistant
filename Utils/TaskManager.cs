@@ -146,68 +146,75 @@ public class TaskManager
     //生成从给定时间到下一次咖啡厅刷新时间前的任务
     public DateTime CreateTask(DateTime taskDateTime)
     {
-        // 处理规避时间段。如果end time小于start time则需要额外生成一个end time
-        DateTime AvoidingStartDateTime = new(taskDateTime.Year, taskDateTime.Month, taskDateTime.Day,
-                _settingsData.AvoidingStartTime.Hour, _settingsData.AvoidingStartTime.Minute, _settingsData.AvoidingStartTime.Second);
-        DateTime AvoidingEndDateTime = new(taskDateTime.Year, taskDateTime.Month, taskDateTime.Day,
-                _settingsData.AvoidingEndTime.Hour, _settingsData.AvoidingEndTime.Minute, _settingsData.AvoidingEndTime.Second);
-        DateTime AvoidingEndDateTimeNextDay = DateTime.MinValue;
-        if (_settingsData.AvoidingStartTime > _settingsData.AvoidingEndTime)
+        try
         {
-            AvoidingEndDateTimeNextDay = AvoidingEndDateTime.AddDays(1);
-        }
-
-        DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(taskDateTime); //04:00 or 03:00
-        DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(taskDateTime);
-        bool hasCreatedCafe1InviteTask = false;
-        bool hasCreatedCafe2InviteTask = false;
-        bool hasCreatedCafe1AMApplyLayoutTask = false;
-        bool hasCreatedCafe1PMApplyLayoutTask = false;
-        bool hasCreatedCafe2AMApplyLayoutTask = false;
-        bool hasCreatedCafe2PMApplyLayoutTask = false;
-        bool hasCreatedSweepHardLevelTask = false;
-        //循环生成第一轮任务(直到下一次咖啡厅刷新时间)
-        do
-        {
-            if (_settingsData.IsCreateTaskAvoidSpecifiedTime)
+            // 处理规避时间段。如果end time小于start time则需要额外生成一个end time
+            DateTime AvoidingStartDateTime = new(taskDateTime.Year, taskDateTime.Month, taskDateTime.Day,
+                    _settingsData.AvoidingStartTime.Hour, _settingsData.AvoidingStartTime.Minute, _settingsData.AvoidingStartTime.Second);
+            DateTime AvoidingEndDateTime = new(taskDateTime.Year, taskDateTime.Month, taskDateTime.Day,
+                    _settingsData.AvoidingEndTime.Hour, _settingsData.AvoidingEndTime.Minute, _settingsData.AvoidingEndTime.Second);
+            DateTime AvoidingEndDateTimeNextDay = DateTime.MinValue;
+            if (_settingsData.AvoidingStartTime > _settingsData.AvoidingEndTime)
             {
-                if (_settingsData.AvoidingStartTime > _settingsData.AvoidingEndTime)
-                {
-                    if (taskDateTime < AvoidingEndDateTime)
-                    {
-                        taskDateTime = AvoidingEndDateTime;
-                    }
-                    else if (taskDateTime >= AvoidingStartDateTime && taskDateTime < AvoidingEndDateTimeNextDay)
-                    {
-                        taskDateTime = AvoidingEndDateTimeNextDay;
-                    }
-                }
-                else
-                {
-                    if (taskDateTime >= AvoidingStartDateTime && taskDateTime < AvoidingEndDateTime)
-                    {
-                        taskDateTime = AvoidingEndDateTime;
-                    }
-                }
-                if (taskDateTime >= nextCafeRefreshDateTime)
-                {
-                    break;
-                }
+                AvoidingEndDateTimeNextDay = AvoidingEndDateTime.AddDays(1);
             }
-            CreateTaskFragment(taskDateTime, ref hasCreatedCafe1InviteTask, ref hasCreatedCafe2InviteTask, ref hasCreatedCafe1AMApplyLayoutTask,
-            ref hasCreatedCafe1PMApplyLayoutTask, ref hasCreatedCafe2AMApplyLayoutTask, ref hasCreatedCafe2PMApplyLayoutTask, ref hasCreatedSweepHardLevelTask);
-            taskDateTime = taskDateTime.AddHours(3);
-        } while (taskDateTime < nextCafeRefreshDateTime);
-        taskDateTime = nextCafeRefreshDateTime;
-        //如果时间到达服务器刷新时间，就添加一个重启任务
-        if (taskDateTime == nextServerRefreshDateTime)
+
+            DateTime nextServerRefreshDateTime = GetNextServerRefreshDateTime(taskDateTime); //04:00 or 03:00
+            DateTime nextCafeRefreshDateTime = GetNextCafeRefreshDateTime(taskDateTime);
+            bool hasCreatedCafe1InviteTask = false;
+            bool hasCreatedCafe2InviteTask = false;
+            bool hasCreatedCafe1AMApplyLayoutTask = false;
+            bool hasCreatedCafe1PMApplyLayoutTask = false;
+            bool hasCreatedCafe2AMApplyLayoutTask = false;
+            bool hasCreatedCafe2PMApplyLayoutTask = false;
+            bool hasCreatedSweepHardLevelTask = false;
+            //循环生成第一轮任务(直到下一次咖啡厅刷新时间)
+            do
+            {
+                if (_settingsData.IsCreateTaskAvoidSpecifiedTime)
+                {
+                    if (_settingsData.AvoidingStartTime > _settingsData.AvoidingEndTime)
+                    {
+                        if (taskDateTime < AvoidingEndDateTime)
+                        {
+                            taskDateTime = AvoidingEndDateTime;
+                        }
+                        else if (taskDateTime >= AvoidingStartDateTime && taskDateTime < AvoidingEndDateTimeNextDay)
+                        {
+                            taskDateTime = AvoidingEndDateTimeNextDay;
+                        }
+                    }
+                    else
+                    {
+                        if (taskDateTime >= AvoidingStartDateTime && taskDateTime < AvoidingEndDateTime)
+                        {
+                            taskDateTime = AvoidingEndDateTime;
+                        }
+                    }
+                    if (taskDateTime >= nextCafeRefreshDateTime)
+                    {
+                        break;
+                    }
+                }
+                CreateTaskFragment(taskDateTime, ref hasCreatedCafe1InviteTask, ref hasCreatedCafe2InviteTask, ref hasCreatedCafe1AMApplyLayoutTask,
+                ref hasCreatedCafe1PMApplyLayoutTask, ref hasCreatedCafe2AMApplyLayoutTask, ref hasCreatedCafe2PMApplyLayoutTask, ref hasCreatedSweepHardLevelTask);
+                taskDateTime = taskDateTime.AddHours(3);
+            } while (taskDateTime < nextCafeRefreshDateTime);
+            taskDateTime = nextCafeRefreshDateTime;
+            //如果时间到达服务器刷新时间，就添加一个重启任务
+            if (taskDateTime == nextServerRefreshDateTime)
+            {
+                Queue<TaskModel> taskQueue = new();
+                if (DeviceIsEmulator())
+                    taskQueue.Enqueue(new("重启游戏", "RestartGame", string.Empty, ETaskType.RestartGame));
+                else
+                    taskQueue.Enqueue(new("重启游戏", "PCClientStartGame", string.Empty, ETaskType.RestartGame));
+                AddToWaitingTaskList(new("重启游戏", taskDateTime, ETaskChainType.System, true, true, "日期已变更，重启游戏中...", taskQueue));
+            }
+        }
+        catch(Exception e)
         {
-            Queue<TaskModel> taskQueue = new();
-            if (DeviceIsEmulator())
-                taskQueue.Enqueue(new("重启游戏", "RestartGame", string.Empty, ETaskType.RestartGame));
-            else
-                taskQueue.Enqueue(new("重启游戏", "PCClientStartGame", string.Empty, ETaskType.RestartGame));
-            AddToWaitingTaskList(new("重启游戏", taskDateTime, ETaskChainType.System, true, true, "日期已变更，重启游戏中...", taskQueue));
+            Utility.CustomDebugWriteLine("CreateTask() failed: " + e.Message);
         }
         return taskDateTime;
         //对任务按时间排序?
@@ -390,6 +397,7 @@ public class TaskManager
                 return null;
             }
             //默认使用第0个模拟器
+            _maaControllerName = devices[0].Name;
             return devices[0].ToAdbController();
         }
         else
@@ -407,7 +415,7 @@ public class TaskManager
                 ShowWindow(gameWindow.Handle, 4);
             }
             _maaControllerName = gameWindow.Name;
-            return gameWindow.ToWin32ControllerWith(Win32ScreencapMethod.FramePool, Win32InputMethod.SendMessageWithCursorPos, Win32InputMethod.SendMessageWithCursorPos);
+            return gameWindow.ToWin32ControllerWith(Win32ScreencapMethods.FramePool, Win32InputMethod.SendMessageWithCursorPos, Win32InputMethod.SendMessageWithCursorPos);
         }
     }
 

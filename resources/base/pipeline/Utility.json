@@ -190,7 +190,7 @@
 		"action": {
 			"type": "StartApp",
 			"param": {
-				"package": "com.RoamingStar.BlueArchive/com.yostar.supersdk.activity.YoStarSplashActivity"
+				"package": "com.RoamingStar.BlueArchive"
 			}
 		},
 		"post_delay": 2000,
