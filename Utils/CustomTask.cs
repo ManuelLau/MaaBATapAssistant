@@ -1,6 +1,5 @@
 ﻿using MaaBATapAssistant.Models;
 using MaaFramework.Binding;
-using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 using Newtonsoft.Json.Linq;
 using System.IO;
@@ -12,51 +11,58 @@ namespace MaaBATapAssistant.Utils;
 /// </summary>
 public static class CustomTask
 {
-    private static bool ScreenShot(IMaaContext context, string filePrefix)
+    /// suffix为maa截图文件名后缀，也就是对应pipeline的入口名；filePrefix为移动目标截图前缀
+    private static bool MoveScreenShot(string suffix, string filePrefix)
     {
-        var controller = context.Tasker.Controller;
-        controller.Screencap().Wait();
-        MaaImageBuffer imageBuffer = new();
-        bool success = controller.GetCachedImage(imageBuffer);
-
-        if (success)
+        if (!Directory.Exists(Constants.MaaScreenshotDirectory))
         {
-            if (imageBuffer.TryGetEncodedData(out byte[]? imageData))
-            {
-                if (imageData is not null)
-                {
-                    string filePath = Path.Combine(Constants.ScreenshotImageDirectory, $"{filePrefix}-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
-                    File.WriteAllBytes(filePath, imageData);
-                    return true;
-                }
-                else
-                {
-                    Utility.CustomDebugWriteLine("截图数据为空！");
-                    return false;
-                }
-            }
-            else
-            {
-                Utility.CustomDebugWriteLine("截图失败！- TryGetEncodedData()");
-                return false;
-            }
-        }
-        else
-        {
-            Utility.CustomDebugWriteLine("截图失败！- GetCachedImage()");
+            Utility.CustomDebugWriteLine($"MaaScreenshotDirectory 源目录不存在：{Constants.MaaScreenshotDirectory}");
             return false;
         }
+
+        var matchedFiles = Directory.GetFiles(Constants.MaaScreenshotDirectory)
+            .Select(f => new FileInfo(f))
+            .Where(file => Path.GetFileNameWithoutExtension(file.Name)
+            .EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(file => file.LastWriteTime).ToList();
+
+        if (matchedFiles.Count == 0)
+        {
+            Utility.CustomDebugWriteLine("未找到符合条件的图片文件");
+            return false;
+        }
+
+        if (!Directory.Exists(Constants.ScreenshotImageDirectory))
+        {
+            Directory.CreateDirectory(Constants.ScreenshotImageDirectory);
+        }
+
+        FileInfo latestFile = matchedFiles.First();
+        string destFile = Path.Combine(Constants.ScreenshotImageDirectory, $"{filePrefix}-{DateTime.Now:yyyy.MM.dd-HH.mm.ss}.png");
+        try
+        {
+            if (File.Exists(destFile))
+            {
+                File.Delete(destFile);
+            }
+            File.Move(latestFile.FullName, destFile);
+        }
+        catch (Exception ex)
+        {
+            Utility.CustomDebugWriteLine($"截图移动失败：{ex.Message}");
+        }
+        return true;
     }
 
-    public class RelationshipRankUpScreenshot : IMaaCustomRecognition
+    public class ManageRelationshipRankUpScreenshot : IMaaCustomRecognition
     {
-        public string Name { get; set; } = nameof(RelationshipRankUpScreenshot);
+        public string Name { get; set; } = nameof(ManageRelationshipRankUpScreenshot);
 
         public bool Analyze<T>(T context, in AnalyzeArgs args, in AnalyzeResults results) where T : IMaaContext
         {
             if (!ProgramDataModel.Instance.SettingsData.NoScreenShot && ProgramDataModel.Instance.SettingsData.IsRelationshipRankUpAutoScreenShot)
             {
-                if (ScreenShot(context, "RelationshipRankUp"))
+                if (MoveScreenShot("RelationshipRankUpScreenshot", "RelationshipRankUp"))
                 {
                     Utility.PrintLog("好感等级提升，已自动截图");
                     return true;
@@ -94,17 +100,17 @@ public static class CustomTask
         }
     }
 
-    public class InviteScreenshot : IMaaCustomAction
+    public class ManageInviteScreenshot : IMaaCustomAction
     {
-        public string Name { get; set; } = nameof(InviteScreenshot);
+        public string Name { get; set; } = nameof(ManageInviteScreenshot);
 
         public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
         {
             if (!ProgramDataModel.Instance.SettingsData.NoScreenShot)
             {
-                if (!ScreenShot(context, "Invite"))
+                if (!MoveScreenShot("InviteScreenshot", "Invite"))
                 {
-                    Utility.PrintLog("咖啡厅邀请截图失败");
+                    Utility.PrintLog("移动咖啡厅邀请截图失败");
                     return false;
                 }
 
@@ -228,15 +234,15 @@ public static class CustomTask
         }
     }
 
-    public class SweepDropScreenshot : IMaaCustomAction
+    public class ManageSweepDropScreenshot : IMaaCustomAction
     {
-        public string Name { get; set; } = nameof(SweepDropScreenshot);
+        public string Name { get; set; } = nameof(ManageSweepDropScreenshot);
 
         public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
         {
             if (!ProgramDataModel.Instance.SettingsData.NoScreenShot)
             {
-                if (!ScreenShot(context, "Drop"))
+                if (!MoveScreenShot("SweepDropScreenshot", "Drop"))
                 {
                     Utility.PrintLog("扫荡掉落截图失败");
                     return false;

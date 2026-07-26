@@ -2,13 +2,14 @@
 	"$__mpe_config_CafeInvite": {
 		"$__mpe_code": {
 			"prefix": "",
+			"coordinateMode": "absolute-v1",
 			"savedViewport": {
-				"x": -1201,
-				"y": 89,
-				"zoom": 0.99
+				"x": -1581,
+				"y": -2,
+				"zoom": 1
 			},
 			"filename": "CafeInvite",
-			"version": "v1.3.1"
+			"version": "v1.7.4"
 		}
 	},
 	"CafeInvite": {
@@ -69,8 +70,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"text": ["好感等级", "精选", "学院", "名字"],
 		"next": ["CafeInvite@ChangeSortType"],
@@ -90,8 +90,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"text": "好感等级",
 		"next": ["CafeInvite@ChangeSortConfirm"],
@@ -111,8 +110,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"next": ["CafeInvite@RecognizeSortOrder", "[JumpBack]CafeInvite@InverseSortOrder"],
@@ -150,29 +148,28 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1315,
-				"y": 496
+				"x": 1312,
+				"y": 522
 			}
 		}
 	},
-	"CafeInvite@InviteScreenshot": {
-		"doc": "执行邀请前截图",
+	"CafeInvite@ManageInviteScreenshot": {
+		"doc": "移动、清理邀请截图，最多保存10张图片",
 		"action": {
 			"type": "Custom",
 			"param": {
-				"custom_action": "InviteScreenshot"
+				"custom_action": "ManageInviteScreenshot"
 			}
 		},
 		"next": ["CafeInvite@Invite"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1575,
-				"y": 252
+				"x": 1576,
+				"y": 375
 			}
 		}
 	},
@@ -188,8 +185,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"next": ["CafeInvite@InviteConfirmPopupNormal", "CafeInvite@InviteConfirmPopupNeighboring", "CafeInvite@InviteConfirmPopupNeighboringSwapAlt", "CafeInvite@InviteConfirmPopupSwapAlt"],
@@ -207,7 +203,7 @@
 			"param": {
 				"roi": [366, 140, 546, 336],
 				"template": "InviteNormal.png",
-				"threshold": 0.9
+				"threshold": [0.8]
 			}
 		},
 		"next": ["CafeInvite@InviteConfirm"],
@@ -225,7 +221,7 @@
 			"param": {
 				"roi": [366, 140, 546, 336],
 				"template": "InviteNeighboring0.png",
-				"threshold": 0.9
+				"threshold": [0.8]
 			}
 		},
 		"next": ["CafeInvite@InviteConfirmPopupNeighboringConfirm0"],
@@ -245,8 +241,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"next": ["CafeInvite@InviteConfirmPopupNeighboringConfirm1"],
 		"$__mpe_code": {
@@ -262,7 +257,7 @@
 			"param": {
 				"roi": [366, 140, 546, 336],
 				"template": "InviteNeighboring1.png",
-				"threshold": 0.9
+				"threshold": [0.8]
 			}
 		},
 		"next": ["CafeInvite@InviteConfirm"],
@@ -280,7 +275,7 @@
 			"param": {
 				"roi": [366, 140, 546, 336],
 				"template": "InviteNeighboring1.png",
-				"threshold": 0.9
+				"threshold": [0.8]
 			}
 		},
 		"next": ["CafeInvite@InviteConfirm"],
@@ -298,7 +293,7 @@
 			"param": {
 				"roi": [366, 140, 546, 336],
 				"template": "InviteSwapAlt.png",
-				"threshold": 0.9
+				"threshold": [0.8]
 			}
 		},
 		"next": ["CafeInvite@InviteConfirm"],
@@ -310,7 +305,7 @@
 		}
 	},
 	"CafeInvite@InviteConfirm": {
-		"doc": "*测试用target: [1240, 680, 0, 0],",
+		"doc": "*测试用target: [1240, 680],",
 		"recognition": {
 			"type": "TemplateMatch",
 			"param": {
@@ -319,9 +314,9 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
+		"post_delay": 1000,
 		"next": ["CafeInvite@CloseMomoTalkThenStartTap"],
 		"$__mpe_code": {
 			"position": {
@@ -338,8 +333,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"next": ["CafeTap"],
@@ -360,8 +354,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"next": ["CafeInvite@CloseMomoTalkAndStop"],
 		"$__mpe_code": {
@@ -379,8 +372,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"next": ["CafeInvite@InviteCancelNotify"],
 		"$__mpe_code": {
@@ -418,6 +410,19 @@
 			"position": {
 				"x": 796,
 				"y": 76
+			}
+		}
+	},
+	"CafeInvite@InviteScreenshot": {
+		"doc": "执行邀请前截图",
+		"action": {
+			"type": "Screencap"
+		},
+		"next": ["CafeInvite@ManageInviteScreenshot"],
+		"$__mpe_code": {
+			"position": {
+				"x": 1575,
+				"y": 134
 			}
 		}
 	}

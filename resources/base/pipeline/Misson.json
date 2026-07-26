@@ -2,13 +2,28 @@
 	"$__mpe_config_Mission": {
 		"$__mpe_code": {
 			"prefix": "",
+			"coordinateMode": "absolute-v1",
 			"savedViewport": {
-				"x": 353,
-				"y": 282,
-				"zoom": 0.47
+				"x": -3640,
+				"y": -437,
+				"zoom": 1.19
 			},
 			"filename": "Mission",
-			"version": "v1.3.1"
+			"version": "v1.7.4"
+		}
+	},
+	"Mission@ManageSweepDropScreenshot": {
+		"action": {
+			"type": "Custom",
+			"param": {
+				"custom_action": "ManageSweepDropScreenshot"
+			}
+		},
+		"$__mpe_code": {
+			"position": {
+				"x": 3795,
+				"y": 722
+			}
 		}
 	},
 	"SweepHardLevel": {
@@ -29,8 +44,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"next": ["Mission@EnterMisson", "[JumpBack]WaitLoading", "[JumpBack]DisconnectPopup", "[JumpBack]Mission@ClickCampaignButton"],
@@ -50,8 +64,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"$__mpe_code": {
@@ -71,8 +84,7 @@
 		},
 		"pre_delay": 1000,
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"next": ["Mission@SelectHardMission", "[JumpBack]Mission@ClickMissionButton"],
@@ -92,8 +104,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"$__mpe_code": {
@@ -113,8 +124,7 @@
 		},
 		"pre_delay": 1000,
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"timeout": 1000,
@@ -137,8 +147,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"repeat": 1,
 		"repeat_delay": 800,
@@ -188,8 +197,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"repeat": 1,
 		"repeat_delay": 800,
@@ -210,8 +218,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"next": ["Mission@ClickSweepButton"],
 		"$__mpe_code": {
@@ -231,8 +238,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"timeout": 5000,
@@ -288,8 +294,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"next": ["Mission@RecognizeRewardPopup"],
 		"$__mpe_code": {
@@ -318,15 +323,13 @@
 	"Mission@SweepDropScreenshot": {
 		"doc": "截图掉落，最多保存10个截图",
 		"action": {
-			"type": "Custom",
-			"param": {
-				"custom_action": "SweepDropScreenshot"
-			}
+			"type": "Screencap"
 		},
+		"next": ["Mission@ManageSweepDropScreenshot"],
 		"$__mpe_code": {
 			"position": {
-				"x": 3520,
-				"y": 692
+				"x": 3518,
+				"y": 702
 			}
 		}
 	},

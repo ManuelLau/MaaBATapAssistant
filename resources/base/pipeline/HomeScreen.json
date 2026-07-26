@@ -2,21 +2,14 @@
 	"$__mpe_config_HomeScreen": {
 		"$__mpe_code": {
 			"prefix": "",
+			"coordinateMode": "absolute-v1",
 			"savedViewport": {
-				"x": 131,
-				"y": -202,
+				"x": -857,
+				"y": -256,
 				"zoom": 0.79
 			},
 			"filename": "HomeScreen",
-			"version": "v1.4.1"
-		}
-	},
-	"$__mpe_external_StartUp@Start_HomeScreen": {
-		"$__mpe_code": {
-			"position": {
-				"x": 1218,
-				"y": 925
-			}
+			"version": "v1.7.4"
 		}
 	},
 	"HomeScreen@IdelClick": {
@@ -24,7 +17,7 @@
 		"action": {
 			"type": "Click",
 			"param": {
-				"target": [650, 66, 0, 0]
+				"target": [650, 66]
 			}
 		},
 		"post_delay": 1000,
@@ -54,15 +47,14 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"next": ["HomeScreen@Start"],
 		"$__mpe_code": {
 			"position": {
-				"x": 886,
-				"y": 364
+				"x": 885,
+				"y": 227
 			}
 		}
 	},
@@ -81,7 +73,7 @@
 		"$__mpe_code": {
 			"position": {
 				"x": 1891,
-				"y": -21
+				"y": -57
 			}
 		}
 	},
@@ -94,15 +86,14 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"next": ["HomeScreen@BackToHomePage", "[JumpBack]DisconnectPopup", "[JumpBack]HomeScreen@DisconnectedPopUp", "[JumpBack]HomeScreen@ClickStudentsPageButton", "[JumpBack]ClosePopup"],
 		"$__mpe_code": {
 			"position": {
 				"x": 883,
-				"y": 623
+				"y": 515
 			}
 		}
 	},
@@ -115,8 +106,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"$__mpe_code": {
@@ -138,8 +128,8 @@
 		"next": ["HomeScreen@Reconnect"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1901,
-				"y": 579
+				"x": 1892,
+				"y": 594
 			}
 		}
 	},
@@ -153,15 +143,14 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"next": ["HomeScreen@Reconnect", "StartUp@StartApp"],
 		"$__mpe_code": {
 			"position": {
-				"x": 2377,
-				"y": 436
+				"x": 2276,
+				"y": 430
 			}
 		}
 	},
@@ -177,8 +166,8 @@
 		"next": ["HomeScreen@Reconnect"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1896,
-				"y": 307
+				"x": 1891,
+				"y": 311
 			}
 		}
 	},
@@ -194,8 +183,8 @@
 		"next": ["HomeScreen@MaintenanceConfirm"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1902,
-				"y": 848
+				"x": 1892,
+				"y": 885
 			}
 		}
 	},
@@ -208,14 +197,13 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"next": ["HomeScreen@MaintenanceStopTask"],
 		"$__mpe_code": {
 			"position": {
-				"x": 2223,
-				"y": 866
+				"x": 2243,
+				"y": 903
 			}
 		}
 	},
@@ -229,40 +217,40 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 2519,
-				"y": 860
+				"x": 2553,
+				"y": 907
 			}
 		}
 	},
 	"$__mpe_external_DisconnectPopup_HomeScreen": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1880,
-				"y": 1184
+				"x": 1862,
+				"y": 1245
 			}
 		}
 	},
 	"$__mpe_external_ClosePopup_HomeScreen": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1849,
-				"y": 1263
+				"x": 1845,
+				"y": 1310
 			}
 		}
 	},
 	"$__mpe_external_ClickHomeButton_HomeScreen": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1910,
-				"y": 1107
+				"x": 1886,
+				"y": 1179
 			}
 		}
 	},
 	"$__mpe_external_StartUp@StartApp_HomeScreen": {
 		"$__mpe_code": {
 			"position": {
-				"x": 885,
-				"y": 1590
+				"x": 886,
+				"y": 1582
 			}
 		}
 	},
@@ -276,13 +264,12 @@
 			}
 		},
 		"action": {
-			"type": "StopTask",
-			"param": {}
+			"type": "StopTask"
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 2227,
-				"y": 10
+				"x": 2240,
+				"y": -3
 			}
 		}
 	},
@@ -290,8 +277,8 @@
 		"next": ["HomeScreen@RecognizeLabel", "[JumpBack]HomeScreen@DuplicatedLoginPopUp", "[JumpBack]HomeScreen@DisconnectedPopUp", "[JumpBack]HomeScreen@MaintenancePopUp", "[JumpBack]ClickHomeButton", "[JumpBack]DisconnectPopup", "[JumpBack]ClosePopup"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1458,
-				"y": 538
+				"x": 1439,
+				"y": 535
 			}
 		}
 	},
@@ -305,8 +292,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 2342,
-				"y": 1238
+				"x": 2275,
+				"y": 1257
 			}
 		}
 	},
@@ -315,7 +302,7 @@
 		"$__mpe_code": {
 			"position": {
 				"x": 881,
-				"y": 1414
+				"y": 1411
 			}
 		}
 	},
@@ -332,8 +319,16 @@
 		"next": ["StartUp@Start"],
 		"$__mpe_code": {
 			"position": {
-				"x": 885,
-				"y": 875
+				"x": 883,
+				"y": 844
+			}
+		}
+	},
+	"$__mpe_external_StartUp@Start_HomeScreen": {
+		"$__mpe_code": {
+			"position": {
+				"x": 1229,
+				"y": 931
 			}
 		}
 	}

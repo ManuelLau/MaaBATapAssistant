@@ -286,10 +286,10 @@ public class TaskManager
                 DisposeOptions = DisposeOptions.All,
             };
             // 注册自定义识别、动作
-            _maaTasker.Resource.Register(new RelationshipRankUpScreenshot());
+            _maaTasker.Resource.Register(new ManageRelationshipRankUpScreenshot());
             _maaTasker.Resource.Register(new CafeTapResetMaxHit());
             _maaTasker.Resource.Register(new InviteUnavailableSkipTask());
-            _maaTasker.Resource.Register(new InviteScreenshot());
+            _maaTasker.Resource.Register(new ManageInviteScreenshot());
             _maaTasker.Resource.Register(new InviteCancelNotify());
             _maaTasker.Resource.Register(new DuplicatedLoginStopTask());
             _maaTasker.Resource.Register(new MaintenanceStopTask());
@@ -298,7 +298,7 @@ public class TaskManager
             _maaTasker.Resource.Register(new FindHardLevel());
             _maaTasker.Resource.Register(new PrintSweepError());
             _maaTasker.Resource.Register(new PrintFindeLevelError());
-            _maaTasker.Resource.Register(new SweepDropScreenshot());
+            _maaTasker.Resource.Register(new ManageSweepDropScreenshot());
         }
         catch (Exception e)
         {

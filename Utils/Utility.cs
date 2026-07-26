@@ -19,7 +19,7 @@ public static class Utility
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            MaaBATapAssistant.ViewModels.MainViewModel.Instance.LogDataList.Add(new($"{DateTime.Now.ToString("MM/dd HH:mm:ss")}   ", content, false));
+            MaaBATapAssistant.ViewModels.MainViewModel.Instance.LogDataList.Add(new($"{DateTime.Now:MM/dd HH:mm:ss}   ", content, false));
         });
         Serilog.Log.Information("[PrintLog]   " + content);
 #if DEBUG
@@ -30,7 +30,7 @@ public static class Utility
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            MaaBATapAssistant.ViewModels.MainViewModel.Instance.LogDataList.Add(new($"{DateTime.Now.ToString("MM/dd HH:mm:ss")}   ", content, true));
+            MaaBATapAssistant.ViewModels.MainViewModel.Instance.LogDataList.Add(new($"{DateTime.Now:MM/dd HH:mm:ss}   ", content, true));
         });
         Serilog.Log.Error("[PrintError] " + content);
 #if DEBUG

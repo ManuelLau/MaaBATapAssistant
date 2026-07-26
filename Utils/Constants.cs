@@ -18,6 +18,7 @@ public static class Constants
     public static readonly string CacheFilePath = GetPath(@"config\cache.json"); //缓存文件也一起放config目录下
     public static readonly string LogFilePath = GetPath(@"debug\log.txt");
     public static readonly string ScreenshotImageDirectory = GetPath(@"images");
+    public static readonly string MaaScreenshotDirectory = GetPath(@"debug\screencap");
     public static readonly string ResourcesVersionJsonPath = GetPath(@"resources\version.json");
 
     public static readonly string MaaSourceDirectory = GetPath(@"resources\base");

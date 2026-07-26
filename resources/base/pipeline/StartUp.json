@@ -2,13 +2,14 @@
 	"$__mpe_config_StartUp": {
 		"$__mpe_code": {
 			"prefix": "",
+			"coordinateMode": "absolute-v1",
 			"savedViewport": {
-				"x": 35,
-				"y": -436,
+				"x": -138,
+				"y": -47,
 				"zoom": 0.63
 			},
 			"filename": "StartUp",
-			"version": "v1.4.1"
+			"version": "v1.7.4"
 		}
 	},
 	"StartUp@Start": {
@@ -64,13 +65,12 @@
 			}
 		},
 		"action": {
-			"type": "StopTask",
-			"param": {}
+			"type": "StopTask"
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1638,
-				"y": 530
+				"x": 1640,
+				"y": 432
 			}
 		}
 	},
@@ -86,8 +86,8 @@
 		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
-				"x": 1269,
-				"y": 244
+				"x": 1258,
+				"y": 131
 			}
 		}
 	},
@@ -105,14 +105,14 @@
 		"action": {
 			"type": "Click",
 			"param": {
-				"target": [640, 360, 0, 0]
+				"target": [640, 360]
 			}
 		},
 		"post_delay": 1000,
 		"$__mpe_code": {
 			"position": {
-				"x": 1264,
-				"y": 1316
+				"x": 1259,
+				"y": 1277
 			}
 		}
 	},
@@ -128,7 +128,7 @@
 		"action": {
 			"type": "Click",
 			"param": {
-				"target": [640, 360, 0, 0]
+				"target": [640, 360]
 			}
 		},
 		"$__mpe_code": {
@@ -149,7 +149,7 @@
 		"action": {
 			"type": "Click",
 			"param": {
-				"target": [640, 360, 0, 0]
+				"target": [640, 360]
 			}
 		},
 		"$__mpe_code": {
@@ -171,8 +171,8 @@
 		"next": ["ClosePopup"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1263,
-				"y": 1679
+				"x": 1262,
+				"y": 1643
 			}
 		}
 	},
@@ -188,8 +188,8 @@
 		"next": ["ClickConfirmButton"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1267,
-				"y": 998
+				"x": 1257,
+				"y": 928
 			}
 		}
 	},
@@ -210,8 +210,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1267,
-				"y": 714
+				"x": 1259,
+				"y": 650
 			}
 		}
 	},
@@ -251,15 +251,15 @@
 		"$__mpe_code": {
 			"position": {
 				"x": 1643,
-				"y": 1061
+				"y": 1003
 			}
 		}
 	},
 	"$__mpe_external_HomeScreen@MaintenancePopUp_StartUp": {
 		"$__mpe_code": {
 			"position": {
-				"x": 1272,
-				"y": 1248
+				"x": 1266,
+				"y": 1210
 			}
 		}
 	},
@@ -285,8 +285,8 @@
 		"next": ["StartUp@FinalCheck", "StartUp@Start"],
 		"$__mpe_code": {
 			"position": {
-				"x": 1269,
-				"y": 513
+				"x": 1257,
+				"y": 395
 			}
 		}
 	}

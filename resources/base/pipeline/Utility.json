@@ -2,28 +2,19 @@
 	"$__mpe_config_Utility": {
 		"$__mpe_code": {
 			"prefix": "",
+			"coordinateMode": "absolute-v1",
 			"savedViewport": {
-				"x": 489,
-				"y": 42,
-				"zoom": 1.01
+				"x": 328,
+				"y": 220,
+				"zoom": 0.8
 			},
 			"filename": "Utility",
-			"version": "v1.3.1"
-		}
-	},
-	"PCClientStartGame": {
-		"next": ["HomeScreen@Refresh"],
-		"$__mpe_code": {
-			"position": {
-				"x": 333,
-				"y": 533
-			}
+			"version": "v1.7.4"
 		}
 	},
 	"Stop": {
 		"action": {
-			"type": "StopTask",
-			"param": {}
+			"type": "StopTask"
 		},
 		"$__mpe_code": {
 			"position": {
@@ -41,8 +32,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 2000,
 		"$__mpe_code": {
@@ -61,8 +51,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"$__mpe_code": {
 			"position": {
@@ -81,8 +70,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"$__mpe_code": {
 			"position": {
@@ -103,7 +91,7 @@
 		"action": {
 			"type": "Click",
 			"param": {
-				"target": [640, 360, 0, 0]
+				"target": [640, 360]
 			}
 		},
 		"post_delay": 1000,
@@ -141,7 +129,7 @@
 		"action": {
 			"type": "Click",
 			"param": {
-				"target": [640, 560, 0, 0]
+				"target": [640, 560]
 			}
 		},
 		"$__mpe_code": {
@@ -175,8 +163,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"$__mpe_code": {
 			"position": {
@@ -253,6 +240,15 @@
 			"position": {
 				"x": 252,
 				"y": 249
+			}
+		}
+	},
+	"PCClientStartGame": {
+		"next": ["HomeScreen@Refresh"],
+		"$__mpe_code": {
+			"position": {
+				"x": 333,
+				"y": 512
 			}
 		}
 	}

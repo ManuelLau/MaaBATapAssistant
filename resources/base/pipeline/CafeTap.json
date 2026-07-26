@@ -2,13 +2,27 @@
 	"$__mpe_config_CafeTap": {
 		"$__mpe_code": {
 			"prefix": "",
+			"coordinateMode": "absolute-v1",
 			"savedViewport": {
-				"x": 372,
-				"y": 93,
-				"zoom": 0.79
+				"x": -520,
+				"y": -53,
+				"zoom": 1.25
 			},
 			"filename": "CafeTap",
-			"version": "v1.4.1"
+			"version": "v1.7.4"
+		}
+	},
+	"CafeTap@RelationshipRankUpScreenshot": {
+		"doc": "检测到好感等级提升，截图保存",
+		"action": {
+			"type": "Screencap"
+		},
+		"next": ["CafeTap@CloseRelationshipRankUp"],
+		"$__mpe_code": {
+			"position": {
+				"x": 874,
+				"y": 351
+			}
 		}
 	},
 	"CafeTap": {
@@ -41,8 +55,8 @@
 		"next": ["CafeTap@ResetMaxHit"],
 		"$__mpe_code": {
 			"position": {
-				"x": 586,
-				"y": -24
+				"x": 587,
+				"y": -47
 			}
 		}
 	},
@@ -52,7 +66,7 @@
 		"$__mpe_code": {
 			"position": {
 				"x": 583,
-				"y": 789
+				"y": 866
 			}
 		}
 	},
@@ -67,8 +81,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"next": ["CafeTap@RefreshStep2", "[JumpBack]Cafe@ClickUnfoldButton", "[JumpBack]CafeTap@ClickEditButton"],
@@ -88,8 +101,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"next": ["CafeTap@Start"],
@@ -119,49 +131,48 @@
 				"template": "RelationshipRankUp.png"
 			}
 		},
-		"next": ["CafeTap@CloseRelationshipRankUp"],
+		"next": ["CafeTap@RelationshipRankUpScreenshot"],
 		"$__mpe_code": {
 			"position": {
 				"x": 586,
-				"y": 426
+				"y": 471
 			}
 		}
 	},
 	"CafeTap@CloseRelationshipRankUp": {
-		"doc": "检测到好感等级提升，截图保存",
 		"recognition": {
 			"type": "Custom",
 			"param": {
-				"custom_recognition": "RelationshipRankUpScreenshot"
+				"custom_recognition": "ManageRelationshipRankUpScreenshot"
 			}
 		},
 		"action": {
 			"type": "Click",
 			"param": {
-				"target": [640, 360, 0, 0]
+				"target": [640, 360]
 			}
 		},
 		"next": ["CafeTap@ResetMaxHit"],
 		"$__mpe_code": {
 			"position": {
-				"x": 874,
-				"y": 324
+				"x": 1172,
+				"y": 346
 			}
 		}
 	},
 	"$__mpe_external_CloseReward_CafeTap": {
 		"$__mpe_code": {
 			"position": {
-				"x": 594,
-				"y": 305
+				"x": 590,
+				"y": 323
 			}
 		}
 	},
 	"$__mpe_external_ClosePopup_CafeTap": {
 		"$__mpe_code": {
 			"position": {
-				"x": 593,
-				"y": 365
+				"x": 590,
+				"y": 394
 			}
 		}
 	},
@@ -176,8 +187,8 @@
 	"$__mpe_external_Stop_CafeTap": {
 		"$__mpe_code": {
 			"position": {
-				"x": 588,
-				"y": 976
+				"x": 584,
+				"y": 1112
 			}
 		}
 	},
@@ -196,8 +207,8 @@
 		"timeout": 4000,
 		"$__mpe_code": {
 			"position": {
-				"x": 132,
-				"y": 655
+				"x": 88,
+				"y": 732
 			}
 		}
 	},
@@ -205,8 +216,8 @@
 		"max_hit": 1,
 		"$__mpe_code": {
 			"position": {
-				"x": 585,
-				"y": 618
+				"x": 584,
+				"y": 698
 			}
 		}
 	},
@@ -219,8 +230,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1128,
-				"y": 111
+				"x": 1425,
+				"y": 92
 			}
 		}
 	},
@@ -234,8 +245,7 @@
 			}
 		},
 		"action": {
-			"type": "Click",
-			"param": {}
+			"type": "Click"
 		},
 		"post_delay": 1000,
 		"$__mpe_code": {

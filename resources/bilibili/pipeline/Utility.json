@@ -1,6 +1,6 @@
 {
 	"StartGame": {
-		"package": "com.RoamingStar.BlueArchive.bilibili/com.yostar.supersdk.activity.YoStarSplashActivity"
+		"package": "com.RoamingStar.BlueArchive.bilibili"
 	},
 	"CloseGame": {
 		"package": "com.RoamingStar.BlueArchive.bilibili"
