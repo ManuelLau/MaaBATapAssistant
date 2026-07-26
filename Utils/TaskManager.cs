@@ -851,9 +851,9 @@ public class TaskManager
 
         //生成摸头任务
         tempQueue.Enqueue(new("进入1号咖啡厅", "MoveToCafe1", string.Empty, ETaskType.Normal));
-        tempQueue.Enqueue(new("(1号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
+        tempQueue.Enqueue(new("(1号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.CafeTap));
         tempQueue.Enqueue(new("进入2号咖啡厅", "MoveToCafe2", string.Empty, ETaskType.Normal));
-        tempQueue.Enqueue(new("(2号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.Normal));
+        tempQueue.Enqueue(new("(2号)咖啡厅摸头", "CafeTap", string.Empty, ETaskType.CafeTap));
         AddToWaitingTaskList(new("咖啡厅摸头", executeDateTime, ETaskChainType.Tap, true, true, string.Empty, tempQueue));
 
         //生成2号咖啡厅邀请任务
@@ -982,9 +982,9 @@ public class TaskManager
         {
             Queue<TaskModel> tempQueue0 = new();
             if (DeviceIsEmulator())
-                tempQueue0.Enqueue(new("启动游戏", "StartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
+                tempQueue0.Enqueue(new("启动游戏", "StartGame", GetOverrideJsonWithReadingConfig(ETaskType.StartGame), ETaskType.StartGame));
             else
-                tempQueue0.Enqueue(new("启动游戏", "PCClientStartGame", GetOverrideJsonWithReadConfig(ETaskType.StartGame), ETaskType.StartGame));
+                tempQueue0.Enqueue(new("启动游戏", "PCClientStartGame", GetOverrideJsonWithReadingConfig(ETaskType.StartGame), ETaskType.StartGame));
             _currentTaskChainList.Add(new("启动游戏", DateTime.Now, ETaskChainType.System, false, true, string.Empty, tempQueue0));
         }
 
@@ -997,7 +997,7 @@ public class TaskManager
                 // 读取设置(进入执行中队列时候才会读取)
                 foreach (var taskItem in taskChainItem.TaskQueue)
                 {
-                    taskItem.PipelineOverride = GetOverrideJsonWithReadConfig(taskItem.Type);
+                    taskItem.PipelineOverride = GetOverrideJsonWithReadingConfig(taskItem.Type);
                 }
                 // 扫荡困难关卡的任务，开始的Log特别处理，显示关卡
                 if (taskChainItem.TaskChainType == ETaskChainType.SweepHardLevel)
@@ -1018,7 +1018,7 @@ public class TaskManager
     }
 
     // 读取设置来生成所需的pipeline override json
-    private string GetOverrideJsonWithReadConfig(ETaskType type)
+    private string GetOverrideJsonWithReadingConfig(ETaskType type)
     {
         string overrideJson;
         string overrideSortType;
@@ -1030,6 +1030,8 @@ public class TaskManager
             //启动游戏
             case ETaskType.StartGame:
                 return _settingsData.IsReconnectAfterDuplicatedLogin ? string.Empty : "{\"HomeScreen@DuplicatedLoginPopUp\":{\"next\":\"HomeScreen@DuplicatedLoginStopTask\"}}";
+            case ETaskType.CafeTap:
+                return ProgramDataModel.Instance.SettingsData.NoScreenShot ? "{\"CafeTap@RelationshipRankUpScreenshot\":{\"action\":{\"type\": \"DoNothing\"}}}" : string.Empty;
             //1号咖啡厅邀请
             case ETaskType.Cafe1Invite:
                 overrideSortType = string.Empty;
@@ -1091,6 +1093,8 @@ public class TaskManager
                     overrideJson += "\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
                 if (!_settingsData.IsCafe1AllowInviteSwapAlt)
                     overrideJson += "\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
+                if (ProgramDataModel.Instance.SettingsData.NoScreenShot)
+                    overrideJson += "\"CafeTap@RelationshipRankUpScreenshot\":{\"action\":{\"type\": \"DoNothing\"}},\"CafeInvite@InviteScreenshot\":{\"action\":{\"type\": \"DoNothing\"}},";
                 if (overrideJson.EndsWith(','))
                     overrideJson = overrideJson.Substring(0, overrideJson.Length - 1);
                 overrideJson += "}";
@@ -1161,6 +1165,8 @@ public class TaskManager
                     overrideJson += "\"CafeInvite@InviteConfirmPopupNeighboringSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
                 if (!_settingsData.IsCafe2AllowInviteSwapAlt)
                     overrideJson += "\"CafeInvite@InviteConfirmPopupSwapAlt\":{\"next\":\"CafeInvite@InviteCancel\"},";
+                if (ProgramDataModel.Instance.SettingsData.NoScreenShot)
+                    overrideJson += "\"CafeTap@RelationshipRankUpScreenshot\":{\"action\":{\"type\": \"DoNothing\"}},\"CafeInvite@InviteScreenshot\":{\"action\":{\"type\": \"DoNothing\"}},";
                 if (overrideJson.EndsWith(','))
                     overrideJson = overrideJson.Substring(0, overrideJson.Length - 1);
                 overrideJson += "}";
@@ -1172,7 +1178,13 @@ public class TaskManager
                 return "{\"CafeLayout@ApplyLayout\":{\"index\":" + _settingsData.Cafe2PMApplyLayoutIndex + "}}";
             //扫荡困难关卡
             case ETaskType.SweepHardLevel:
-                return "{\"Mission@RecognizeMissionLevel\":{\"recognition\":{\"param\":{\"expected\":\""+ _settingsData.HardLevel + "\"}}}}";
+                overrideJson = "{\"Mission@RecognizeMissionLevel\":{\"recognition\":{\"param\":{\"expected\":\"" + _settingsData.HardLevel + "\"}}}";
+                if (ProgramDataModel.Instance.SettingsData.NoScreenShot)
+                {
+                    overrideJson += ",\"Mission@SweepDropScreenshot\":{\"action\":{\"type\": \"DoNothing\"}}";
+                }
+                overrideJson += "}";
+                return overrideJson;
             default:
                 return "";
         }

@@ -6,6 +6,7 @@ public enum ETaskType
     Normal = 0,
     StartGame,
     RestartGame,
+    CafeTap,
     Cafe1Invite,
     Cafe2Invite,
     Cafe1AMApplyLayout,

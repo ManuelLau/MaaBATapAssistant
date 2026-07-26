@@ -98,6 +98,7 @@ public partial class SettingsViewModel : ObservableObject
             case EClientTypeSettingOptions.Zh_TW:
             case EClientTypeSettingOptions.Jp:
             case EClientTypeSettingOptions.Zh_TW_PC:
+            case EClientTypeSettingOptions.Jp_PC:
                 CafeInviteTimeSettingOptionsText[0] = "3:00~14:59";
                 CafeInviteTimeSettingOptionsText[1] = "15:00~次日2:59";
                 Cafe1ApplyLayoutAMText = "3:00~14:59时间段1号咖啡厅应用家具预设序号";
