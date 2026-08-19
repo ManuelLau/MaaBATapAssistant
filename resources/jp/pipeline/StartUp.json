@@ -34,7 +34,7 @@
 	"StartUp@RecognizeMailButton": {
 		"recognition": {
 			"param": {
-				"roi": [1148, 38, 12, 4]
+				"roi": [1149, 38, 12, 4]
 			}
 		}
 	},

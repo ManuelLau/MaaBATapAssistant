@@ -4,12 +4,12 @@
 			"prefix": "",
 			"coordinateMode": "absolute-v1",
 			"savedViewport": {
-				"x": -138,
-				"y": -47,
-				"zoom": 0.63
+				"x": -632,
+				"y": -119,
+				"zoom": 1
 			},
 			"filename": "StartUp",
-			"version": "v1.7.4"
+			"version": "v1.7.6"
 		}
 	},
 	"StartUp@Start": {
@@ -34,8 +34,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 1839,
-				"y": 721
+				"x": 1641,
+				"y": 602
 			}
 		}
 	},
@@ -52,8 +52,8 @@
 		},
 		"$__mpe_code": {
 			"position": {
-				"x": 2096,
-				"y": 709
+				"x": 1880,
+				"y": 589
 			}
 		}
 	},

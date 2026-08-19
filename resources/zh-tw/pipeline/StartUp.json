@@ -23,6 +23,13 @@
 			}
 		}
 	},
+	"StartUp@RecognizeMailButton": {
+		"recognition": {
+			"param": {
+				"roi": [1149, 38, 12, 4]
+			}
+		}
+	},
 	"StartUp@TitleScreen": {
 		"next": "StartUp@NexonCheckHomePageLabelEntry",
 		"doc": "国际服-覆写登录流程。从标题页面进入到主页，固定会弹公告，检测公告弹窗的关闭按钮"
